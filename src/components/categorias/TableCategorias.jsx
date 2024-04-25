@@ -1,10 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useProductos } from "../../context/ProductosContext";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Importar los iconos de flecha
 import { IoIosMore } from "react-icons/io";
+import { useObtenerId } from "../../helpers/obtenerId";
+import ModalEditarCategoria from "./ModalEditarCategoria";
+import { useModal } from "../../helpers/modal";
+import ModalEliminarCategoria from "./ModalEliminarCategoria";
 
-export const TableProducts = ({ productos, openModal, handleID }) => {
-  const { deleleteProducto } = useProductos();
+export const TableCategorias = () => {
+  const { categorias, getCategorias } = useProductos();
+
+  const {
+    closeModal: closeEliminar,
+    isOpen: isOpenEliminar,
+    openModal: openModalEliminar,
+  } = useModal();
+
+  const { handleObtenerId, idObtenida } = useObtenerId();
+
+  const [isEditar, setEditar] = useState(false);
+
+  useEffect(() => {
+    getCategorias();
+  }, []);
+
+  const openEditar = () => {
+    setEditar(true);
+  };
+
+  const closeEditar = () => {
+    setEditar(false);
+  };
 
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(15);
@@ -12,7 +38,7 @@ export const TableProducts = ({ productos, openModal, handleID }) => {
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = productos.slice(
+  const currentProducts = categorias.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
@@ -28,7 +54,7 @@ export const TableProducts = ({ productos, openModal, handleID }) => {
     product.detalle.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(productos.length / productsPerPage);
+  const totalPages = Math.ceil(categorias.length / productsPerPage);
 
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -39,11 +65,12 @@ export const TableProducts = ({ productos, openModal, handleID }) => {
     }
     return pageNumbers;
   };
+
   return (
     <div className="mt-5">
       <input
         type="text"
-        placeholder="Buscar producto por codigo o detalle..."
+        placeholder="Buscar por el nombre de la categoria..."
         value={searchTerm}
         onChange={handleSearch}
         className="block px-4 py-2.5 mb-3 w-1/3 rounded-xl shadow-md transition-all outline-none focus:ring-sky-500 focus:border-sky-500"
@@ -53,32 +80,11 @@ export const TableProducts = ({ productos, openModal, handleID }) => {
           <thead>
             <tr>
               <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
-                Codigo
+                Fecha de creación
               </th>
               <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
-                Detalle
+                Nombre de la categoria
               </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
-                Color
-              </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
-                Categoria
-              </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
-                Kg Estimativo
-              </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
-                Stock
-              </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
-                Stock Minimo
-              </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
-                Stock Máximo
-              </th>
-              {/* <th className="text-center px-4 py-4 font-medium text-gray-900 uppercase">
-                Acciones
-              </th> */}
             </tr>
           </thead>
 
@@ -86,28 +92,10 @@ export const TableProducts = ({ productos, openModal, handleID }) => {
             {filteredProducts.map((p) => (
               <tr className="hover:bg-gray-100/50 cursor-pointer" key={p._id}>
                 <td className="px-4 py-4 font-medium text-gray-900 uppercase text-sm">
-                  {p.codigo}
+                  {new Date(p.createdAt).toLocaleDateString()}
                 </td>
-                <td className="px-4 py-4 text-gray-700 uppercase font-light text-sm">
+                <td className="px-4 py-4 font-medium text-gray-900 uppercase text-sm">
                   {p.detalle}
-                </td>
-                <td className="px-4 py-4 text-gray-700 uppercase font-light text-sm">
-                  {p.color}
-                </td>
-                <td className="px-4 py-4 text-gray-700 uppercase font-light text-sm">
-                  {p.categoria}
-                </td>
-                <td className="px-4 py-4 text-gray-700 uppercase font-light text-sm">
-                  {p.kg_barra_estimado}
-                </td>
-                <td className="px-4 py-4 text-sky-600 font-bold uppercase text-sm flex">
-                  <p className="py-2 px-2 bg-sky-100 rounded-xl">{p.stock}</p>
-                </td>
-                <td className="px-4 py-4 text-sky-600 font-bold uppercase text-sm">
-                  {p.stock_minimo}
-                </td>
-                <td className="px-4 py-4 text-sky-600 font-bold uppercase text-sm">
-                  {p.stock_maximo}
                 </td>
                 <td className="px-4 py-4 text-gray-700 uppercase font-light text-sm">
                   <div className="dropdown dropdown-left drop-shadow-lg">
@@ -125,19 +113,21 @@ export const TableProducts = ({ productos, openModal, handleID }) => {
                       <li>
                         <button
                           onClick={() => {
-                            handleID(p._id), openModal();
+                            handleObtenerId(p._id), openEditar();
                           }}
                           type="button"
                         >
-                          Editar el producto
+                          Editar categoria
                         </button>
                       </li>
                       <li>
                         <button
-                          onClick={() => deleleteProducto(p._id)}
+                          onClick={() => {
+                            handleObtenerId(p._id), openModalEliminar();
+                          }}
                           type="button"
                         >
-                          Eliminar el producto
+                          Eliminar categoria
                         </button>
                       </li>
                     </ul>
@@ -180,6 +170,16 @@ export const TableProducts = ({ productos, openModal, handleID }) => {
           <FaArrowRight />
         </button>
       </div>
+      <ModalEditarCategoria
+        isOpen={isEditar}
+        closeModal={closeEditar}
+        idObtenida={idObtenida}
+      />
+      <ModalEliminarCategoria
+        closeModal={closeEliminar}
+        isOpen={isOpenEliminar}
+        idObtenida={idObtenida}
+      />
     </div>
   );
 };
