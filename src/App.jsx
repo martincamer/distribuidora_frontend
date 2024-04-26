@@ -9,8 +9,11 @@ import { HomeApp } from "./pages/HomeApp";
 import { CrearProductoNuevo } from "./pages/CrearProductoNuevo";
 import { CrearCategorias } from "./pages/CrearCategorias";
 import { Ventas } from "./pages/Ventas";
-import HomePage from "./pages/HomePage";
+import { EditarProducto } from "./pages/EditarProducto";
+import { Producto } from "./pages/Producto";
+import { CrearColores } from "./pages/CrearColores";
 import RegisterPage from "./pages/RegisterPage";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
@@ -18,7 +21,6 @@ function App() {
       <ProductosProvider>
         <BrowserRouter>
           <Navbar />
-          {/* <SideBar /> */}
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
@@ -27,8 +29,11 @@ function App() {
               <Route index path="/home" element={<HomeApp />} />
               <Route index path="/ventas" element={<Ventas />} />
               <Route path="/productos" element={<ProductosPage />} />
+              <Route path="/producto/:id" element={<Producto />} />
               <Route path="/categorias" element={<CrearCategorias />} />
+              <Route path="/colores" element={<CrearColores />} />
               <Route path="/crear-producto" element={<CrearProductoNuevo />} />
+              <Route path="/editar-producto/:id" element={<EditarProducto />} />
               <Route path="/profile" element={<h1>Profile</h1>} />
             </Route>
           </Routes>

@@ -2,17 +2,27 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect } from "react";
 import { IoIosAlert, IoMdClose } from "react-icons/io";
 import { useProductos } from "../../context/ProductosContext";
-import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
-export default function ModalEliminarCategoria({
+export default function ModalEliminarProducto({
   isOpen,
   closeModal,
   idObtenida,
 }) {
-  const { deleteCategoria } = useProductos();
+  const { deleleteProducto } = useProductos();
+
+  const navigate = useNavigate();
+
+  const handleEliminar = () => {
+    deleleteProducto(idObtenida);
+
+    setTimeout(() => {
+      navigate("/productos");
+    }, 1000);
+  };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -54,7 +64,7 @@ export default function ModalEliminarCategoria({
                   <p className="text-3xl text-yellow-500">¡Espera! ✋</p>
 
                   <p className="font-light text-sm mt-2">
-                    ¿Vas a eliminar la categoria estas seguro?
+                    ¿Vas a eliminar el producto estas seguro?
                   </p>
 
                   <div className="mt-3 flex items-center justify-between gap-5">
@@ -67,7 +77,7 @@ export default function ModalEliminarCategoria({
                     </button>
                     <button
                       onClick={() => {
-                        deleteCategoria(idObtenida), closeModal();
+                        handleEliminar(), closeModal();
                       }}
                       className="text-base font-bold text-white bg-orange-500 hover:bg-orange-600 py-2 px-6 rounded-full hover:text-white"
                       type="button"

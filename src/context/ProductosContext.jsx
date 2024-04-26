@@ -309,15 +309,13 @@ export function ProductosProvider({ children }) {
       const coloresActualizados = colores.map((c) =>
         c._id === id ? res.data : c
       );
+
       setColores(coloresActualizados);
 
       toast.success("Color editado correctamente", {
         position: "top-center",
         autoClose: 500,
         hideProgressBar: true,
-        closeOnClick,
-        pauseOnHover,
-        draggable,
         theme: "light",
         style: {
           padding: "10px",

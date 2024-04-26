@@ -1,8 +1,8 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect } from "react";
 import { IoIosAlert, IoMdClose } from "react-icons/io";
-import { useProductos } from "../../context/ProductosContext";
 import { useForm } from "react-hook-form";
+import { useProductos } from "../../context/ProductosContext";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
@@ -12,7 +12,7 @@ export default function ModalEliminarCategoria({
   closeModal,
   idObtenida,
 }) {
-  const { deleteCategoria } = useProductos();
+  const { deleteColor } = useProductos();
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -54,7 +54,7 @@ export default function ModalEliminarCategoria({
                   <p className="text-3xl text-yellow-500">¡Espera! ✋</p>
 
                   <p className="font-light text-sm mt-2">
-                    ¿Vas a eliminar la categoria estas seguro?
+                    ¿Vas a eliminar el color estas seguro?
                   </p>
 
                   <div className="mt-3 flex items-center justify-between gap-5">
@@ -67,7 +67,7 @@ export default function ModalEliminarCategoria({
                     </button>
                     <button
                       onClick={() => {
-                        deleteCategoria(idObtenida), closeModal();
+                        deleteColor(idObtenida), closeModal();
                       }}
                       className="text-base font-bold text-white bg-orange-500 hover:bg-orange-600 py-2 px-6 rounded-full hover:text-white"
                       type="button"

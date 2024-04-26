@@ -25,7 +25,7 @@ export const SideBar = () => {
     <div
       className={`${
         isOpen ? "w-64 opacity-1" : "w-16 opacity-1"
-      } transition-all ease-linear flex flex-col bg-white h-screen `}
+      } transition-all ease-linear flex flex-col bg-white min-h-screen max-h-full h-full `}
     >
       {/* Botón de menú */}
       <div

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useProductos } from "../context/ProductosContext";
 import { useEffect, useState } from "react";
@@ -9,15 +9,25 @@ import FileDropZone from "../components/ui/FileDropZone";
 
 dayjs.extend(utc);
 
-export function CrearProductoNuevo() {
-  const { createProducto, colores, categorias, getColores, getCategorias } =
-    useProductos();
+export function EditarProducto() {
+  const params = useParams();
+  const [producto, setProducto] = useState([]);
+
+  const {
+    updateProducto,
+    colores,
+    categorias,
+    getColores,
+    getCategorias,
+    getProducto,
+  } = useProductos();
   const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
 
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -27,6 +37,23 @@ export function CrearProductoNuevo() {
     getColores();
     getCategorias();
   }, []);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await getProducto(params.id);
+      setValue("codigo", res.codigo);
+      setValue("detalle", res.detalle);
+      setValue("color", res.color);
+      setValue("categoria", res.categoria);
+      setValue("kg_barra_estimado", res.kg_barra_estimado);
+      setValue("stock", res.stock);
+      setValue("stock_minimo", res.stock_minimo);
+      setValue("stock_maximo", res.stock_maximo);
+
+      setProducto(res);
+    };
+    loadData();
+  }, [params.id]);
 
   // Función para subir la imagen a Cloudinary y obtener la URL
   const uploadFile = async (file) => {
@@ -58,10 +85,10 @@ export function CrearProductoNuevo() {
       const productData = {
         ...formData,
         date: dayjs.utc(formData.date).format(),
-        imagen: imageURL, // Añadimos la URL de la imagen
+        imagen: imageURL || producto.imagen, // Añadimos la URL de la imagen
       };
 
-      await createProducto(productData);
+      await updateProducto(params.id, productData);
 
       setTimeout(() => {
         navigate("/productos");
@@ -268,11 +295,23 @@ export function CrearProductoNuevo() {
                 </div>
 
                 <div>
+                  <label className="text-sm font-bold text-slate-700">
+                    Imagen del producto
+                  </label>
+                  <img className="w-[200px]" src={producto.imagen} />
+                </div>
+                <div className="flex gap-4">
+                  <Link
+                    to={`/producto/${producto._id}`}
+                    className="transition-all hover:bg-orange-500/20 text-orange-400 py-3 px-6 text-sm rounded-full font-semibold mt-3 cursor-pointer"
+                  >
+                    Cancelar
+                  </Link>
                   <button
                     type="submit"
-                    className="bg-green-500 py-2 px-4 text-sm rounded-xl font-bold text-white mt-3 hover:bg-green-600/90 cursor-pointer"
+                    className="transition-all bg-green-500/90 py-3 px-6 text-sm rounded-full font-semibold text-white mt-3 hover:bg-green-600/90 cursor-pointer"
                   >
-                    Guardar categoria
+                    Editar el producto
                   </button>
                 </div>
               </form>

@@ -6,14 +6,13 @@ import { BsFolderPlus } from "react-icons/bs";
 import { TbHandClick } from "react-icons/tb";
 import { TableProducts } from "../components/products/TableProducts";
 import { IoFilterOutline } from "react-icons/io5";
+import { IoIosAddCircleOutline } from "react-icons/io";
 import { Link } from "react-router-dom";
 import ModalFormProducts from "../components/modals/ModalFormProducts";
 import ModalCategorias from "../components/modals/ModalCategorias";
 import ModalColores from "../components/modals/ModalColores";
-import { Footnote, PageBottom, Tailwind } from "@onedoc/react-print";
-import { IoIosAddCircleOutline } from "react-icons/io";
 
-export function ProductosPage(props) {
+export function ProductosPage() {
   let [isOpen, setIsOpen] = useState(false);
   let [isOpenCategorias, setIsOpenCategorias] = useState(false);
   let [isOpenColor, setIsOpenColor] = useState(false);
@@ -64,7 +63,7 @@ export function ProductosPage(props) {
           </div>
           <div>
             <Link
-              onClick={() => openModal()}
+              to={"/crear-producto"}
               className="bg-sky-100 text-sky-600 py-3 px-6 rounded-2xl hover:shadow-md transition-all ease-linear flex gap-2 items-center"
               // to={"/crear-producto"}
             >
@@ -77,28 +76,37 @@ export function ProductosPage(props) {
       {productos.length > 0 && (
         <div className="bg-white w-full flex justify-between items-center ">
           <div className="flex">
-            <p className="bg-sky-100/80 px-8 text-sm py-4 text-sky-600 font-bold">
+            <p className="bg-sky-100/80 px-8 text-[16px] py-4 text-sky-600 font-semibold">
               Productos
             </p>
           </div>
           <div className="mx-5 z-[0] flex gap-2">
+            <button className="text-sm font-semibold bg-green-500/90 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0">
+              <Link
+                to={"/colores"}
+                className="transition-opacity duration-300 opacity-100 group-hover:opacity-0"
+              >
+                Crear nuevo color
+              </Link>
+              <IoIosAddCircleOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
+            </button>
             <Link
               to={"/categorias"}
-              className="text-sm font-bold bg-green-500 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0"
+              className="text-sm font-semibold bg-green-500/90 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0"
             >
               <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
                 Crear categorias
               </span>
               <IoIosAddCircleOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
             </Link>
-            <button className="text-sm font-bold bg-green-500 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0">
+            <button className="text-sm font-semibold bg-green-500/90 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0">
               <Link
                 to={"/crear-producto"}
                 className="transition-opacity duration-300 opacity-100 group-hover:opacity-0"
               >
                 Crear nuevo producto
               </Link>
-              {/* <IoIosAddCircleOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" /> */}
+              <IoIosAddCircleOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
             </button>
           </div>
         </div>
@@ -172,9 +180,8 @@ export function ProductosPage(props) {
           </section>
           <div className="bg-white rounded-3xl py-5 px-5 shadow-lg transition-all ease-linear flex gap-2 text-sm">
             <Link
-              onClick={() => openModal()}
-              className="bg-sky-100 py-3 px-5 rounded-2xl text-sky-700 group flex gap-3 items-center relative transition-all ease-linear duration-300"
-              // to={"/crear-producto"}
+              to={"/crear-producto"}
+              className="bg-sky-100 py-3 px-6 rounded-full text-sky-700 group flex gap-3 items-center relative transition-all"
             >
               <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
                 Crear nuevo producto
@@ -182,9 +189,8 @@ export function ProductosPage(props) {
               <BsFolderPlus className="text-sky-700 text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
             </Link>
             <Link
-              onClick={() => openModalCategoiras()}
-              className="bg-green-100 py-3 px-5 rounded-2xl text-green-700 group flex gap-3 items-center relative transition-all ease-linear duration-300"
-              // to={"/crear-producto"}
+              to={"/categorias"}
+              className="bg-green-100 py-3 px-6 rounded-full text-green-700 group flex gap-3 items-center relative transition-all"
             >
               <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
                 Crear nuevas categorias
@@ -192,9 +198,8 @@ export function ProductosPage(props) {
               <IoFilterOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
             </Link>
             <Link
-              onClick={() => openModalColores()}
-              className="bg-green-100 py-3 px-5 rounded-2xl text-green-700 group flex gap-3 items-center relative transition-all ease-linear duration-300"
-              // to={"/crear-producto"}
+              to={"/colores"}
+              className="bg-orange-100 py-3 px-6 rounded-full text-orange-700 group flex gap-3 items-center relative transition-all"
             >
               <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
                 Crear nuevos colores
