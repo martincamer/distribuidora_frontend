@@ -8,37 +8,66 @@ import { ProductosProvider } from "./context/ProductosContext";
 import { HomeApp } from "./pages/HomeApp";
 import { CrearProductoNuevo } from "./pages/CrearProductoNuevo";
 import { CrearCategorias } from "./pages/CrearCategorias";
-import { Ventas } from "./pages/Ventas";
+import { VentasPage } from "./pages/VentasPage";
 import { EditarProducto } from "./pages/EditarProducto";
 import { Producto } from "./pages/Producto";
 import { CrearColores } from "./pages/CrearColores";
+import { ClientesPage } from "./pages/ClientesPage";
+import { ClientesProvider } from "./context/ClientesContext";
+import { CrearClienteNuevo } from "./pages/CrearCliente";
+import { EditarCliente } from "./pages/EditarCliente";
+import { Cliente } from "./pages/Cliente";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
+import VentasProvider from "./context/VentasContext";
+import { CrearVenta } from "./pages/CrearVenta";
 
 function App() {
   return (
     <AuthProvider>
-      <ProductosProvider>
-        <BrowserRouter>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route element={<ProtectedRoute />}>
-              <Route index path="/home" element={<HomeApp />} />
-              <Route index path="/ventas" element={<Ventas />} />
-              <Route path="/productos" element={<ProductosPage />} />
-              <Route path="/producto/:id" element={<Producto />} />
-              <Route path="/categorias" element={<CrearCategorias />} />
-              <Route path="/colores" element={<CrearColores />} />
-              <Route path="/crear-producto" element={<CrearProductoNuevo />} />
-              <Route path="/editar-producto/:id" element={<EditarProducto />} />
-              <Route path="/profile" element={<h1>Profile</h1>} />
-            </Route>
-          </Routes>
-        </BrowserRouter>
-      </ProductosProvider>
+      <VentasProvider>
+        <ProductosProvider>
+          <ClientesProvider>
+            <BrowserRouter>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route index path="/home" element={<HomeApp />} />
+                  <Route index path="/clientes" element={<ClientesPage />} />
+                  <Route path="/cliente/:id" element={<Cliente />} />
+                  <Route
+                    path="/editar-cliente/:id"
+                    element={<EditarCliente />}
+                  />
+                  <Route
+                    index
+                    path="/crear-cliente"
+                    element={<CrearClienteNuevo />}
+                  />
+                  <Route index path="/ventas" element={<VentasPage />} />
+                  <Route index path="/crear-venta" element={<CrearVenta />} />
+                  <Route path="/productos" element={<ProductosPage />} />
+                  <Route path="/producto/:id" element={<Producto />} />
+                  <Route path="/categorias" element={<CrearCategorias />} />
+                  <Route path="/colores" element={<CrearColores />} />
+                  <Route
+                    path="/crear-producto"
+                    element={<CrearProductoNuevo />}
+                  />
+                  <Route
+                    path="/editar-producto/:id"
+                    element={<EditarProducto />}
+                  />
+                  <Route path="/profile" element={<h1>Profile</h1>} />
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </ClientesProvider>
+        </ProductosProvider>
+      </VentasProvider>
     </AuthProvider>
   );
 }

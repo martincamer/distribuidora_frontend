@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/authContext";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 import { AiOutlineDatabase } from "react-icons/ai";
-import { CiDatabase, CiUser } from "react-icons/ci";
+import { CiDatabase, CiUser, CiViewList } from "react-icons/ci";
 
 export const SideBar = () => {
   const { logout, user } = useAuth();
@@ -21,6 +21,8 @@ export const SideBar = () => {
     console.log("Cerrando sesión...");
   };
 
+  const params = useParams();
+
   return (
     <div
       className={`${
@@ -33,11 +35,11 @@ export const SideBar = () => {
           isOpen ? "flex justify-between" : ""
         } transition-all ease-linear duration-300 py-3 px-4 border-b-[2px] border-slate-300 `}
       >
-        <button className="text-3xl text-sky-600" onClick={handleToggle}>
+        <button className="text-3xl text-sky-700" onClick={handleToggle}>
           {isOpen ? <IoCloseOutline /> : <IoMenuOutline />}
         </button>
         {isOpen && (
-          <p className="bg-sky-500 py-1 px-2 rounded-xl text-sm text-white capitalize">
+          <p className="bg-sky-700 py-1 px-2 rounded-xl text-sm text-white capitalize">
             {user?.username}
           </p>
         )}
@@ -58,13 +60,24 @@ export const SideBar = () => {
           >
             Clientes/Editar/Crear
           </Link>
+          <Link
+            to={"/ventas"}
+            className="hover:text-sky-700 text-slate-700 text-sm transition-all py-3 px-3"
+          >
+            Crear nuevas ventas/presupuestos
+          </Link>{" "}
         </div>
       ) : (
         <div className="flex flex-col justify-center">
           <div
             className={`${
               location.pathname === "/productos" ||
-              location.pathname === "/categorias"
+              location.pathname === "/categorias" ||
+              location.pathname === "/crear-producto" ||
+              location.pathname === "/categorias" ||
+              location.pathname === "/colores" ||
+              location.pathname === `/editar-producto/${params.id}` ||
+              location.pathname === `/producto/${params.id}`
                 ? "bg-sky-100"
                 : "bg-none"
             } w-full text-center py-2 items-center transition-all`}
@@ -74,17 +87,46 @@ export const SideBar = () => {
               data-tip="VER LOS PRODUCTOS/CRAR/ETC"
             >
               <Link to={"/productos"}>
-                <CiDatabase className="text-3xl text-sky-700" />
+                <CiViewList className="text-4xl text-sky-700" />
               </Link>
             </div>
           </div>
-          <div className="w-full text-center py-2 items-center transition-all ">
+          <div
+            className={`${
+              location.pathname === "/clientes" ||
+              location.pathname === `/editar-cliente/${params.id}` ||
+              location.pathname === `/cliente/${params.id}` ||
+              location.pathname === `/crear-cliente`
+                ? "bg-sky-100"
+                : "bg-none"
+            } w-full text-center py-2 items-center transition-all`}
+          >
             <div
               className="tooltip tooltip-right"
-              data-tip="VER LOS CLIENTES/COMPROBANTES/ETC"
+              data-tip="VER LOS PRODUCTOS/CRAR/ETC"
             >
-              <Link to={"/productos"}>
-                <CiUser className="text-3xl text-sky-700" />
+              <Link to={"/clientes"}>
+                <CiUser className="text-4xl text-sky-700" />
+              </Link>
+            </div>
+          </div>
+
+          <div
+            className={`${
+              location.pathname === "/ventas" ||
+              location.pathname === `/crear-venta` ||
+              location.pathname === `/venta/${params.id}` ||
+              location.pathname === `/editar/${params.id}`
+                ? "bg-sky-100"
+                : "bg-none"
+            } w-full text-center py-2 items-center transition-all`}
+          >
+            <div
+              className="tooltip tooltip-right"
+              data-tip="VER LOS PRODUCTOS/CRAR/ETC"
+            >
+              <Link to={"/ventas"}>
+                <CiUser className="text-4xl text-sky-700" />
               </Link>
             </div>
           </div>

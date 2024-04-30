@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { TableColores } from "../components/colores/TableColores";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { ToastContainer } from "react-toastify";
 dayjs.extend(utc);
 
 export function CrearColores() {
@@ -39,13 +38,13 @@ export function CrearColores() {
         <div className="flex">
           <Link
             to={"/productos"}
-            className="bg-gray-100/50 px-8 text-sm py-4 text-gray-700 font-medium hover:bg-sky-100 transition-all"
+            className="px-8 text-[16px] py-4 text-gray-700 font-medium hover:bg-sky-200 hover:text-sky-900 transition-all"
           >
             Productos
           </Link>
           <Link
             to={"/colores"}
-            className="bg-sky-50 px-8 text-sm py-4 text-sky-600 font-medium hover:bg-gray-100 transition-all"
+            className="bg-sky-100 px-8 text-[16px] py-4 text-sky-700 font-medium hover:bg-gray-100 transition-all"
           >
             Colores
           </Link>

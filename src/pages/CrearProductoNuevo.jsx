@@ -272,7 +272,7 @@ export function CrearProductoNuevo() {
                     type="submit"
                     className="bg-green-500 py-2 px-4 text-sm rounded-xl font-bold text-white mt-3 hover:bg-green-600/90 cursor-pointer"
                   >
-                    Guardar categoria
+                    Guardar producto
                   </button>
                 </div>
               </form>

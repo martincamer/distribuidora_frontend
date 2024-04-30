@@ -31,7 +31,7 @@ export function Navbar() {
   const menuRef = useRef(null);
 
   return (
-    <header className="bg-sky-600 z-[-100]">
+    <header className="bg-[#0287E0] z-[-100]">
       <nav className="flex justify-between items-center py-2 px-10 container mx-auto">
         <h1 className="text-2xl font-bold">
           <Link
@@ -105,7 +105,7 @@ export function Navbar() {
             click
               ? "translate-x-0 opacity-1"
               : "translate-x-32 opacity-0 hidden"
-          } transition-all ease-linear duration-200 absolute bottom-[-10] flex justify-center items-center flex-col rounded-bl-xl right-0 bg-white shadow-xl py-3  w-1/5 gap-2 z-[100]`}
+          } transition-all ease-linear duration-200 absolute bottom-[-10] flex justify-center items-center flex-col rounded-bl-xl right-0 bg-white shadow-xl border border-gray-200 py-3  w-1/5 gap-2 z-[100]`}
           ref={menuRef}
         >
           <img

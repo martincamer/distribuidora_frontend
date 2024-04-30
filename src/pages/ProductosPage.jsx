@@ -54,17 +54,17 @@ export function ProductosPage() {
   return (
     <div>
       {productos.length === 0 && (
-        <div className="flex flex-col gap-6 justify-center items-center p-10 bg-white w-1/3 mx-auto my-10 rounded-xl shadow">
+        <div className="flex flex-col gap-6 justify-center items-center p-10 bg-white w-1/3 mx-auto my-10 rounded-xl">
           <div>
-            <ImFileEmpty className="text-6xl text-sky-400 m-auto my-2" />
-            <h1 className="font-bold text-xl">
+            <ImFileEmpty className="text-6xl text-sky-700 m-auto my-2" />
+            <h1 className="font-bold text-xl text-slate-700">
               No hay ningun producto cargado ahún
             </h1>
           </div>
           <div>
             <Link
               to={"/crear-producto"}
-              className="bg-sky-100 text-sky-600 py-3 px-6 rounded-2xl hover:shadow-md transition-all ease-linear flex gap-2 items-center"
+              className="bg-sky-100 text-sky-700 py-3 px-6 rounded-2xl hover:shadow-md transition-all ease-linear flex gap-2 items-center"
               // to={"/crear-producto"}
             >
               Crear nuevo producto
@@ -76,7 +76,7 @@ export function ProductosPage() {
       {productos.length > 0 && (
         <div className="bg-white w-full flex justify-between items-center ">
           <div className="flex">
-            <p className="bg-sky-100/80 px-8 text-[16px] py-4 text-sky-600 font-semibold">
+            <p className="bg-sky-100 px-8 text-[16px] py-4 text-sky-700 font-semibold">
               Productos
             </p>
           </div>
@@ -114,9 +114,9 @@ export function ProductosPage() {
       {productos.length > 0 && (
         <div className="flex flex-col gap-5 mx-10">
           <section className="py-10 grid grid-cols-3 gap-4">
-            <div className="bg-white rounded-3xl py-8 px-5 shadow-lg transition-all ease-linear flex justify-between items-center">
+            <div className="bg-white rounded-xl py-8 px-5 transition-all ease-linear flex justify-between items-center">
               <div>
-                <CiShoppingCart className="text-7xl shadow-md text-sky-700 bg-sky-100 rounded-full py-3 px-3.5" />
+                <CiShoppingCart className="text-7xl shadow-md text-six bg-sky-700 rounded-full py-3 px-3.5" />
               </div>
               <div className="flex flex-col items-end gap-4">
                 <div className="bg-sky-100 py-2 px-3 rounded-xl">
@@ -125,55 +125,12 @@ export function ProductosPage() {
                   </p>
                 </div>
                 <div>
-                  <p className="font-normal">
+                  <p className="font-normal text-gray-600 text-base">
                     Productos cargados hasta el momento{" "}
-                    <span className="font-bold text-sky-500 bg-sky-100 py-2 px-2 rounded-xl">
+                    <span className="font-bold text-sky-700 bg-sky-100 py-2 px-2 rounded-xl">
                       {100}
                     </span>
                   </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-3xl py-8 px-5 shadow-lg transition-all ease-linear flex justify-between items-center">
-              <div>
-                <CiShoppingCart className="text-7xl text-sky-700 bg-sky-100 rounded-full py-3 px-3.5" />
-              </div>
-              <div className="flex flex-col items-end gap-4">
-                <div className="bg-sky-100 py-2 px-3 rounded-xl">
-                  <p className="text-xs  text-sky-700 font-bold">
-                    Porcentaje de kg vendidos en el mes
-                  </p>
-                </div>
-                <div>
-                  <p className="font-normal">
-                    Kilogramos vendidos del mes{" "}
-                    <span className="font-bold text-sky-500 bg-sky-100 py-2 px-2 rounded-xl">
-                      {100.55} kgs.
-                    </span>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-3xl py-8 px-5 shadow-lg transition-all ease-linear flex justify-between items-center">
-              <div>
-                <CiShoppingCart className="text-7xl text-sky-700 bg-sky-100 rounded-full py-3 px-3.5" />
-              </div>
-              <div className="flex flex-col items-end gap-4">
-                <div className="bg-sky-100 py-2 px-3 rounded-xl">
-                  <p className="text-xs  text-sky-700 font-bold">
-                    Porcentaje de materiales vendidos en el mes
-                  </p>
-                </div>
-                <div className="flex flex-col gap-2 h-[50px] overflow-y-scroll">
-                  <p className="font-normal">
-                    Materiales vendidos por categoria y color{" "}
-                  </p>
-                  <Link className="bg-green-100  text-green-700 rounded-2xl py-3 px-4 text-sm font-bold flex gap-2 items-center justify-between">
-                    Ver materiales mas vendidos
-                    <TbHandClick className="text-xl" />
-                  </Link>
                 </div>
               </div>
             </div>
