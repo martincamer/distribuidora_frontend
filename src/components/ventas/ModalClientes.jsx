@@ -69,16 +69,19 @@ export default function ModalClientes({
                             <td>
                               <button
                                 onClick={() => {
-                                  addToCliente(
-                                    c.id,
-                                    c.nombre,
-                                    c.apellido,
-                                    c.email,
-                                    c.dni,
-                                    c.telefono,
-                                    c.localidad,
-                                    c.provincia
-                                  );
+                                  {
+                                    addToCliente(
+                                      c._id,
+                                      c.nombre,
+                                      c.apellido,
+                                      c.email,
+                                      c.dni,
+                                      c.telefono,
+                                      c.localidad,
+                                      c.provincia
+                                    ),
+                                      closeModal();
+                                  }
                                 }}
                                 className="bg-sky-700 py-2 px-6 rounded-full text-white font-semibold"
                               >

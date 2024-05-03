@@ -260,7 +260,9 @@ export function Cliente() {
                 <div>
                   <div>
                     <p class="flex items-center justify-end text-green-500 text-md">
-                      <span class="font-bold">{totalComprobantes % 100}%</span>
+                      <span class="font-bold">
+                        {Number(totalComprobantes % 100).toFixed(2)}%
+                      </span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 fill-current"
@@ -289,7 +291,9 @@ export function Cliente() {
                 <div>
                   <div>
                     <p class="flex items-center justify-end text-red-500 text-md">
-                      <span class="font-bold">{cliente.total % 100}%</span>
+                      <span class="font-bold">
+                        {Number(cliente.total % 100).toFixed(2)}%
+                      </span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 fill-current"

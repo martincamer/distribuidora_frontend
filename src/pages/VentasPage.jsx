@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useVentas } from "../context/VentasContext.jsx"; // Cambia a VentasContext
 import { ImFileEmpty } from "react-icons/im"; // Icono para cuando no hay datos
 import { BsFolderPlus } from "react-icons/bs"; // Icono para agregar
 import { TableVentas } from "../components/ventas/TableVentas.jsx"; // Cambia a la tabla de ventas
 import { IoIosAddCircleOutline } from "react-icons/io"; // Icono para agregar
 import { Link } from "react-router-dom";
+import { CSSTransition } from "react-transition-group";
 
 export function VentasPage() {
   const { ventas, getVentas } = useVentas(); // Cambia a ventas y función para obtener ventas

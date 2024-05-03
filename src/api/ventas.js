@@ -13,6 +13,9 @@ export const getVentaRequest = async (id) => axios.get(`/ventas/${id}`);
 export const updateVentaRequest = async (id, venta) =>
   axios.put(`/ventas/${id}`, venta);
 
+export const updateVentaEstadoRequest = async (id, venta) =>
+  axios.put(`/ventas-estado/${id}`, venta);
+
 // Eliminar una venta por su ID
 export const deleteVentaRequest = async (id) => axios.delete(`/ventas/${id}`);
 

@@ -5,8 +5,10 @@ import {
   deleteVentaRequest,
   updateVentaRequest,
   getVentaRequest,
+  updateVentaEstadoRequest,
 } from "../api/ventas.js"; // Asegúrate de tener las funciones de solicitud correctas para ventas
 import { toast } from "react-toastify";
+import { Navigate, useNavigate } from "react-router-dom";
 
 // Crear el contexto para ventas
 const VentasContext = createContext();
@@ -23,6 +25,7 @@ export const useVentas = () => {
 // Proveedor del contexto de ventas
 export function VentasProvider({ children }) {
   const [ventas, setVentas] = useState([]); // Estado para guardar ventas
+  const [error, setError] = useState([]);
 
   // Obtener todas las ventas
   const getVentas = async () => {
@@ -89,6 +92,8 @@ export function VentasProvider({ children }) {
     }
   };
 
+  const navigate = useNavigate();
+
   // Actualizar una venta por ID
   const updateVenta = async (id, venta) => {
     try {
@@ -99,17 +104,50 @@ export function VentasProvider({ children }) {
 
       setVentas(ventasActualizadas); // Actualiza el estado de las ventas
 
-      toast.success("Venta actualizada correctamente", {
+      toast.success("Venta actualizada con éxito", {
         position: "top-center",
         autoClose: 500,
-        hideProgressBar,
-        closeOnClick,
-        pauseOnHover,
-        draggable,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+
+      setTimeout(() => {
+        navigate("/ventas");
+      }, 3000);
+    } catch (error) {
+      setError(error.response.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
+  };
+
+  const updateVentaEstado = async (id, venta) => {
+    try {
+      const res = await updateVentaEstadoRequest(id, venta); // Solicitud para actualizar una venta
+      const ventasActualizadas = ventas.map((v) =>
+        v._id === id ? res.data : v
+      ); // Actualiza la venta en el estado
+
+      setVentas(ventasActualizadas); // Actualiza el estado de las ventas
+
+      toast.success("Estado actualizado con éxito", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
         theme: "light",
       });
     } catch (error) {
-      console.error("Error al actualizar venta:", error); // Manejo de errores
+      setError(error.response.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
@@ -123,6 +161,8 @@ export function VentasProvider({ children }) {
         createVenta,
         getVenta,
         updateVenta,
+        updateVentaEstado,
+        error,
       }}
     >
       {children}

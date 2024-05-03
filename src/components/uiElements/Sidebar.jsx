@@ -3,7 +3,8 @@ import { useAuth } from "../../context/authContext";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 import { AiOutlineDatabase } from "react-icons/ai";
-import { CiDatabase, CiUser, CiViewList } from "react-icons/ci";
+import { CiDatabase, CiUser, CiViewBoard, CiViewList } from "react-icons/ci";
+import { FaMoneyCheckAlt } from "react-icons/fa";
 
 export const SideBar = () => {
   const { logout, user } = useAuth();
@@ -123,10 +124,10 @@ export const SideBar = () => {
           >
             <div
               className="tooltip tooltip-right"
-              data-tip="VER LOS PRODUCTOS/CRAR/ETC"
+              data-tip="CREAR VENTAS/PRESUPUESTOS"
             >
               <Link to={"/ventas"}>
-                <CiUser className="text-4xl text-sky-700" />
+                <CiViewBoard className="text-4xl text-sky-700" />
               </Link>
             </div>
           </div>

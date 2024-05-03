@@ -135,19 +135,19 @@ export function ProductosPage() {
               </div>
             </div>
           </section>
-          <div className="bg-white rounded-3xl py-5 px-5 shadow-lg transition-all ease-linear flex gap-2 text-sm">
+          <div className="bg-white rounded-xl py-5 px-5 transition-all ease-linear flex gap-2 text-sm">
             <Link
               to={"/crear-producto"}
-              className="bg-sky-100 py-3 px-6 rounded-full text-sky-700 group flex gap-3 items-center relative transition-all"
+              className="bg-sky-500 font-semibold py-3 px-6 rounded-full text-white group flex gap-3 items-center relative transition-all"
             >
               <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
                 Crear nuevo producto
               </span>
-              <BsFolderPlus className="text-sky-700 text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
+              <BsFolderPlus className="text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
             </Link>
             <Link
               to={"/categorias"}
-              className="bg-green-100 py-3 px-6 rounded-full text-green-700 group flex gap-3 items-center relative transition-all"
+              className="bg-green-500/90 py-3 px-6 rounded-full text-white font-semibold group flex gap-3 items-center relative transition-all"
             >
               <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
                 Crear nuevas categorias
@@ -156,7 +156,7 @@ export function ProductosPage() {
             </Link>
             <Link
               to={"/colores"}
-              className="bg-orange-100 py-3 px-6 rounded-full text-orange-700 group flex gap-3 items-center relative transition-all"
+              className="bg-orange-500/90 py-3 px-6 rounded-full text-white font-semibold group flex gap-3 items-center relative transition-all"
             >
               <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
                 Crear nuevos colores

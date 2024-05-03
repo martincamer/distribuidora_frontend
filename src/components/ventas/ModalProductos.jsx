@@ -1,39 +1,71 @@
 import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { IoMdClose } from "react-icons/io"; // Iconos de alerta y cerrar
+import { IoMdClose } from "react-icons/io";
 import { useProductos } from "../../context/ProductosContext";
 import { generateRandomNumericId } from "../../helpers/generateId";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
-export default function ModalProductos({
-  isOpen, // Estado para indicar si el modal está abierto
-  closeModal, // Función para cerrar el modal
-  addToProducto,
-}) {
+export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
   const { productos, getProductos } = useProductos();
-  const [cantidad, setCantidad] = useState("");
-  const [kilogramos, setKilogramos] = useState("");
-  const [precio, setPrecio] = useState("");
+  const [productoData, setProductoData] = useState({});
 
   useEffect(() => {
     getProductos();
   }, []);
 
   dayjs.extend(utc);
-
   const fechaActual = dayjs().utc().format();
+
+  const handleInputChange = (index, field, value) => {
+    setProductoData((prev) => ({
+      ...prev,
+      [index]: {
+        ...prev[index],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleAddProducto = (index, producto) => {
+    const data = productoData[index] || {};
+
+    addToProducto(
+      producto._id,
+      generateRandomNumericId(),
+      producto.codigo,
+      producto.detalle,
+      producto.imagen,
+      producto.color,
+      producto.categoria,
+      producto.kg_barra_estimado,
+      parseFloat(
+        data.kilogramos || producto.kg_barra_estimado * data.cantidad
+      ) || 0,
+      parseFloat(data.precio) || 0,
+      (parseFloat(data.kilogramos || producto.kg_barra_estimado) || 0) *
+        (parseFloat(data.precio) || 0) *
+        (parseFloat(data.cantidad) || 1),
+      parseFloat(data.cantidad) || 1,
+      fechaActual
+    );
+
+    setProductoData({});
+  };
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
         <Transition.Child
-          as="div"
+          as={Fragment}
           enter="transition-opacity"
           enterFrom="opacity-0"
           enterTo="opacity-100"
+          leave="transition-opacity"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/10" /> {/* Fondo oscuro */}
+          <div className="fixed inset-0 bg-black/30" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -50,86 +82,95 @@ export default function ModalProductos({
               <Dialog.Panel className="w-auto transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <div className="flex justify-end py-2">
                   <IoMdClose
-                    onClick={closeModal} // Cierra el modal al hacer clic
-                    className="hover:text-sky-700 hover:bg-gray-100 transition-all cursor-pointer text-4xl text-slate-800 bg-gray-200 py-2 px-2 rounded-full"
+                    onClick={closeModal}
+                    className="hover:text-sky-700 transition-all cursor-pointer text-4xl text-slate-800 bg-gray-200"
                   />
                 </div>
 
-                <div className="flex justify-center flex-col gap-2 items-center">
-                  <div>
-                    <p className="font-semibold text-slate-700">
-                      Seleccionar el producto de la venta
-                    </p>
-                  </div>
+                <div className="flex flex-col gap-2 items-center">
+                  <p className="font-semibold text-slate-700 text-lg">
+                    Seleccionar productos 👋
+                  </p>
 
                   <div className="overflow-x-auto w-full capitalize">
-                    <table className="table">
-                      {/* head */}
+                    <table className="table table-auto w-full">
                       <thead>
                         <tr>
-                          <th className="text-slate-500 text-sm">Codigo</th>
+                          <th className="font-bold text-sm">Código</th>
+                          <th className="font-bold text-sm">Detalle</th>
+                          <th className="font-bold text-sm">Color</th>
+                          <th className="font-bold text-sm">
+                            Kilogramos/peso barra
+                          </th>
+                          <th className="font-bold text-sm">Cantidad</th>
+                          <th className="font-bold text-sm">Precio del kg</th>
+                          <th className="font-bold text-sm">Acción</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {productos.map((c) => (
-                          <tr>
-                            <th>{c.codigo}</th>
-                            <th>{c.detalle}</th>
-                            <th>{c.color}</th>
-                            <th>
+                        {productos.map((producto, index) => (
+                          <tr key={index}>
+                            <th className="text-sm">{producto.codigo}</th>
+                            <th className="text-sm uppercase">
+                              {producto.detalle}
+                            </th>
+                            <th className="text-sm">{producto.color}</th>
+                            <th className="text-sm">
                               <input
-                                value={kilogramos}
-                                onChange={(e) => setKilogramos(e.target.value)}
-                                className="bg-gray-200/80 rounded-xl py-2 px-3 text-slate-600 outline-none"
                                 type="text"
                                 placeholder="PESO BARRA KG"
+                                value={
+                                  productoData[index]?.kilogramos ||
+                                  producto.kg_barra_estimado
+                                }
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    index,
+                                    "kilogramos",
+                                    e.target.value
+                                  )
+                                }
+                                className="bg-gray-200 rounded-xl py-2 px-3 placeholder:font-bold placeholder:text-slate-400 text-gray-700 outline-none focus:outline-sky-500"
                               />
                             </th>
                             <th>
                               <input
-                                value={cantidad}
-                                onChange={(e) => setCantidad(e.target.value)}
-                                className="bg-gray-200/80 rounded-xl py-2 px-3 text-slate-600 outline-none"
                                 type="text"
                                 placeholder="CANTIDAD BARRAS"
+                                value={productoData[index]?.cantidad || ""}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    index,
+                                    "cantidad",
+                                    e.target.value
+                                  )
+                                }
+                                className="bg-gray-200 rounded-xl py-2 px-3 placeholder:font-bold placeholder:text-slate-400 text-gray-700 outline-none focus:outline-sky-500"
                               />
                             </th>
-                            <th className="flex gap-2 items-center">
+                            <th>
                               <input
-                                value={precio}
-                                onChange={(e) => setPrecio(e.target.value)}
-                                className="bg-gray-200/80 rounded-xl py-2 px-3 text-slate-600 outline-none"
                                 type="text"
                                 placeholder="$ PRECIO EN MONEDA ARS"
+                                value={productoData[index]?.precio || ""}
+                                onChange={(e) =>
+                                  handleInputChange(
+                                    index,
+                                    "precio",
+                                    e.target.value
+                                  )
+                                }
+                                className="bg-gray-200 rounded-xl py-2 px-3 placeholder:font-bold placeholder:text-slate-400 text-gray-700 outline-none focus:outline-sky-500"
                               />
-                              <p className="text-slate-500">
-                                {Number(precio).toLocaleString("es-AR", {
-                                  style: "currency",
-                                  currency: "ARS",
-                                })}
-                              </p>
                             </th>
                             <td>
                               <button
-                                onClick={() => {
-                                  addToProducto(
-                                    generateRandomNumericId(),
-                                    c.codigo,
-                                    c.detalle,
-                                    c.imagen,
-                                    c.color,
-                                    c.categoria,
-                                    c.kg_barra_estimado,
-                                    kilogramos,
-                                    precio,
-                                    kilogramos * precio * cantidad,
-                                    cantidad,
-                                    fechaActual
-                                  );
-                                }}
-                                className="bg-sky-700 py-2 px-6 rounded-full text-white font-semibold"
+                                className="bg-sky-700 text-white py-2 px-6 rounded-full font-semibold"
+                                onClick={() =>
+                                  handleAddProducto(index, producto)
+                                }
                               >
-                                Agregar producto
+                                Agregar
                               </button>
                             </td>
                           </tr>

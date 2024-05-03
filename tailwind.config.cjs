@@ -17,6 +17,7 @@ module.exports = {
         teeen: "#2C3E56",
         "sky-700": "#3b89e0",
         "sky-100": "#EBF5FB",
+        "sky-500": "#0287E0",
       },
     },
   },

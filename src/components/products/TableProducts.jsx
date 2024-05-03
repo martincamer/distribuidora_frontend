@@ -41,7 +41,7 @@ export const TableProducts = ({ productos }) => {
     return pageNumbers;
   };
   return (
-    <div className="mt-5">
+    <div className="my-6">
       <input
         type="text"
         placeholder="Buscar producto por codigo o detalle..."
@@ -53,28 +53,28 @@ export const TableProducts = ({ productos }) => {
         <table className="min-w-full divide-y-[1px] divide-slate-200 bg-white text-sm rounded-2xl">
           <thead>
             <tr>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
+              <th className="text-left px-4 py-4 font-semibold text-sky-700 uppercase text-sm">
                 Codigo
               </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
+              <th className="text-left px-4 py-4 font-semibold text-sky-700 uppercase text-sm">
                 Detalle
               </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
+              <th className="text-left px-4 py-4 font-semibold text-sky-700 uppercase text-sm">
                 Color
               </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
+              <th className="text-left px-4 py-4 font-semibold text-sky-700 uppercase text-sm">
                 Categoria
               </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
+              <th className="text-left px-4 py-4 font-semibold text-sky-700 uppercase text-sm">
                 Kg Estimativo
               </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
+              <th className="text-left px-4 py-4 font-semibold text-sky-700 uppercase text-sm">
                 Stock
               </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
+              <th className="text-left px-4 py-4 font-semibold text-sky-700 uppercase text-sm">
                 Stock Minimo
               </th>
-              <th className="text-left px-4 py-4 font-medium text-gray-900 uppercase">
+              <th className="text-left px-4 py-4 font-semibold text-sky-700 uppercase text-sm">
                 Stock Máximo
               </th>
             </tr>
@@ -98,13 +98,15 @@ export const TableProducts = ({ productos }) => {
                 <td className="px-4 py-4 text-gray-700 uppercase font-light text-sm">
                   {p.kg_barra_estimado}
                 </td>
-                <td className="px-4 py-4 text-sky-600 font-bold uppercase text-sm flex">
-                  <p className="py-2 px-2 bg-sky-100 rounded-xl">{p.stock}</p>
+                <td className="px-4 py-4 text-sky-700 font-bold uppercase text-sm flex">
+                  <p className="py-2 px-2.5 bg-sky-500/10 rounded-xl">
+                    {p.stock}
+                  </p>
                 </td>
-                <td className="px-4 py-4 text-sky-600 font-bold uppercase text-sm">
+                <td className="px-4 py-4 text-sky-700 font-bold uppercase text-sm">
                   {p.stock_minimo}
                 </td>
-                <td className="px-4 py-4 text-sky-600 font-bold uppercase text-sm">
+                <td className="px-4 py-4 text-sky-700 font-bold uppercase text-sm">
                   {p.stock_maximo}
                 </td>
                 <td className="px-4 py-4 text-gray-700 uppercase font-light text-sm">
@@ -112,7 +114,7 @@ export const TableProducts = ({ productos }) => {
                     <div
                       tabIndex={0}
                       role="button"
-                      className="py-2 px-3 transition-all hover:bg-sky-100 hover:text-sky-700 border-none rounded-2xl"
+                      className="py-2 px-2 transition-all hover:bg-sky-500 hover:text-white border-none rounded-full"
                     >
                       <IoIosMore className="text-2xl" />
                     </div>
@@ -122,7 +124,7 @@ export const TableProducts = ({ productos }) => {
                     >
                       <li>
                         <Link
-                          className="capitalize"
+                          className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                           to={`/editar-producto/${p._id}`}
                           // onClick={() => {
                           //   handleID(p._id), openModal();
@@ -133,7 +135,7 @@ export const TableProducts = ({ productos }) => {
                       </li>
                       <li>
                         <Link
-                          className="capitalize"
+                          className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                           to={`/producto/${p._id}`}
                           // onClick={() => {
                           //   handleID(p._id), openModal();
@@ -146,7 +148,7 @@ export const TableProducts = ({ productos }) => {
                         <button
                           onClick={() => deleleteProducto(p._id)}
                           type="button"
-                          className="capitalize"
+                          className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                         >
                           Eliminar el producto
                         </button>
