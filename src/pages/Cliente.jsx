@@ -9,12 +9,12 @@ import ModalNuevoComprobante from "../components/clients/ModalNuevoComprobante";
 import dayjs from "dayjs"; // Para formatear fechas
 import instance from "../api/axios";
 import { IoIosMore } from "react-icons/io";
-import { IoClose } from "react-icons/io5";
 
 export function Cliente() {
   const { getCliente } = useClientes(); // Función para obtener un cliente
   const [comprobante, setComprobante] = useState([]);
   const { openModal, closeModal, isOpen } = useModal(); // Para abrir y cerrar el modal
+
   const {
     openModal: openModalComprobante,
     closeModal: closeModalComprobante,

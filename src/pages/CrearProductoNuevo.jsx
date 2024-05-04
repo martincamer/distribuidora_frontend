@@ -279,17 +279,19 @@ export function CrearProductoNuevo() {
             </div>
           </div>
         </div>
-        <FileDropZone
-          dragging={dragging}
-          handleDragLeave={handleDragLeave}
-          handleDragOver={handleDragOver}
-          handleDrop={handleDrop}
-          handleFileChange={handleFileChange}
-          handleRemoveFile={handleRemoveFile}
-          setDragging={setDragging}
-          setUploadedFile={setUploadedFile}
-          uploadedFile={uploadedFile}
-        />
+        <div className="mt-28">
+          <FileDropZone
+            dragging={dragging}
+            handleDragLeave={handleDragLeave}
+            handleDragOver={handleDragOver}
+            handleDrop={handleDrop}
+            handleFileChange={handleFileChange}
+            handleRemoveFile={handleRemoveFile}
+            setDragging={setDragging}
+            setUploadedFile={setUploadedFile}
+            uploadedFile={uploadedFile}
+          />
+        </div>
       </div>
     </section>
   );

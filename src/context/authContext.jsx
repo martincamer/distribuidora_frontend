@@ -1,6 +1,13 @@
 import { useEffect } from "react";
 import { createContext, useContext, useState } from "react";
-import { loginRequest, registerRequest, verifyTokenRequest } from "../api/auth";
+import {
+  loginRequest,
+  registerRequest,
+  updateUser,
+  updateUserImagenUrl,
+  verifyTokenRequest,
+} from "../api/auth";
+import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 
 const AuthContext = createContext();
@@ -51,6 +58,70 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUserApi = async (id, datos) => {
+    try {
+      const res = await updateUser(id, datos);
+
+      const usuarioActualizado = {
+        ...user,
+        ...res.data.user, // Reemplazar con los campos actualizados
+      };
+
+      // Actualizar el estado con el nuevo objeto
+      setUser(usuarioActualizado);
+
+      toast.success("Datos editados correctamente", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        style: {
+          padding: "10px 15px",
+          borderRadius: "15px",
+        },
+        // transition: "Bounce",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateUserImagen = async (id, datos) => {
+    try {
+      const res = await updateUserImagenUrl(id, datos);
+
+      const usuarioActualizado = {
+        ...user,
+        ...res.data.user, // Reemplazar con los campos actualizados
+      };
+
+      // Actualizar el estado con el nuevo objeto
+      setUser(usuarioActualizado);
+
+      toast.success("Datos editados correctamente", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        style: {
+          padding: "10px 15px",
+          borderRadius: "15px",
+        },
+        // transition: "Bounce",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const checkLogin = async () => {
       const cookies = Cookies.get();
@@ -94,6 +165,8 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         errors,
         loading,
+        updateUserApi,
+        updateUserImagen,
       }}
     >
       {children}

@@ -80,10 +80,13 @@ export function Navbar() {
             <div className="flex justify-between items-center gap-36 w-full">
               <div className="flex gap-4 items-center">
                 <img
-                  src="https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
+                  src={
+                    user?.imagen ||
+                    "https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
+                  }
                   onClick={() => handleClick()}
                   className="
-                text-[45px] text-white cursor-pointer hover:shadow transition-all ease-linear rounded-full w-14"
+                text-[45px] text-white cursor-pointer hover:shadow transition-all ease-linear rounded-full w-14 border-[2px] border-gray-400"
                 />
               </div>{" "}
             </div>
@@ -110,7 +113,10 @@ export function Navbar() {
         >
           <Link to={"/perfil"}>
             <img
-              src="https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
+              src={
+                user?.imagen ||
+                "https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
+              }
               className="
                 text-6xl text-sky-600 cursor-pointer hover:shadow transition-all ease-linear rounded-full w-20 shadow-md shadow-gray-300"
             />

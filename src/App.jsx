@@ -38,6 +38,7 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
               <Route element={<ProtectedRoute />}>
                 <Route index path="/home" element={<HomeApp />} />
+                <Route path="/ventas" element={<VentasPage />} />
                 <Route path="/perfil" element={<Perfil />} />
                 <Route path="/clientes" element={<ClientesPage />} />
                 <Route path="/cliente/:id" element={<Cliente />} />
