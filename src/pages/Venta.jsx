@@ -8,6 +8,7 @@ export function Venta() {
   const { getVenta } = useVentas(); // Función para obtener un cliente
 
   const [venta, setVenta] = useState({}); // Estado para almacenar el cliente
+
   const params = useParams(); // Para obtener el ID del cliente desde la URL
 
   useEffect(() => {
@@ -238,7 +239,7 @@ export function Venta() {
               >
                 <div>
                   <div>
-                    <p class="flex items-center justify-end text-red-500 text-md">
+                    <p class="flex items-center justify-end text-gray-500 text-md">
                       <span class="font-bold">
                         {Number(totalKIlogramos % 100).toFixed(2)}%
                       </span>
@@ -249,7 +250,7 @@ export function Venta() {
                       >
                         <path
                           class="heroicon-ui"
-                          d="M20 9a1 1 0 012 0v8a1 1 0 01-1 1h-8a1 1 0 010-2h5.59L13 10.41l-3.3 3.3a1 1 0 01-1.4 0l-6-6a1 1 0 011.4-1.42L9 11.6l3.3-3.3a1 1 0 011.4 0l6.3 6.3V9z"
+                          d="M20 15a1 1 0 002 0V7a1 1 0 00-1-1h-8a1 1 0 000 2h5.59L13 13.59l-3.3-3.3a1 1 0 00-1.4 0l-6 6a1 1 0 001.4 1.42L9 12.4l3.3 3.3a1 1 0 001.4 0L20 9.4V15z"
                         />
                       </svg>
                     </p>
@@ -420,14 +421,25 @@ export function Venta() {
           </tbody>
         </table>
       </div>
-      <div className="mx-10">
-        <button
-          type="button"
-          className="bg-green-500/90 py-2 px-6 rounded-full text-white font-semibold"
-        >
-          Emitir facturación
-        </button>
-      </div>
+      {venta.tipo === "venta" ? (
+        <div className="mx-10">
+          <button
+            type="button"
+            className="bg-green-500/90 py-2 px-6 rounded-full text-white font-semibold"
+          >
+            Emitir facturación documento
+          </button>
+        </div>
+      ) : (
+        <div className="mx-10">
+          <button
+            type="button"
+            className="bg-green-500/90 py-2 px-6 rounded-full text-white font-semibold"
+          >
+            Emitir presupuesto documento
+          </button>
+        </div>
+      )}
     </div>
   );
 }

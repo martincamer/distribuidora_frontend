@@ -116,8 +116,8 @@ export const Perfil = () => {
               Logo de la factura
               <img
                 src={user.imagen_facturacion}
-                className="w-[98px]
-           rounded-2xl shadow-xl"
+                className="w-[100px]
+           rounded-full object-cover shadow-xl"
               />
             </p>
             <div className="text-sm font-bold text-gray-700">

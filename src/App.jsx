@@ -20,10 +20,11 @@ import { Cliente } from "./pages/Cliente";
 import { CrearVenta } from "./pages/CrearVenta";
 import { Venta } from "./pages/Venta";
 import { EditarVenta } from "./pages/EditarVenta";
+import { Perfil } from "./pages/Perfil";
+import { PruebasPdf } from "./pages/PruebasPdf";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import VentasProvider from "./context/VentasContext";
-import { Perfil } from "./pages/Perfil";
 
 function App() {
   return (
@@ -60,6 +61,7 @@ function App() {
                   element={<EditarProducto />}
                 />
                 <Route path="/profile" element={<h1>Profile</h1>} />
+                <Route path="/pruebas/:id" element={<PruebasPdf />} />
               </Route>
             </Routes>
           </ClientesProvider>
