@@ -1,9 +1,9 @@
 import React from "react";
 import { Document, Text, View, Page, Image, Font } from "@react-pdf/renderer";
-import { v4 as uuidv4 } from "uuid";
 import bold from "../../fonts/Roboto-Bold.ttf";
 import normal from "../../fonts/Roboto-Light.ttf";
 import medium from "../../fonts/Roboto-Medium.ttf";
+import { formatearDinero } from "../../helpers/FormatearDinero";
 
 Font.register({
   family: "Roboto",
@@ -81,6 +81,49 @@ export const PresupuestoDocument = ({ datos, user }) => {
   };
   const invoiceNumber = generateInvoiceNumber();
 
+  //separar el aluminio
+  // Objeto para agrupar por categoria y color
+  const groupedByCategoryAndColor = {};
+
+  // Agrupar productos por categoria y color
+  datos?.productos?.forEach((producto) => {
+    const key = `${producto.categoria}-${producto.color}`; // Clave para agrupar
+
+    if (!groupedByCategoryAndColor[key]) {
+      // Si la clave no existe, crear una nueva entrada
+      groupedByCategoryAndColor[key] = {
+        categoria: producto.categoria,
+        color: producto.color,
+        precio: producto.precio,
+        total_dinero: 0,
+        total_kilogramos: 0,
+      };
+    }
+
+    // Sumar los valores al grupo existente
+    groupedByCategoryAndColor[key].total_dinero += producto.total_dinero;
+    groupedByCategoryAndColor[key].total_kilogramos +=
+      producto.total_kilogramos;
+  });
+
+  // Convertir el objeto a un arreglo
+  const groupedProducts = Object.values(groupedByCategoryAndColor);
+
+  const totalVenta = datos?.productos?.reduce(
+    (total, producto) => total + producto.total_dinero,
+    0
+  );
+
+  // const totalKIlogramos = datos?.productos?.reduce(
+  //   (total, producto) => total + producto.total_kilogramos,
+  //   0
+  // );
+
+  // const totalPerfiles = datos?.productos?.reduce(
+  //   (total, producto) => total + producto.cantidad,
+  //   0
+  // );
+
   return (
     <Document
       style={{
@@ -90,7 +133,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
       <Page
         size="A4"
         style={{
-          padding: "30px 50px",
+          padding: "10px 30px",
         }}
       >
         <View
@@ -105,7 +148,10 @@ export const PresupuestoDocument = ({ datos, user }) => {
             style={{
               width: "120px",
             }}
-            src={user.imagen_facturacion}
+            src={
+              user?.imagen_facturacion ||
+              "https://lh5.googleusercontent.com/proxy/cbRpBBL-vhi05SpWADMaW16pJ_E2lyeEtKdOGBs6vLcvcbK9Q_Z_XU-OBZPEo67UN-GlCAkJNJ3gXH1hMe9yZ-ClwDoa5qc6rE16Y1NmAmW3hGn5r43C0lD7"
+            }
           />
           <View>
             <Text
@@ -151,6 +197,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
               style={{
                 display: "flex",
                 flexDirection: "row",
+                flexWrap: "wrap",
                 gap: "16px",
               }}
             >
@@ -159,16 +206,17 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
-                  Nombre{" "}
+                  Nombre/Apellido{" "}
                 </Text>
                 <Text
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {user.username}
@@ -179,7 +227,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Dni{" "}
@@ -188,7 +236,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {user.dni_facturacion}
@@ -199,7 +248,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Telefono{" "}
@@ -208,7 +257,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {user.telefono_facturacion}
@@ -219,7 +269,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Localidad{" "}
@@ -228,7 +278,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {user.localidad_facturacion}
@@ -239,7 +290,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Provincia{" "}
@@ -248,7 +299,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {user.provincia_facturacion}
@@ -259,7 +311,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Email{" "}
@@ -268,7 +320,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {user.email_facturacion}
@@ -312,7 +365,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Nombre/Apellido{" "}
@@ -321,7 +374,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {datos?.cliente?.nombre + " " + datos?.cliente?.apellido}
@@ -332,7 +386,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Dni{" "}
@@ -341,7 +395,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {datos?.cliente?.dni}
@@ -352,7 +407,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Telefono{" "}
@@ -361,7 +416,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {datos?.cliente?.telefono}
@@ -372,7 +428,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Localidad{" "}
@@ -381,7 +437,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {datos?.cliente?.localidad}
@@ -392,7 +449,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Provincia{" "}
@@ -401,7 +458,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {datos?.cliente?.provincia}
@@ -412,7 +470,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "bold",
-                    fontSize: "12px",
+                    fontSize: "10px",
                   }}
                 >
                   Email{" "}
@@ -421,7 +479,8 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   style={{
                     fontFamily: "Roboto",
                     fontWeight: "medium",
-                    fontSize: "12px",
+                    fontSize: "10px",
+                    textTransform: "capitalize",
                   }}
                 >
                   {datos?.cliente?.email}
@@ -448,8 +507,334 @@ export const PresupuestoDocument = ({ datos, user }) => {
             </Text>
           </View>
 
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "5px",
+              marginTop: "10px",
+            }}
+          >
+            <View
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "row",
+                gap: "8px",
+                padding: "10px 5px",
+                borderBottom: "1px solid #000",
+              }}
+            >
+              <Text
+                style={{
+                  width: "10%",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  fontFamily: "Roboto",
+                  textTransform: "uppercase",
+                }}
+              >
+                Codigo
+              </Text>
+              <Text
+                style={{
+                  width: "30%",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  fontFamily: "Roboto",
+                  textTransform: "uppercase",
+                }}
+              >
+                Descripción
+              </Text>
+              <Text
+                style={{
+                  width: "10%",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  fontFamily: "Roboto",
+                  textTransform: "uppercase",
+                }}
+              >
+                Color
+              </Text>
+              <Text
+                style={{
+                  width: "10%",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  fontFamily: "Roboto",
+                  textTransform: "uppercase",
+                }}
+              >
+                Cat.
+              </Text>
+              <Text
+                style={{
+                  width: "5%",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  fontFamily: "Roboto",
+                  textTransform: "uppercase",
+                }}
+              >
+                Kgs
+              </Text>
+              <Text
+                style={{
+                  width: "5%",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  fontFamily: "Roboto",
+                  textTransform: "uppercase",
+                }}
+              >
+                Cant.
+              </Text>
+              <Text
+                style={{
+                  width: "10%",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  fontFamily: "Roboto",
+                  textTransform: "uppercase",
+                }}
+              >
+                Total
+              </Text>
+            </View>
+            {datos?.productos?.map((p) => (
+              <View
+                key={p.id}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "8px",
+                  padding: "10px 5px",
+                }}
+              >
+                <Text
+                  style={{
+                    width: "10%",
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {p.codigo}
+                </Text>
+                <Text
+                  style={{
+                    width: "30%",
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {p.detalle}
+                </Text>
+                <Text
+                  style={{
+                    width: "10%",
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {p.color}
+                </Text>
+                <Text
+                  style={{
+                    width: "10%",
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {p.categoria}
+                </Text>
+                <Text
+                  style={{
+                    width: "5%",
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {p.total_kilogramos}
+                </Text>
+                <Text
+                  style={{
+                    width: "5%",
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {p.cantidad}
+                </Text>
+                <Text
+                  style={{
+                    width: "10%",
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {formatearDinero(p.total_dinero)}
+                </Text>
+              </View>
+            ))}
+          </View>
+        </View>
+        <View
+          style={{
+            border: "1px solid #000",
+            padding: "10px 10px",
+            marginTop: "20px",
+          }}
+        >
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: "10px",
+              fontFamily: "Roboto",
+            }}
+          >
+            Resumen
+          </Text>
+
           <View>
-            <View></View>
+            {groupedProducts.map((p) => (
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "10px",
+                  marginTop: "5px",
+                }}
+              >
+                <View
+                  style={{
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <Text>Categoria</Text>{" "}
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {p.categoria}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <Text>Color</Text>{" "}
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {p.color}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <Text>Precio kg</Text>{" "}
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {formatearDinero(p.precio)}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <Text>Total Dinero</Text>{" "}
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {formatearDinero(p.total_dinero)}
+                  </Text>
+                </View>
+                <View
+                  style={{
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <Text>Total kgs</Text>{" "}
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {p.total_kilogramos.toFixed(2)}
+                  </Text>
+                </View>
+              </View>
+            ))}
+          </View>
+
+          <View
+            style={{
+              marginTop: 5,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "bold",
+                fontSize: "10px",
+                fontFamily: "Roboto",
+              }}
+            >
+              Total $
+            </Text>
+            <Text
+              style={{
+                fontWeight: "medium",
+                fontSize: "10px",
+                fontFamily: "Roboto",
+                textTransform: "uppercase",
+              }}
+            >
+              {formatearDinero(totalVenta)}
+            </Text>
           </View>
         </View>
       </Page>

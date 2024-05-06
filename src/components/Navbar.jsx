@@ -27,44 +27,49 @@ export function Navbar() {
   const menuRef = useRef(null);
 
   return (
-    <header className="bg-[#0287E0] z-[-100]">
+    <header
+      className={`${isAuthenticated ? "bg-sky-500" : "bg-white"} z-[-100]`}
+    >
       <nav className="flex justify-between items-center py-2 px-10 container mx-auto">
         <h1 className="text-2xl font-bold">
-          <Link
-            className="text-white relative"
-            to={isAuthenticated ? "/home" : "/"}
-          >
-            <p className="z-100">Gestión Prisma</p>
+          <Link className="relative" to={isAuthenticated ? "/home" : "/"}>
+            <p
+              className={`${
+                isAuthenticated ? "text-white" : "text-sky-500 py-3"
+              } z-[-100]`}
+            >
+              Gestión Prisma
+            </p>
           </Link>
         </h1>
         {!isAuthenticated && (
           <ul className="flex items-center gap-4 text-lg">
             <Link
-              className="hover:bg-teal-500 py-2 px-4 rounded-xl hover:shadow hover:text-white transition-all ease-in-out"
+              className="hover:bg-sky-500/10 py-1.5 text-sm font-medium px-6 rounded-xl hover:text-sky-500 transition-all ease-in-out"
               to={"/funcionalidades"}
             >
               Funcionalidades
             </Link>
             <Link
-              className="hover:bg-teal-500 py-2 px-4 rounded-xl hover:shadow hover:text-white transition-all ease-in-out"
+              className="hover:bg-sky-500/10 py-1.5 text-sm font-medium px-6 rounded-xl hover:text-sky-500 transition-all ease-in-out"
               to={"/funcionalidades"}
             >
               Precios
             </Link>
             <Link
-              className="hover:bg-teal-500 py-2 px-4 rounded-xl hover:shadow hover:text-white transition-all ease-in-out"
+              className="hover:bg-sky-500/10 py-1.5 text-sm font-medium px-6 rounded-xl hover:text-sky-500 transition-all ease-in-out"
               to={"/funcionalidades"}
             >
               Asesorías
             </Link>
             <Link
-              className="hover:bg-teal-500 py-2 px-4 rounded-xl hover:shadow hover:text-white transition-all ease-in-out"
+              className="hover:bg-sky-500/10 py-1.5 text-sm font-medium px-6 rounded-xl hover:text-sky-500 transition-all ease-in-out"
               to={"/funcionalidades"}
             >
               Preguntas frecuentes
             </Link>
             <Link
-              className="hover:bg-teal-500 py-2 px-4 rounded-xl hover:shadow hover:text-white transition-all ease-in-out"
+              className="hover:bg-sky-500/10 py-1.5 text-sm font-medium px-6 rounded-xl hover:text-sky-500 transition-all ease-in-out"
               to={"/funcionalidades"}
             >
               Nosotros
@@ -82,17 +87,27 @@ export function Navbar() {
                   }
                   onClick={() => setClick(true)}
                   className="
-                text-[45px] text-white cursor-pointer hover:shadow transition-all ease-linear rounded-full w-14 border-[2px] border-gray-400"
+                text-[45px] text-white cursor-pointer hover:shadow transition-all ease-linear rounded-full w-[60px] h-[60px] border border-gray-700/90"
                 />
               </div>
             </div>
           ) : (
             <>
               <li>
-                <ButtonLink to="/login">Login</ButtonLink>
+                <Link
+                  className="font-semibold text-white bg-sky-500 py-2 px-6 rounded-full text-sm hover:shadow-md  transition-all"
+                  to="/login"
+                >
+                  Iniciar Sesion
+                </Link>
               </li>
               <li>
-                <ButtonLink to="/register">Register</ButtonLink>
+                <Link
+                  className="font-semibold text-white bg-sky-500 py-2 px-6 rounded-full text-sm hover:shadow-md  transition-all"
+                  to="/register"
+                >
+                  Registrarte ahora
+                </Link>
               </li>
             </>
           )}
@@ -111,7 +126,7 @@ export function Navbar() {
                   "https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
                 }
                 className="
-                text-6xl text-sky-600 cursor-pointer hover:shadow transition-all ease-linear rounded-full w-20 shadow-md shadow-gray-300"
+                text-6xl text-sky-600 cursor-pointer hover:shadow transition-all ease-linear rounded-full w-[80px] h-[80px] border shadow-md shadow-gray-300"
               />
             </Link>
             <p className="text-sm capitalize text-slate-700 font-bold">

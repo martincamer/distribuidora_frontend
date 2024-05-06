@@ -82,9 +82,9 @@ function Register() {
           )}
           <Button>CREAR CUENTA AHORA</Button>
         </form>
-        <p className="justify-between flex mt-5">
+        <p className="justify-between flex mt-5 text-sm">
           Ya tienes una cuenta?
-          <Link to="/login" className="text-teal-500 underline">
+          <Link to="/login" className="text-sky-500 font-semibold underline">
             Inicia Sesión
           </Link>
         </p>

@@ -27,15 +27,15 @@ export function LoginPage() {
   }, [isAuthenticated]);
 
   return (
-    <div className="h-[calc(100vh-100px)] flex gap-12 items-center border-slate-200 border-[1px]">
+    <div className="h-[calc(100vh-100px)] flex gap-12 items-center">
       <img className="w-[55%] object-cover opacity-[0.7] h-[100%]" src={img} />
 
       <Card>
         {loginErrors.map((error, i) => (
           <Message message={error} key={i} />
         ))}
-        <h1 className="text-2xl font-semibold text-center mb-5">
-          Inisiar Sesión
+        <h1 className="text-xl font-semibold text-center mb-5">
+          Te damos la bienvenida 👋
         </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
@@ -62,14 +62,14 @@ export function LoginPage() {
             <p>{errors.password?.message}</p>
           </div>
 
-          <div className="text-sm">
+          <div className="text-sm mt-2">
             <Button>Iniciar Sesion</Button>
           </div>
         </form>
 
-        <p className="flex gap-x-2 justify-between">
+        <p className="flex gap-x-2 justify-between mt-3 text-sm">
           No tienes una cuenta aun?{" "}
-          <Link to="/register" className="text-teal-500 underline">
+          <Link to="/register" className="text-sky-500 font-semibold underline">
             Registrate ahora
           </Link>
         </p>

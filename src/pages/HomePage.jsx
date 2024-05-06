@@ -17,12 +17,14 @@ function HomePage() {
     <>
       <section className="imagen_url bg-white-500 flex items-center">
         <header className="p-20 container mx-auto px-10 md:px-0">
-          <h1 className="text-4xl py-2 font-bold text-teal-500">
-            SOFTWARE DE GESTIÓN
+          <h1 className="text-4xl py-2 font-bold text-sky-700">
+            SOFTWARE DE GESTIÓN/ALUMINIO
           </h1>
-          <p className="text-md text-slate-900 text-3xl flex flex-col gap-1 mt-2">
+          <p className="text-md text-slate-900 text-3xl flex flex-col gap-1 mt-2 font-medium">
             Controlá cuánto invertís.
-            <span className="pl-32 text-4xl">Conocé cuánto ganás.</span>
+            <span className="pl-32 text-4xl text-sky-500">
+              Conocé cuánto ganás.
+            </span>
           </p>
 
           <p className="mt-6 text-500 text-lg underline">
@@ -31,7 +33,7 @@ function HomePage() {
           </p>
 
           <Link
-            className="bg-teal-500 text-xl rounded-xl text-white px-12 uppercase font-semibold py-2 inline-block mt-6"
+            className="bg-sky-500 text-sm rounded-xl text-white px-12 uppercase font-semibold py-2 inline-block mt-6"
             to="/register"
           >
             USAR GRATÍS AHORA
@@ -42,13 +44,12 @@ function HomePage() {
       <section className=" bg-slate-100 py-20 px-10 flex gap-5 flex-col justify-center items-center">
         <div className="flex flex-col gap-3">
           <p className="text-3xl font-semibold text-slate-600">
-            + 9000 cuentas creadas
+            + 50 cuentas creadas
           </p>
           <p className="text-center text-slate-800 text-xl">
             Algunas marcas que usan Gestión Prisma...
           </p>
         </div>
-        <div>MARCAS..</div>
       </section>
 
       <section className="mt-16 bg-white py-14 px-10 flex gap-5 flex-col justify-center items-center">
