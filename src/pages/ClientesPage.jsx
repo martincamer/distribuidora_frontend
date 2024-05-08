@@ -50,8 +50,6 @@ export function ClientesPage() {
     getComprobantesDelMesRequest();
   }, []);
 
-  console.log("asd", comprobante);
-
   const totalGanancias = comprobante.reduce((total, c) => {
     return Number(total) + Number(c.total);
   }, 0);

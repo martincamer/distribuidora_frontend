@@ -89,13 +89,6 @@ export const TableClients = ({ clientes }) => {
           />
         </Transition>
       </div>
-      {/* <input
-        type="text"
-        placeholder="Buscar cliente por nombre o localidad..."
-        value={searchTerm}
-        onChange={handleSearch}
-        className="block px-4 py-2.5 mb-3 w-1/3 rounded-xl shadow-md transition-all outline-none focus:ring-sky-500 focus:border-sky-500"
-      /> */}
 
       <div className="transition-all ease-linear rounded-2xl mt-6">
         <table className="min-w-full bg-white text-sm rounded-2xl table">
@@ -121,6 +114,9 @@ export const TableClients = ({ clientes }) => {
               </th>
               <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
                 Email
+              </th>
+              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
+                Deuda
               </th>
             </tr>
           </thead>
@@ -148,6 +144,22 @@ export const TableClients = ({ clientes }) => {
                 </th>
                 <th className="px-4 py-4 text-gray-500 uppercase text-sm">
                   {c.email}
+                </th>
+                <th className="px-4 py-4 uppercase text-sm flex">
+                  <p
+                    className={` py-2 px-3 rounded-full  font-extrabold ${
+                      c.total > 0
+                        ? "bg-orange-100 text-orange-500"
+                        : "bg-green-100 text-green-600"
+                    }`}
+                  >
+                    {c.total.toLocaleString("es-AR", {
+                      style: "currency",
+                      currency: "ARS",
+                      minimumFractionDigits: 2, // Mínimo dos decimales
+                      maximumFractionDigits: 2, // Máximo dos decimales
+                    })}
+                  </p>
                 </th>
                 <td className="px-4 py-4 text-gray-500 uppercase text-sm">
                   <div className="dropdown dropdown-left drop-shadow-lg">

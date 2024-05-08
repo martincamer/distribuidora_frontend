@@ -116,7 +116,7 @@ export default function ModalClientes({
                         </tr>
                       </thead>
                       <tbody className="uppercase">
-                        {clientes.map((c) => (
+                        {filteredVentas.map((c) => (
                           <tr>
                             <th>{c.nombre}</th>
                             <th>{c.apellido}</th>

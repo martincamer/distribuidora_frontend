@@ -76,7 +76,10 @@ export function ProductosPage() {
           </Link>
         </div>
         <div className="mx-5 z-[0] flex gap-2">
-          <button className="text-sm font-semibold bg-green-500 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0">
+          <Link
+            to={"/colores"}
+            className="text-sm font-semibold bg-green-500 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0"
+          >
             <Link
               to={"/colores"}
               className="transition-opacity duration-300 opacity-100 group-hover:opacity-0"
@@ -84,7 +87,7 @@ export function ProductosPage() {
               Crear nuevo color
             </Link>
             <IoIosAddCircleOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
-          </button>
+          </Link>
           <Link
             to={"/categorias"}
             className="text-sm font-semibold bg-green-500 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0"
@@ -94,7 +97,10 @@ export function ProductosPage() {
             </span>
             <IoIosAddCircleOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
           </Link>
-          <button className="text-sm font-semibold bg-green-500 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0">
+          <Link
+            to={"/crear-producto"}
+            className="text-sm font-semibold bg-green-500 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0"
+          >
             <Link
               to={"/crear-producto"}
               className="transition-opacity duration-300 opacity-100 group-hover:opacity-0"
@@ -102,7 +108,7 @@ export function ProductosPage() {
               Crear nuevo producto
             </Link>
             <IoIosAddCircleOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
-          </button>
+          </Link>
         </div>
       </div>
 
