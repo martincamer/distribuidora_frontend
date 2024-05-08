@@ -3,15 +3,16 @@ import { useForm } from "react-hook-form";
 import { useVentas } from "../context/VentasContext"; // Para obtener la venta a editar
 import { useEffect, useState } from "react";
 import { useModal } from "../helpers/modal"; // Para manejar modales
+import { useProductos } from "../context/ProductosContext.jsx";
 import ModalClientes from "../components/ventas/ModalClientes";
 import ModalProductos from "../components/ventas/ModalProductos.jsx";
 import dayjs from "dayjs";
-import { toast } from "react-toastify"; // Para mostrar notificaciones
 
 export function EditarVenta() {
   const { id } = useParams(); // Obtener el ID de la venta
   const navigate = useNavigate(); // Para redirigir después de la edición
   const { getVenta, updateVenta, error } = useVentas(); // Funciones para obtener y actualizar la venta
+  const { productos, setProductos } = useProductos();
 
   const [clienteSeleccionado, setClienteSeleccionado] = useState({});
   const [productosSeleccionados, setProductosSeleccionados] = useState([]);
@@ -48,6 +49,9 @@ export function EditarVenta() {
     fetchVenta(); // Llama para obtener la venta al montar el componente
   }, [id, getVenta, setValue]);
 
+  console.log(productos);
+
+  // Simulación de función onSubmit
   const onSubmit = async (formData) => {
     const ventaData = {
       ...formData,
@@ -56,7 +60,32 @@ export function EditarVenta() {
       date: dayjs.utc(formData.date).format(),
     };
 
+    // Aquí actualizas el estado de productos
+    const productosActualizados = productos.map((producto) => {
+      // Encuentra el producto en la ventaData
+      const productoVendido = ventaData.productos.find(
+        (prod) => prod.ObjectId === producto._id
+      );
+
+      // Si el producto se vendió, actualiza el stock
+      if (productoVendido) {
+        return {
+          ...producto,
+          stock: producto.stock - productoVendido.cantidad,
+        };
+      }
+
+      // Si no se vendió, regresa el producto sin cambios
+      return producto;
+    });
+
+    // Actualiza el estado de productos con el nuevo valor
+    setProductos(productosActualizados);
+
+    // Aquí podrías llamar a tu función para actualizar la venta en el backend
     await updateVenta(id, ventaData); // Actualizar la venta
+
+    console.log("DATA", ventaData);
   };
 
   const addToCliente = (
@@ -176,12 +205,10 @@ export function EditarVenta() {
 
       {/* Formulario para editar la venta */}
       <div className="mx-10 flex justify-start items-start gap-8 relative">
-        {error ? (
-          <div className="bg-red-100  rounded-2xl py-6 px-6 text-sm text-red-800 font-semibold fixed left-[40%] shadow-xl transition-all">
+        {error.length > 0 && (
+          <div className="bg-red-100 uppercase  rounded-2xl py-6 px-6 text-sm text-red-800 font-semibold fixed left-[40%] shadow-xl transition-all z-[100]">
             {error}
           </div>
-        ) : (
-          ""
         )}
         <div className="w-3/4">
           <div className="flex flex-col gap-1">

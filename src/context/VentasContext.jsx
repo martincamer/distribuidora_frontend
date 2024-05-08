@@ -98,6 +98,8 @@ export function VentasProvider({ children }) {
   const updateVenta = async (id, venta) => {
     try {
       const res = await updateVentaRequest(id, venta); // Solicitud para actualizar una venta
+      console.log(res);
+
       const ventasActualizadas = ventas.map((v) =>
         v._id === id ? res.data : v
       ); // Actualiza la venta en el estado

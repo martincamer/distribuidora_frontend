@@ -382,22 +382,34 @@ export function CrearVenta() {
                   </button>
                 </div>
                 <div className="w-full scroll-bar overflow-x-scroll">
-                  <table className="table">
+                  <table className="table uppercase">
                     {/* head */}
                     <thead>
                       <tr>
-                        <th className="text-slate-500 text-sm">Código</th>
-                        <th className="text-slate-500 text-sm">Detalle</th>
-                        <th className="text-slate-500 text-sm">Color</th>
-                        <th className="text-slate-500 text-sm">Categoría</th>
-                        <th className="text-slate-500 text-sm">
+                        <th className="text-slate-500 text-sm uppercase">
+                          Código
+                        </th>
+                        <th className="text-slate-500 text-sm uppercase">
+                          Detalle
+                        </th>
+                        <th className="text-slate-500 text-sm uppercase">
+                          Color
+                        </th>
+                        <th className="text-slate-500 text-sm uppercase">
+                          Categoría
+                        </th>
+                        <th className="text-slate-500 text-sm uppercase">
                           Peso Total (kg)
                         </th>
-                        <th className="text-slate-500 text-sm">
+                        <th className="text-slate-500 text-sm uppercase">
                           Precio kg (ARS)
                         </th>
-                        <th className="text-slate-500 text-sm">Cantidad</th>
-                        <th className="text-slate-500 text-sm">Total final</th>
+                        <th className="text-slate-500 text-sm uppercase">
+                          Cantidad
+                        </th>
+                        <th className="text-slate-500 text-sm uppercase">
+                          Total final
+                        </th>
                       </tr>
                     </thead>
                     <tbody>

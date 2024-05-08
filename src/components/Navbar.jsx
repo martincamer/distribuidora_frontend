@@ -1,30 +1,8 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { ButtonLink } from "./ui/ButtonLink";
-import { IoLogOutOutline } from "react-icons/io5";
-import { BsFiletypePdf, BsPersonCircle } from "react-icons/bs";
-import { MdPerson, MdWork } from "react-icons/md";
-import { useEffect, useRef, useState } from "react";
 
 export function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
-
-  const [click, setClick] = useState(false);
-
-  const handleClickOutside = (event) => {
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setClick(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const menuRef = useRef(null);
 
   return (
     <header
@@ -79,16 +57,59 @@ export function Navbar() {
         <ul className="flex gap-x-4">
           {isAuthenticated ? (
             <div className="flex justify-between items-center gap-36 w-full">
-              <div className="flex gap-4 items-center">
-                <img
-                  src={
-                    user?.imagen ||
-                    "https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
-                  }
-                  onClick={() => setClick(true)}
-                  className="
-                text-[45px] text-white cursor-pointer hover:shadow transition-all ease-linear rounded-full w-[60px] h-[60px] border border-gray-700/90"
-                />
+              <div className="dropdown dropdown-end">
+                <div tabIndex={0} role="button" className="avatar">
+                  <div className="w-16 rounded-full">
+                    <img
+                      alt="Tailwind CSS Navbar component"
+                      src={
+                        user?.imagen ||
+                        "https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
+                      }
+                    />
+                  </div>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="mt-3 z-[1] p-2 shadow-2xl menu menu-sm dropdown-content bg-base-100 rounded-box w-60"
+                >
+                  <div className="py-2 px-2">
+                    <img
+                      className="rounded-full w-28 mx-auto"
+                      src={
+                        user.imagen ||
+                        "https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
+                      }
+                      alt=""
+                    />
+                    <div className="py-2 ">
+                      <p className="font-semibold text-sky-500 capitalize text-center">
+                        {user.username}
+                      </p>
+                      <p className="font-semibold text-gray-500 text-xs capitalize text-center">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
+                  <li className="mb-1">
+                    <Link
+                      to={"/perfil"}
+                      className="justify-between hover:bg-sky-500 py-2 transition-all hover:text-white font-semibold"
+                    >
+                      Perfil
+                      <span className="badge">Nuevo</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => logout()}
+                      type="button"
+                      className="justify-between hover:bg-sky-500 py-2 transition-all hover:text-white font-semibold"
+                    >
+                      Salir de la aplicación
+                    </button>
+                  </li>
+                </ul>
               </div>
             </div>
           ) : (
@@ -113,7 +134,7 @@ export function Navbar() {
           )}
         </ul>
       </nav>
-      {isAuthenticated &&
+      {/* {isAuthenticated &&
         (click ? (
           <div
             className={`transition-all ease-linear duration-300 absolute flex justify-center items-center flex-col rounded-bl-xl right-0 bg-white shadow-xl shadow-black/20  py-5 w-1/6 gap-2 z-[100]`}
@@ -169,7 +190,7 @@ export function Navbar() {
           </div>
         ) : (
           ""
-        ))}
+        ))} */}
     </header>
   );
 }

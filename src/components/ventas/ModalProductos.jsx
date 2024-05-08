@@ -96,15 +96,28 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
                     <table className="table table-auto w-full">
                       <thead>
                         <tr>
-                          <th className="font-bold text-sm">Código</th>
-                          <th className="font-bold text-sm">Detalle</th>
-                          <th className="font-bold text-sm">Color</th>
-                          <th className="font-bold text-sm">
+                          <th className="font-bold text-sm uppercase">
+                            Código
+                          </th>
+                          <th className="font-bold text-sm uppercase">
+                            Detalle
+                          </th>
+                          <th className="font-bold text-sm uppercase">Color</th>
+                          <th className="font-bold text-sm uppercase">
+                            Stock/Fabrica
+                          </th>
+                          <th className="font-bold text-sm uppercase">
                             Kilogramos/peso barra
                           </th>
-                          <th className="font-bold text-sm">Cantidad</th>
-                          <th className="font-bold text-sm">Precio del kg</th>
-                          <th className="font-bold text-sm">Acción</th>
+                          <th className="font-bold text-sm uppercase">
+                            Cantidad
+                          </th>
+                          <th className="font-bold text-sm uppercase">
+                            Precio del kg
+                          </th>
+                          <th className="font-bold text-sm uppercase">
+                            Acción
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -115,6 +128,9 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
                               {producto.detalle}
                             </th>
                             <th className="text-sm">{producto.color}</th>
+                            <th className="text-sm text-sky-500">
+                              {producto.stock}
+                            </th>
                             <th className="text-sm">
                               <input
                                 type="text"
