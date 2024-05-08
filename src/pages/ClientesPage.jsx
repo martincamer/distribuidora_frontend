@@ -1,16 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useClientes } from "../context/ClientesContext"; // Cambia el contexto a Clientes
-import { CiUser } from "react-icons/ci"; // Icono de usuario para clientes
 import { ImFileEmpty } from "react-icons/im";
 import { BsFolderPlus } from "react-icons/bs";
 import { TableClients } from "../components/clients/TableClients.jsx"; // Cambia la tabla de productos por la de clientes
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import { Link } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
+import instance from "../api/axios";
 import video from "../assets/video/producto.mp4";
 
 export function ClientesPage() {
   const { clientes, getClientes } = useClientes(); // Cambia a clientes y función para obtener clientes
+
+  const [comprobante, setComprobante] = useState([]);
 
   useEffect(() => {
     getClientes(); // Obtiene los clientes cuando el componente se monta
@@ -23,6 +26,35 @@ export function ClientesPage() {
       modal.showModal();
     }
   }, []); // El array vacío garantiza que el efecto solo se ejecute una vez al montar el componente
+
+  const totalDeuda = clientes.reduce((total, c) => {
+    return Number(total) + Number(c.total);
+  }, 0);
+
+  const getComprobantesDelMesRequest = async () => {
+    try {
+      const response = await instance.get(`/clientes/comprobantes-mensuales`);
+
+      // Llama a la función para actualizar el cliente en el backend
+
+      console.log(response);
+
+      return setComprobante(response.data); // Devuelve los comprobantes del mes actual
+    } catch (error) {
+      console.error("Error al obtener comprobantes del mes:", error);
+      throw error; // Re-lanza el error para manejo posterior
+    }
+  };
+
+  useEffect(() => {
+    getComprobantesDelMesRequest();
+  }, []);
+
+  console.log("asd", comprobante);
+
+  const totalGanancias = comprobante.reduce((total, c) => {
+    return Number(total) + Number(c.total);
+  }, 0);
 
   return (
     <div>
@@ -110,33 +142,109 @@ export function ClientesPage() {
       {clientes.length > 0 && (
         <div className="flex flex-col gap-5 mx-10">
           <section className="py-10 grid grid-cols-3 gap-4">
-            <div className="bg-white rounded-3xl py-8 px-5 shadow-lg transition-all ease-linear flex justify-between items-center">
-              <div>
-                <CiUser className="text-7xl shadow-md text-sky-700 bg-sky-100 rounded-full py-3 px-3.5" />
-              </div>
-              <div className="flex flex-col items-end gap-4">
-                <div className="bg-sky-100 py-2 px-3 rounded-xl">
-                  <p className="text-xs text-sky-700 font-bold">
-                    Número total de clientes
-                  </p>
+            <div className="stats shadow-xl items-center">
+              <div className="stat">
+                <div className="stat-title font-semibold">
+                  Total clientes cargados
                 </div>
-                <div>
-                  <p className="font-normal">
-                    Clientes cargados hasta el momento{" "}
-                    <span className="font-bold text-sky-500 bg-sky-100 py-2 px-2 rounded-xl">
-                      {clientes.length}
-                    </span>
-                  </p>
+                <div className="stat-value">{clientes.length}</div>
+                <div className="stat-desc font-bold text-green-500 mt-1">
+                  ↗︎ {clientes.length % 100}%
+                </div>
+              </div>
+
+              <div>
+                <div className="py-5 px-5 w-32 font-bold mx-auto">
+                  <CircularProgressbar
+                    value={clientes.length % 100}
+                    text={`${clientes.length % 100}%`}
+                    strokeWidth={9}
+                    // backgroundPadding={"#22c55e"}
+                    styles={buildStyles({
+                      textColor: "#0287e0",
+                      pathColor: "#0287e0",
+                      trailColor: "#e5e7eb",
+                    })}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="stats shadow-xl items-center">
+              <div className="stat">
+                <div className="stat-title font-semibold">
+                  Total deuda clientes
+                </div>
+                <div className="stat-value text-red-500">
+                  {" "}
+                  {totalDeuda.toLocaleString("es-AR", {
+                    style: "currency",
+                    currency: "ARS",
+                    minimumFractionDigits: 2, // Mínimo dos decimales
+                    maximumFractionDigits: 2, // Máximo dos decimales
+                  })}
+                </div>
+                <div className="stat-desc font-bold text-red-500 mt-1">
+                  ↗︎ {Number(totalDeuda & 100).toFixed(2)}%
+                </div>
+              </div>
+
+              <div>
+                <div className="py-5 px-5 w-32 font-bold mx-auto">
+                  <CircularProgressbar
+                    value={Number(totalDeuda) & 100}
+                    text={`${Number(totalDeuda & 100)}%`}
+                    strokeWidth={9}
+                    // backgroundPadding={"#22c55e"}
+                    styles={buildStyles({
+                      textColor: "#ef4444",
+                      pathColor: "#ef4444 ",
+                      trailColor: "#e5e7eb",
+                    })}
+                  />
                 </div>
               </div>
             </div>
 
+            <div className="stats shadow-xl items-center">
+              <div className="stat">
+                <div className="stat-title font-semibold">
+                  Total ganancias del mes
+                </div>
+                <div className="stat-value text-sky-500">
+                  {totalGanancias.toLocaleString("es-AR", {
+                    style: "currency",
+                    currency: "ARS",
+                    minimumFractionDigits: 2, // Mínimo dos decimales
+                    maximumFractionDigits: 2, // Máximo dos decimales
+                  })}
+                </div>
+                <div className="stat-desc font-bold text-sky-500 mt-1">
+                  ↗︎ {Number(totalGanancias & 100).toFixed(2)}%
+                </div>
+              </div>
+
+              <div>
+                <div className="py-5 px-5 w-32 font-bold mx-auto">
+                  <CircularProgressbar
+                    value={Number(totalGanancias) & 100}
+                    text={`${Number(totalGanancias & 100)}%`}
+                    strokeWidth={9}
+                    // backgroundPadding={"#22c55e"}
+                    styles={buildStyles({
+                      textColor: "#0287e0 ",
+                      pathColor: "#0287e0  ",
+                      trailColor: "#e5e7eb",
+                    })}
+                  />
+                </div>
+              </div>
+            </div>
             {/* Aquí podrías agregar otras métricas relacionadas con clientes */}
           </section>
-          <div className="bg-white rounded-3xl py-5 px-5 shadow-lg transition-all ease-linear flex gap-2 text-sm">
+          <div className="bg-white rounded-xl py-5 px-5 transition-all ease-linear flex gap-2 text-sm">
             <Link
               to={"/crear-cliente"}
-              className="bg-sky-100 py-3 px-6 rounded-full text-sky-700 group flex gap-3 items-center relative transition-all"
+              className="bg-sky-500 py-3 px-6 rounded-full text-white font-semibold group flex gap-3 items-center relative transition-all"
             >
               Crear nuevo cliente
             </Link>

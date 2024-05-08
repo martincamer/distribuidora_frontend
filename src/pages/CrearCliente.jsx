@@ -70,24 +70,21 @@ export function CrearClienteNuevo() {
       <div className="mx-10 flex justify-start items-start gap-16">
         <div className="w-1/2">
           <div className="flex flex-col gap-1">
-            <p className="font-semibold text-slate-700 mt-10 text-xl">
+            <p className="font-bold text-slate-700 mt-10 text-xl">
               Crear Cliente
             </p>
-            <p className="text-slate-600 font-normal text-sm">
+            <p className="text-slate-600 font-medium text-sm">
               En esta sección podrás crear nuevos clientes.
             </p>
           </div>
 
           <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
             <div className="bg-gray-100 py-4 rounded-t-xl">
-              <p className="text-sky-700 text-center text-base font-semibold">
+              <p className="text-sky-500 text-center text-base font-bold">
                 Formulario
               </p>
             </div>
             <div className="px-10 py-8 flex flex-col gap-5">
-              <div>
-                <p className="text-sm text-sky-700">Crear un nuevo cliente</p>
-              </div>
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4"
@@ -100,7 +97,7 @@ export function CrearClienteNuevo() {
                     {...register("nombre", { required: true })}
                     type="text"
                     placeholder="Nombre del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
                   />
                   {errors.nombre && (
                     <span className="text-red-500 text-sm uppercase">
@@ -117,7 +114,7 @@ export function CrearClienteNuevo() {
                     {...register("apellido", { required: true })}
                     type="text"
                     placeholder="Apellido del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
                   />
                   {errors.apellido && (
                     <span className="text-red-500 text-sm uppercase">
@@ -134,7 +131,7 @@ export function CrearClienteNuevo() {
                     {...register("localidad", { required: true })}
                     type="text"
                     placeholder="Localidad del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
                   />
                   {errors.localidad && (
                     <span className="text-red-500 text-sm uppercase">
@@ -151,7 +148,7 @@ export function CrearClienteNuevo() {
                     {...register("provincia", { required: true })}
                     type="text"
                     placeholder="Provincia del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
                   />
                   {errors.provincia && (
                     <span className="text-red-500 text-sm uppercase">
@@ -168,7 +165,7 @@ export function CrearClienteNuevo() {
                     {...register("dni")}
                     type="text"
                     placeholder="DNI del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
                   />
                 </div>
 
@@ -180,7 +177,7 @@ export function CrearClienteNuevo() {
                     {...register("telefono")}
                     type="text"
                     placeholder="Teléfono del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 uppercase" // Hace que todo el texto esté en mayúsculas
                   />
                 </div>
 
@@ -192,14 +189,14 @@ export function CrearClienteNuevo() {
                     {...register("email")}
                     type="email"
                     placeholder="Email del cliente"
-                    className="uppercase text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700"
+                    className="uppercase text-sm text-slate-700 bg-gray-100 font-bold rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700"
                   />
                 </div>
 
                 <div>
                   <button
                     type="submit"
-                    className="bg-green-500 py-2 px-4 text-sm rounded-xl font-bold text-white mt-3 hover:bg-green-600/90 cursor-pointer uppercase" // Aplica 'uppercase'
+                    className="bg-green-500 py-2 px-6 text-sm rounded-full font-bold text-white mt-3 hover:bg-green-600/90 cursor-pointer"
                   >
                     Guardar Cliente
                   </button>

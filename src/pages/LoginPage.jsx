@@ -27,7 +27,7 @@ export function LoginPage() {
   }, [isAuthenticated]);
 
   return (
-    <div className="h-[calc(100vh-100px)] flex gap-12 items-center">
+    <div className="h-screen flex gap-12 items-center">
       <img className="w-[55%] object-cover opacity-[0.7] h-[100%]" src={img} />
 
       <Card>

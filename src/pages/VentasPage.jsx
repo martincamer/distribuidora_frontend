@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useVentas } from "../context/VentasContext.jsx"; // Cambia a VentasContext
 import { ImFileEmpty } from "react-icons/im"; // Icono para cuando no hay datos
 import { BsFolderPlus } from "react-icons/bs"; // Icono para agregar
@@ -7,6 +7,7 @@ import { IoIosAddCircleOutline } from "react-icons/io"; // Icono para agregar
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import video from "../assets/video/producto.mp4";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 export function VentasPage() {
   const { ventas, getVentas } = useVentas(); // Cambia a ventas y función para obtener ventas
@@ -22,6 +23,21 @@ export function VentasPage() {
       modal.showModal();
     }
   }, []); // El array vacío garantiza que el efecto solo se ejecute una vez al montar el componente
+
+  // Filtrar las ventas que son de tipo 'venta'
+  const ventasDeTipoVenta = ventas.filter((venta) => venta.tipo === "venta");
+
+  // Calcular el total de ganancias para cada venta de tipo 'venta'
+  const totalGanancias = ventasDeTipoVenta.map((venta) => {
+    return venta.productos.reduce((suma, producto) => {
+      return suma + producto.total_dinero; // Sumar el total_dinero de cada producto
+    }, 0);
+  });
+
+  // Calcular el total de ganancias para todas las ventas de tipo 'venta' combinadas
+  const sumaTotalGanancias = totalGanancias.reduce((suma, ganancia) => {
+    return suma + ganancia;
+  }, 0);
 
   return (
     <div>
@@ -109,33 +125,74 @@ export function VentasPage() {
       {ventas.length > 0 && (
         <div className="flex flex-col gap-5 mx-10">
           <section className="py-10 grid grid-cols-3 gap-4">
-            <div className="bg-white rounded-3xl py-8 px-5 shadow-lg transition-all ease-linear flex justify-between items-center">
-              <div>
-                <IoIosAddCircleOutline className="text-7xl text-sky-700 bg-sky-100 rounded-full py-3 px-3.5" />
-              </div>
-              <div className="flex flex-col items-end gap-4">
-                <div className="bg-sky-100 py-2 px-3 rounded-xl">
-                  <p className="text-xs text-sky-700 font-bold">
-                    Número total de ventas
-                  </p>
+            <div className="stats shadow-xl items-center">
+              <div className="stat">
+                <div className="stat-title font-semibold">Total ventas</div>
+                <div className="stat-value text-gray-800">
+                  {ventasDeTipoVenta.length}
                 </div>
-                <div>
-                  <p className="font-normal">
-                    Ventas registradas hasta el momento{" "}
-                    <span className="font-bold text-sky-500 bg-sky-100 py-2 px-2 rounded-xl">
-                      {ventas.length}
-                    </span>
-                  </p>
+                <div className="stat-desc font-bold text-green-500 mt-1">
+                  ↗︎ {Number(ventasDeTipoVenta.length % 100).toFixed(2)}%
+                </div>
+              </div>
+
+              <div>
+                <div className="py-5 px-5 w-32 font-bold mx-auto">
+                  <CircularProgressbar
+                    value={Number(ventasDeTipoVenta.length) % 100}
+                    text={`${Number(ventasDeTipoVenta.length % 100)}%`}
+                    strokeWidth={9}
+                    // backgroundPadding={"#22c55e"}
+                    styles={buildStyles({
+                      textColor: "#0287e0 ",
+                      pathColor: "#0287e0  ",
+                      trailColor: "#e5e7eb",
+                    })}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="stats shadow-xl items-center">
+              <div className="stat">
+                <div className="stat-title font-semibold">
+                  Total ventas del mes
+                </div>
+                <div className="stat-value text-sky-500">
+                  {sumaTotalGanancias.toLocaleString("es-AR", {
+                    style: "currency",
+                    currency: "ARS",
+                    minimumFractionDigits: 2, // Mínimo dos decimales
+                    maximumFractionDigits: 2, // Máximo dos decimales
+                  })}
+                </div>
+                <div className="stat-desc font-bold text-sky-500 mt-1">
+                  ↗︎ {Number(sumaTotalGanancias & 100).toFixed(2)}%
+                </div>
+              </div>
+
+              <div>
+                <div className="py-5 px-5 w-32 font-bold mx-auto">
+                  <CircularProgressbar
+                    value={Number(sumaTotalGanancias) & 100}
+                    text={`${Number(sumaTotalGanancias & 100)}%`}
+                    strokeWidth={9}
+                    // backgroundPadding={"#22c55e"}
+                    styles={buildStyles({
+                      textColor: "#0287e0 ",
+                      pathColor: "#0287e0  ",
+                      trailColor: "#e5e7eb",
+                    })}
+                  />
                 </div>
               </div>
             </div>
 
             {/* Aquí podrías agregar otras métricas relacionadas con ventas */}
           </section>
-          <div className="bg-white rounded-3xl py-5 px-5 shadow-lg transition-all ease-linear flex gap-2 text-sm">
+          <div className="bg-white rounded-xl py-5 px-5 transition-all ease-linear flex gap-2 text-sm">
             <Link
               to={"/crear-venta"}
-              className="bg-sky-100 py-3 px-6 rounded-full text-sky-700 group flex gap-3 items-center relative transition-all"
+              className="bg-sky-500 py-3 px-6 rounded-full font-semibold text-white group flex gap-3 items-center relative transition-all"
             >
               Crear nueva venta
             </Link>

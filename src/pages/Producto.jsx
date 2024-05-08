@@ -1,12 +1,11 @@
 import { Link, useParams } from "react-router-dom";
 import { useProductos } from "../context/ProductosContext";
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { FaPencilAlt } from "react-icons/fa";
-import ModalEliminarProducto from "../components/products/ModalEliminarProducto";
 import { useObtenerId } from "../helpers/obtenerId";
 import { useModal } from "../helpers/modal";
+import ModalEliminarProducto from "../components/products/ModalEliminarProducto";
+import dayjs from "dayjs";
 
 export function Producto() {
   const { getProducto } = useProductos();
@@ -52,15 +51,15 @@ export function Producto() {
         <div className="flex">
           <Link
             to={"/productos"}
-            className="bg-gray-100/50 px-8 text-sm py-4 text-gray-700 font-medium hover:bg-sky-100 transition-all"
+            className="bg-gray-100/50 px-8 text-base py-4 text-gray-700 font-medium hover:text-sky-500 transition-all"
           >
-            Productos
+            Perfiles
           </Link>
           <Link
             to={"/producto"}
-            className="bg-sky-50 px-8 text-sm py-4 text-sky-600 font-medium hover:bg-gray-100 transition-all"
+            className="bg-sky-500/10 px-8 text-base py-4 text-sky-500 font-medium hover:bg-gray-100 transition-all"
           >
-            Detalle del producto
+            Detalle del perfil
           </Link>
         </div>
         <div className="flex mx-9">
@@ -68,7 +67,7 @@ export function Producto() {
             <ul>
               <li>
                 <Link
-                  className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl cursor-pointer"
+                  className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl cursor-pointer font-semibold"
                   to={"/home"}
                 >
                   Inicio
@@ -76,18 +75,18 @@ export function Producto() {
               </li>
               <li>
                 <Link
-                  className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer"
+                  className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer font-semibold"
                   to={"/productos"}
                 >
-                  Productos
+                  Perfiles
                 </Link>
               </li>
               <li>
                 <Link
-                  className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer"
+                  className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer font-semibold"
                   to={"/crear-producto"}
                 >
-                  Crear producto
+                  Crear perfil
                 </Link>
               </li>
             </ul>
@@ -96,11 +95,11 @@ export function Producto() {
       </div>
       <div className="mx-10 py-10">
         <div className="flex flex-col gap-1">
-          <p className="font-semibold text-slate-700 text-xl">
+          <p className="font-bold text-slate-700 text-xl">
             Producto obtenido{" "}
             <span className="text-sky-500">{producto.codigo}</span>
           </p>
-          <p className="text-slate-600 font-light text-sm">
+          <p className="text-slate-600 font-medium text-sm">
             En esta sección podras crear nuevos productos.
           </p>
         </div>
@@ -158,7 +157,7 @@ export function Producto() {
                 </p>
               </div>
             </div>
-            <div className="py-5 px-5 bg-sky-100 text-center text-sky-600">
+            <div className="py-5 px-5 bg-sky-100 text-center text-sky-500 font-bold">
               Descripción del producto
             </div>
             <div className="py-10 px-10 bg-white  grid grid-cols-3 gap-6">

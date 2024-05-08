@@ -161,13 +161,13 @@ export function Cliente() {
 
       <div className="mx-10 py-10">
         <div className="flex flex-col gap-1">
-          <p className="font-semibold text-slate-700 text-xl">
+          <p className="font-bold text-slate-700 text-xl">
             Datos del cliente{" "}
             <span className="text-sky-700 capitalize">
               {cliente.nombre} {cliente.apellido}
             </span>
           </p>
-          <p className="text-slate-600 font-normal text-sm">
+          <p className="text-slate-600 font-medium text-sm">
             Aquí puedes ver información detallada del cliente.
           </p>
         </div>
@@ -204,7 +204,7 @@ export function Cliente() {
                 </p>
               </div>
             </div>
-            <div className="py-5 px-5 bg-sky-100 text-center text-sky-700 font-semibold">
+            <div className="py-5 px-5 bg-sky-100 text-center text-sky-500 font-bold">
               Información del cliente
             </div>
             <div className="py-10 px-10 bg-white grid grid-cols-2 gap-6">
@@ -261,7 +261,7 @@ export function Cliente() {
                   <div>
                     <p class="flex items-center justify-end text-green-500 text-md">
                       <span class="font-bold">
-                        {Number(totalComprobantes % 100).toFixed(2)}%
+                        {Number(totalComprobantes & 100).toFixed(2)}%
                       </span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -292,7 +292,7 @@ export function Cliente() {
                   <div>
                     <p class="flex items-center justify-end text-red-500 text-md">
                       <span class="font-bold">
-                        {Number(cliente.total % 100).toFixed(2)}%
+                        {Number(cliente.total & 100).toFixed(2)}%
                       </span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -325,7 +325,7 @@ export function Cliente() {
                 <div>
                   <div>
                     <p class="flex items-center justify-end text-gray-500 text-md">
-                      <span class="font-bold">0%</span>
+                      <span class="font-bold">{comprobante.length & 100}%</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 fill-current"
@@ -339,7 +339,7 @@ export function Cliente() {
                     </p>
                   </div>
                   <p class="text-3xl font-semibold text-center text-gray-800">
-                    43
+                    {comprobante.length}
                   </p>
                   <p class="text-base text-center text-gray-500">
                     Total comprobantes cargados
@@ -353,10 +353,10 @@ export function Cliente() {
 
       <div className="mb-8 flex justify-between mx-10">
         <div className="flex flex-col gap-1">
-          <p className="font-semibold text-gray-700 text-xl">
+          <p className="font-bold text-gray-700 text-xl">
             Comprobantes mensuales{" "}
           </p>
-          <p className="text-gray-600 font-normal text-sm">
+          <p className="text-gray-600 font-medium text-sm">
             Aquí puedes ver información detallada de los comprobantes del mes.
           </p>
         </div>
@@ -366,20 +366,18 @@ export function Cliente() {
             // to={"/cargar-comprobante"}
             onClick={() => openModalComprobante()}
           >
-            Cargar nuevo comprobante
+            Cargar nuevo comprobante o total $
           </Link>
         </div>
       </div>
 
       <div className="mb-10 mx-10 rounded-xl">
-        <table className="table bg-white">
+        <table className="table bg-white uppercase">
           {/* head */}
           <thead>
             <tr>
-              <th className="py-4 text-sky-700 font-semibold text-base">
-                Fechad de emisión
-              </th>
-              <th className="py-4 text-sky-700 font-semibold text-base">
+              <th className="py-4 text-sky-500 text-base">Fecha de emisión</th>
+              <th className="py-4 text-sky-500 text-base">
                 Total del comprobante/$
               </th>
             </tr>
@@ -388,7 +386,7 @@ export function Cliente() {
             {currentComprobantes.map((c) => (
               <tr key={c.id}>
                 <th className="py-5 text-slate-600">{c.date}</th>
-                <td className="py-5 text-sky-700 font-semibold">
+                <td className="py-5 text-sky-500 font-bold">
                   {Number(c.total).toLocaleString("es-AR", {
                     style: "currency",
                     currency: "ARS",
@@ -399,32 +397,38 @@ export function Cliente() {
                     <div
                       tabIndex={0}
                       role="button"
-                      className="py-2 px-3 transition-all hover:bg-sky-100 hover:text-sky-700 border-none rounded-2xl"
+                      className="py-2 px-2 transition-all hover:bg-sky-500 hover:text-white border-none rounded-full"
                     >
                       <IoIosMore className="text-2xl" />
                     </div>
                     <ul
                       tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 gap-1"
                     >
                       <li>
                         <button
-                          className="capitalize"
+                          className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                           onClick={() => handleViewImage(c.imagen)} // Abre el modal con la imagen
                         >
                           Ver imagen
                         </button>
                       </li>
-                      <li>
-                        <Link className="capitalize" to={`/cliente/${c._id}`}>
+                      {/* <li>
+                        <Link
+                          className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
+                          to={`/cliente/${c._id}`}
+                        >
                           Descargar comprobante
                         </Link>
-                      </li>
-                      <li>
-                        <button type="button" className="capitalize">
+                      </li> */}
+                      {/* <li>
+                        <button
+                          type="button"
+                          className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
+                        >
                           Eliminar el comprobante
                         </button>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 </td>
@@ -508,12 +512,7 @@ const ImageModal = ({ isVisible, onClose, imageUrl }) => {
       bg-opacity-50"
     >
       <div onClick={handleContentClick} className="relative p-5">
-        {/* <IoClose
-          className="absolute top-0 right-0 text-5xl cursor-pointer text-red-600 hover:text-red-800 bg-red-100 py-2 px-3 rounded-full"
-          onClick={onClose} // Cierra el modal
-        /> */}
         <img src={imageUrl} alt="Comprobante" className="w-full h-auto" />{" "}
-        {/* Muestra la imagen */}
       </div>
     </div>
   );

@@ -229,7 +229,6 @@ export function CrearVenta() {
 
   return (
     <section>
-      {/* Navegación para volver a la página de ventas */}
       <div className="bg-white w-full flex justify-between items-center">
         <div className="flex">
           <Link
@@ -273,17 +272,17 @@ export function CrearVenta() {
       <div className="mx-10 flex justify-start items-start gap-8">
         <div className="w-3/4">
           <div className="flex flex-col gap-1">
-            <p className="font-semibold text-slate-700 mt-10 text-xl">
+            <p className="font-bold text-slate-700 mt-10 text-xl">
               Crear nueva/o {tipo?.length === 0 ? "venta o presupuesto" : tipo}
             </p>
-            <p className="text-slate-600 font-normal text-sm">
+            <p className="text-slate-600 font-medium text-sm">
               En esta sección podrás crear nuevas ventas.
             </p>
           </div>
 
           <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
             <div className="bg-gray-100 py-4 rounded-t-xl">
-              <p className="text-sky-700 text-center text-base font-semibold">
+              <p className="text-sky-500 text-center text-base font-bold">
                 Formulario
               </p>
             </div>
@@ -292,16 +291,16 @@ export function CrearVenta() {
                 onSubmit={handleSubmit(onSubmit)} // Maneja el envío del formulario
                 className="flex flex-col gap-4"
               >
-                <div className="flex flex-col gap-2 w-1/5">
+                <div className="flex flex-col gap-2 w-1/5 cursor-pointer">
                   <label className="text-sm font-bold text-slate-700 uppercase">
                     Selecciona el tipo
                   </label>
                   <select
                     {...register("tipo", { required: true })} // Registro del campo con validación
-                    className="uppercase text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-2 font-semibold outline-none ease-linear transition-all focus:outline-sky-700"
+                    className="uppercase text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-2 font-semibold outline-none ease-linear transition-all focus:outline-sky-700 cursor-pointer"
                   >
                     <option value="" disabled selected>
-                      Seleccione tipo de venta
+                      Seleccione tipo
                     </option>
                     <option value="venta">Venta</option> // Opciones disponibles
                     <option value="presupuesto">Presupuesto</option>
@@ -331,12 +330,18 @@ export function CrearVenta() {
                     {/* head */}
                     <thead>
                       <tr>
-                        <th className="text-slate-500 text-sm">Nombre</th>
-                        <th className="text-slate-500 text-sm">Apellido</th>
-                        <th className="text-slate-500 text-sm">
+                        <th className="text-slate-500 text-sm uppercase">
+                          Nombre
+                        </th>
+                        <th className="text-slate-500 text-sm uppercase">
+                          Apellido
+                        </th>
+                        <th className="text-slate-500 text-sm uppercase">
                           Localidad
                         </th>{" "}
-                        <th className="text-slate-500 text-sm">Provincia</th>{" "}
+                        <th className="text-slate-500 text-sm uppercase">
+                          Provincia
+                        </th>{" "}
                       </tr>
                     </thead>
                     <tbody>
@@ -431,11 +436,19 @@ export function CrearVenta() {
                           <td className="font-semibold text-gray-700">
                             {editIndex === index ? (
                               <input
-                                type="number"
+                                type="text"
                                 className="p-2 rounded w-full bg-gray-200/80 text-gray-700 border-none outline-none"
-                                value={Number(
-                                  producto.total_kilogramos
-                                ).toFixed(2)}
+                                // value={Number(
+                                //   producto.total_kilogramos
+                                // ).toFixed(2)}
+                                // onChange={(e) =>
+                                //   handleInputChange(
+                                //     index,
+                                //     "total_kilogramos",
+                                //     parseFloat(e.target.value)
+                                //   )
+                                // }
+                                value={producto.total_kilogramos}
                                 onChange={(e) =>
                                   handleInputChange(
                                     index,
@@ -493,13 +506,14 @@ export function CrearVenta() {
                           </td>
 
                           <td className="font-semibold text-gray-700">
-                            {Number(producto.total_dinero).toLocaleString(
-                              "es-AR",
-                              {
-                                style: "currency",
-                                currency: "ARS",
-                              }
-                            )}
+                            {Number(
+                              producto.total_kilogramos *
+                                producto.cantidad *
+                                producto.precio
+                            ).toLocaleString("es-AR", {
+                              style: "currency",
+                              currency: "ARS",
+                            })}
                           </td>
 
                           <td>

@@ -7,6 +7,7 @@ import { agregarComprobante } from "../../api/clientes";
 import axios from "axios"; // Para solicitudes HTTP
 import FileDropZoneClient from "./FileDropZoneClients"; // Componente para cargar archivos
 import dayjs from "dayjs";
+import { toast } from "react-toastify";
 
 export default function ModalNuevoComprobante({
   isOpen,
@@ -15,7 +16,7 @@ export default function ModalNuevoComprobante({
   setComprobante,
   setCliente,
 }) {
-  const { register, handleSubmit, watch } = useForm();
+  const { register, handleSubmit, watch, reset } = useForm();
 
   const total = watch("total") || 0;
 
@@ -67,6 +68,24 @@ export default function ModalNuevoComprobante({
       }
 
       closeModal(); // Cierra el modal
+
+      reset();
+
+      toast.success("Comprobante creado correctamente", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        style: {
+          padding: "10px",
+          borderRadius: "15px",
+        },
+        // transition: "Bounce",
+      });
     } catch (error) {
       console.error("Error creando comprobante:", error);
     }
@@ -144,7 +163,7 @@ export default function ModalNuevoComprobante({
                         {...register("total", { required: true })} // Campo requerido
                       />
 
-                      <div className="bg-sky-700 text-white py-2 px-4 rounded-xl">
+                      <div className="bg-sky-500 text-white py-2 px-4 rounded-xl font-bold">
                         {Number(total)?.toLocaleString("es-AR", {
                           style: "currency",
                           currency: "ARS",

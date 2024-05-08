@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useVentas } from "../../context/VentasContext"; // Asegúrate de tener un contexto de ventas
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Iconos para la paginación
 import { IoIosMore } from "react-icons/io"; // Para el menú de acciones
-import { CiCreditCard1, CiLocationArrow1 } from "react-icons/ci";
+import { CiCreditCard1 } from "react-icons/ci";
 import { Link } from "react-router-dom"; // Para enlaces de navegación
-import { Tab } from "@headlessui/react";
+import { Tab, Transition } from "@headlessui/react";
 import { updateFecha } from "../../helpers/FechaUpdate";
-import ModalEstado from "./ModalEstado";
 import { useObtenerId } from "../../helpers/obtenerId";
+import ModalEstado from "./ModalEstado";
 
 export const TableVentas = ({ ventas }) => {
   const { deleteVenta } = useVentas(); // Asegúrate de tener la función para eliminar ventas
@@ -64,16 +64,56 @@ export const TableVentas = ({ ventas }) => {
   } transition  ease-linear outline-none
 `;
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Alternar la visibilidad
+  const toggleSearchBar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="my-5">
-      {/* Campo para búsqueda */}
-      <input
-        type="text"
-        placeholder="Buscar por tipo o cliente..."
-        value={searchTerm}
-        onChange={handleSearch}
-        className="block px-4 py-2.5 mb-3 w-1/3 rounded-xl shadow-md transition-all outline-none focus:ring-sky-500 focus:border-sky-500"
-      />
+      <div className="flex items-center">
+        {/* Botón para abrir/cerrar el campo de búsqueda */}
+        <button
+          onClick={toggleSearchBar}
+          className="p-3 rounded-full bg-sky-500 text-white hover:bg-sky-600 transition fixed right-4 z-[100]"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            />
+          </svg>
+        </button>
+
+        {/* Animación de transición para el campo de búsqueda */}
+        <Transition
+          show={isOpen}
+          enter="transition-all duration-500 ease-out"
+          enterFrom="w-0 opacity-0"
+          enterTo="w-1/3 opacity-100"
+          leave="transition-all duration-500 ease-in"
+          leaveFrom="w-1/3 opacity-100"
+          leaveTo="w-0 opacity-0"
+        >
+          <input
+            type="text"
+            placeholder="Buscar producto por el cliente..."
+            value={searchTerm}
+            onChange={handleSearch}
+            className="px-4 py-2.5 ml-3 rounded-full shadow-lg outline-none focus:ring-sky-500 focus:border-sky-500 font-bold text-sm w-[400px]"
+          />
+        </Transition>
+      </div>
 
       <Tab.Group>
         <Tab.List className={"gap-3 flex mt-8"}>
@@ -87,33 +127,33 @@ export const TableVentas = ({ ventas }) => {
         <Tab.Panels>
           <Tab.Panel>
             <div className="transition-all ease-linear rounded-2xl mt-3 py-5">
-              <table className="min-w-full divide-y-[1px] divide-slate-200 bg-white text-sm rounded-2xl">
+              <table className="min-w-full table bg-white text-sm rounded-2xl">
                 <thead>
                   <tr>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 text-sky-700 uppercase text-sm">
                       Tipo
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 text-sky-700 uppercase text-sm">
                       Cliente
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 text-sky-700 uppercase text-sm">
                       Total Brs
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 text-sky-700 uppercase text-sm">
                       Total Kgs
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 text-sky-700 uppercase text-sm">
                       Total
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 text-sky-700 uppercase text-sm">
                       Fecha
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700">
+                    <th className="text-left px-4 py-4 text-sky-700 text-sm uppercase">
                       Estado de la venta
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-200">
+                <tbody className="divide-y divide-slate-200 uppercase">
                   {filteredVentas
                     .filter((v) => v.tipo === "venta") // Filtra solo los elementos con tipo "venta"
                     .map((v) => (
@@ -121,10 +161,10 @@ export const TableVentas = ({ ventas }) => {
                         key={v._id}
                         className="hover:bg-gray-100/50 cursor-pointer"
                       >
-                        <td className="px-4 py-4 font-semibold text-gray-700 capitalize">
+                        <td className="px-4 py-4 font-bold text-gray-700 uppercase">
                           {v.tipo}
                         </td>
-                        <td className="px-4 py-4 text-gray-700 font-semibold capitalize">
+                        <td className="px-4 py-4 text-gray-700 font-bold uppercase">
                           {v.cliente.nombre} {v.cliente.apellido}
                         </td>
                         <td className="px-4 py-4">
@@ -195,17 +235,17 @@ export const TableVentas = ({ ventas }) => {
                             <div
                               tabIndex={0}
                               role="button"
-                              className="py-2 px-3 transition-all hover:bg-sky-100 hover:text-sky-700 border-none rounded-2xl"
+                              className="py-2 px-2 transition-all hover:bg-sky-500 hover:text-white border-none rounded-full"
                             >
                               <IoIosMore className="text-2xl" />
                             </div>
                             <ul
                               tabIndex={0}
-                              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 gap-1"
                             >
                               <li>
                                 <Link
-                                  className="capitalize"
+                                  className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                   to={`/editar-venta/${v._id}`}
                                 >
                                   Editar venta
@@ -213,7 +253,7 @@ export const TableVentas = ({ ventas }) => {
                               </li>
                               <li>
                                 <Link
-                                  className="capitalize"
+                                  className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                   onClick={() => {
                                     handleObtenerId(v._id), openModal();
                                   }}
@@ -223,7 +263,7 @@ export const TableVentas = ({ ventas }) => {
                               </li>
                               <li>
                                 <Link
-                                  className="capitalize"
+                                  className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                   to={`/venta/${v._id}`}
                                 >
                                   Ver detalles
@@ -233,7 +273,7 @@ export const TableVentas = ({ ventas }) => {
                                 <button
                                   onClick={() => deleteVenta(v._id)} // Función para eliminar venta
                                   type="button"
-                                  className="capitalize"
+                                  className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                 >
                                   Eliminar venta
                                 </button>
@@ -249,30 +289,30 @@ export const TableVentas = ({ ventas }) => {
           </Tab.Panel>
           <Tab.Panel>
             <div className="transition-all ease-linear rounded-2xl mt-3">
-              <table className="min-w-full divide-y-[1px] divide-slate-200 bg-white text-sm rounded-2xl">
+              <table className="min-w-full table bg-white text-sm rounded-2xl">
                 <thead>
                   <tr>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 font-bold text-sky-700 uppercase text-sm">
                       Tipo
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 font-bold text-sky-700 uppercase text-sm">
                       Cliente
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 font-bold text-sky-700 uppercase text-sm">
                       Total Brs
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 font-bold text-sky-700 uppercase text-sm">
                       Total Kgs
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 font-bold text-sky-700 uppercase text-sm">
                       Total
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700 capitalize">
+                    <th className="text-left px-4 py-4 font-bold text-sky-700 uppercase text-sm">
                       Fecha
                     </th>
-                    <th className="text-left px-4 py-4 font-bold text-sky-700">
+                    {/* <th className="text-left px-4 py-4 font-bold text-sky-700 uppercase text-sm">
                       Estado del presupuesto
-                    </th>
+                    </th> */}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-200">
@@ -281,12 +321,12 @@ export const TableVentas = ({ ventas }) => {
                     .map((v) => (
                       <tr
                         key={v._id}
-                        className="hover:bg-gray-100/50 cursor-pointer"
+                        className="hover:bg-gray-100/50 cursor-pointer uppercase"
                       >
-                        <td className="px-4 py-4 font-semibold text-gray-700 capitalize">
+                        <td className="px-4 py-4 font-semibold text-gray-700">
                           {v.tipo}
                         </td>
-                        <td className="px-4 py-4 text-gray-700 font-semibold capitalize">
+                        <td className="px-4 py-4 text-gray-700 font-semibold">
                           {v.cliente.nombre} {v.cliente.apellido}
                         </td>
                         <td className="px-4 py-4">
@@ -334,7 +374,7 @@ export const TableVentas = ({ ventas }) => {
                         <td className="px-4 py-4 text-gray-700 font-semibold">
                           {updateFecha(v.date)}
                         </td>
-                        <td className="px-4 py-4 text-gray-700 font-semibold">
+                        {/* <td className="px-4 py-4 text-gray-700 font-semibold">
                           <div className="flex">
                             <p
                               className={`font-semibold py-2.5 px-5 rounded-2xl ${
@@ -351,41 +391,31 @@ export const TableVentas = ({ ventas }) => {
                                 (v.estado === "rechazado" && "Rechazado")}
                             </p>
                           </div>
-                        </td>
+                        </td> */}
                         <td className="px-4 py-4">
                           <div className="dropdown dropdown-left drop-shadow-lg">
                             <div
                               tabIndex={0}
                               role="button"
-                              className="py-2 px-3 transition-all hover:bg-sky-100 hover:text-sky-700 border-none rounded-2xl"
+                              className="py-2 px-2 transition-all hover:bg-sky-500 hover:text-white border-none rounded-full"
                             >
                               <IoIosMore className="text-2xl" />
                             </div>
                             <ul
                               tabIndex={0}
-                              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                              className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 gap-1"
                             >
                               <li>
                                 <Link
-                                  className="capitalize"
+                                  className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                   to={`/editar-venta/${v._id}`}
                                 >
-                                  Editar venta
+                                  Editar venta/Convertir en venta
                                 </Link>
                               </li>
                               <li>
                                 <Link
-                                  className="capitalize"
-                                  onClick={() => {
-                                    handleObtenerId(v._id), openModal();
-                                  }}
-                                >
-                                  Editar estado
-                                </Link>
-                              </li>
-                              <li>
-                                <Link
-                                  className="capitalize"
+                                  className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                   to={`/venta/${v._id}`}
                                 >
                                   Ver detalles
@@ -395,7 +425,7 @@ export const TableVentas = ({ ventas }) => {
                                 <button
                                   onClick={() => deleteVenta(v._id)} // Función para eliminar venta
                                   type="button"
-                                  className="capitalize"
+                                  className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                 >
                                   Eliminar venta
                                 </button>

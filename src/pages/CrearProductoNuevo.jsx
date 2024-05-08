@@ -107,15 +107,15 @@ export function CrearProductoNuevo() {
         <div className="flex">
           <Link
             to={"/productos"}
-            className="bg-gray-100/50 px-8 text-sm py-4 text-gray-700 font-medium hover:bg-sky-100 transition-all"
+            className="bg-gray-100/50 px-8 text-base py-4 text-gray-700 font-medium hover:text-sky-500 transition-all"
           >
-            Productos
+            Perfiles
           </Link>
           <Link
             to={"/categorias"}
-            className="bg-sky-50 px-8 text-sm py-4 text-sky-600 font-medium hover:bg-gray-100 transition-all"
+            className="bg-sky-500/10 px-8 text-base py-4 text-sky-500 font-medium hover:bg-gray-100 transition-all"
           >
-            Crear producto
+            Crear nuevo perfil
           </Link>
         </div>
         <div className="flex mx-9">
@@ -123,7 +123,7 @@ export function CrearProductoNuevo() {
             <ul>
               <li>
                 <Link
-                  className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl cursor-pointer"
+                  className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl cursor-pointer font-semibold"
                   to={"/home"}
                 >
                   Inicio
@@ -131,10 +131,10 @@ export function CrearProductoNuevo() {
               </li>
               <li>
                 <Link
-                  className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer"
+                  className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer font-semibold"
                   to={"/productos"}
                 >
-                  Productos
+                  Perfiles
                 </Link>
               </li>
             </ul>
@@ -144,21 +144,20 @@ export function CrearProductoNuevo() {
       <div className="mx-10 flex justify-start items-start gap-16">
         <div className="w-1/2">
           <div className="flex flex-col gap-1">
-            <p className="font-semibold text-slate-700 mt-10 text-xl">
-              Crear productos
+            <p className="font-bold text-slate-700 mt-10 text-xl">
+              Crear nuevo perfil
             </p>
-            <p className="text-slate-600 font-light text-sm">
-              En esta sección podras crear nuevos productos.
+            <p className="text-slate-600 font-medium text-sm">
+              En esta sección podras crear nuevos perfiles.
             </p>
           </div>
           <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
             <div className="bg-gray-100 py-4 rounded-t-xl">
-              <p className="text-sky-500 text-center text-base">Formulario</p>
+              <p className="text-sky-500 text-center text-base font-bold">
+                Formulario
+              </p>
             </div>
             <div className="px-10 py-8 flex flex-col gap-5">
-              <div>
-                <p className="text-sm text-sky-600">Crear un nuevo producto</p>
-              </div>
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4"
@@ -171,7 +170,7 @@ export function CrearProductoNuevo() {
                     {...register("codigo")}
                     type="text"
                     placeholder="Ej: Tkpr1"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1"
+                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   />
                 </div>
 
@@ -182,8 +181,8 @@ export function CrearProductoNuevo() {
                   <input
                     {...register("detalle")}
                     type="text"
-                    placeholder="Ej: Tkpr1"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1"
+                    placeholder="Ej: Marco pesado"
+                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   />
                 </div>
 
@@ -194,7 +193,7 @@ export function CrearProductoNuevo() {
                   <select
                     {...register("color")}
                     type="text"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3.5 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1"
+                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3.5 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   >
                     <option value="">Seleccionar el color</option>
                     {colores.map((c) => (
@@ -210,7 +209,7 @@ export function CrearProductoNuevo() {
                   <select
                     {...register("categoria")}
                     type="text"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3.5 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1"
+                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3.5 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   >
                     <option value="">Seleccionar la categoria</option>
                     {categorias.map((c) => (
@@ -226,8 +225,8 @@ export function CrearProductoNuevo() {
                   <input
                     {...register("kg_barra_estimado")}
                     type="text"
-                    placeholder="Ej: 1.05, siempre es con punto."
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1"
+                    placeholder="Ej: 1 font-bold.05, siempre es con punto."
+                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   />
                 </div>
 
@@ -239,7 +238,7 @@ export function CrearProductoNuevo() {
                     {...register("stock")}
                     type="text"
                     placeholder="Ej: 100"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1"
+                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   />
                 </div>
 
@@ -251,7 +250,7 @@ export function CrearProductoNuevo() {
                     {...register("stock_minimo")}
                     type="text"
                     placeholder="Ej: 200"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1"
+                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   />
                 </div>
 
@@ -263,14 +262,14 @@ export function CrearProductoNuevo() {
                     {...register("stock_maximo")}
                     type="text"
                     placeholder="Ej: 300"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1"
+                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   />
                 </div>
 
                 <div>
                   <button
                     type="submit"
-                    className="bg-green-500 py-2 px-4 text-sm rounded-xl font-bold text-white mt-3 hover:bg-green-600/90 cursor-pointer"
+                    className="bg-green-500 py-3 px-8 text-sm rounded-full font-semibold text-white mt-3 hover:bg-green-500/90 cursor-pointer"
                   >
                     Guardar producto
                   </button>

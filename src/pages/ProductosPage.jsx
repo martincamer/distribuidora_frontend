@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useProductos } from "../context/ProductosContext";
-import { CiShoppingCart } from "react-icons/ci";
 import { ImFileEmpty } from "react-icons/im";
 import { BsFolderPlus } from "react-icons/bs";
 import { TableProducts } from "../components/products/TableProducts";
 import { IoClose, IoFilterOutline } from "react-icons/io5";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { Link } from "react-router-dom";
 import ModalFormProducts from "../components/modals/ModalFormProducts";
 import ModalCategorias from "../components/modals/ModalCategorias";
 import ModalColores from "../components/modals/ModalColores";
 import video from "../assets/video/producto.mp4";
+// import { Line, Circle } from "rc-progress";
+import {
+  CircularProgressbar,
+  CircularProgressbarWithChildren,
+  buildStyles,
+} from "react-circular-progressbar";
 
 export function ProductosPage() {
   useEffect(() => {
@@ -67,7 +72,7 @@ export function ProductosPage() {
             to={"/productos"}
             className="bg-sky-100 px-8 text-[16px] py-4 text-sky-500 font-semibold cursor-pointer"
           >
-            Productos
+            Perfiles
           </Link>
         </div>
         <div className="mx-5 z-[0] flex gap-2">
@@ -165,25 +170,33 @@ export function ProductosPage() {
       )}
 
       {productos.length > 0 && (
-        <div className="flex flex-col gap-5 mx-10">
-          <section className="py-10 grid grid-cols-3 gap-4">
-            <article className="bg-white shadow-xl rounded-xl py-8 px-5 transition-all ease-linear flex justify-between items-center">
-              <div className="flex flex-col items-end gap-4">
-                <div className="bg-sky-100 py-2 px-3 rounded-xl">
-                  <p className="text-xs  text-sky-700 font-bold">
-                    Porcentaje de productos cargados
-                  </p>
+        <div className="flex flex-col gap-2 mx-10">
+          <section className="py-10 grid grid-cols-4 gap-4">
+            <div className="stats shadow-xl items-center">
+              <div className="stat">
+                <div className="stat-title font-semibold">
+                  Total perfiles cargados
                 </div>
-                <div>
-                  <p className="font-normal text-gray-600 text-base">
-                    Productos cargados hasta el momento{" "}
-                    <span className="font-bold text-sky-700 bg-sky-100 py-2 px-2 rounded-xl">
-                      {100}
-                    </span>
-                  </p>
+                <div className="stat-value">{productos.length}</div>
+                <div className="stat-desc font-bold text-green-500">
+                  ↗︎ {productos.length % 100}%
                 </div>
               </div>
-            </article>
+
+              <div className="py-5 px-5 w-32 font-bold mx-auto">
+                <CircularProgressbar
+                  value={productos.length}
+                  text={`${productos.length}%`}
+                  strokeWidth={9}
+                  // backgroundPadding={"#22c55e"}
+                  styles={buildStyles({
+                    textColor: "#0287e0",
+                    pathColor: "#0287e0",
+                    trailColor: "#e5e7eb",
+                  })}
+                />
+              </div>
+            </div>
           </section>
           <div className="bg-white rounded-xl py-5 px-5 transition-all ease-linear flex gap-2 text-sm">
             <Link

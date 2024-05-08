@@ -21,7 +21,7 @@ export function Navbar() {
           </Link>
         </h1>
         {!isAuthenticated && (
-          <ul className="flex items-center gap-4 text-lg">
+          <ul className="items-center gap-4 text-lg hidden">
             <Link
               className="hover:bg-sky-500/10 py-1.5 text-sm font-medium px-6 rounded-xl hover:text-sky-500 transition-all ease-in-out"
               to={"/funcionalidades"}
@@ -117,18 +117,18 @@ export function Navbar() {
               <li>
                 <Link
                   className="font-semibold text-white bg-sky-500 py-2 px-6 rounded-full text-sm hover:shadow-md  transition-all"
-                  to="/login"
+                  to="/"
                 >
                   Iniciar Sesion
                 </Link>
               </li>
               <li>
-                <Link
+                {/* <Link
                   className="font-semibold text-white bg-sky-500 py-2 px-6 rounded-full text-sm hover:shadow-md  transition-all"
                   to="/register"
                 >
                   Registrarte ahora
-                </Link>
+                </Link> */}
               </li>
             </>
           )}

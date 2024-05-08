@@ -66,10 +66,10 @@ export function EditarCliente() {
             Clientes
           </Link>
           <Link
-            to={"/crear-cliente"}
+            to={`/editar-cliente/${params.id}`}
             className="bg-sky-100 px-8 text-base py-4 text-sky-700 font-medium hover:bg-gray-100 transition-all"
           >
-            Crear cliente
+            Editar cliente
           </Link>
         </div>
         <div className="flex mx-9">
@@ -99,24 +99,21 @@ export function EditarCliente() {
       <div className="mx-10 flex justify-start items-start gap-16">
         <div className="w-1/2">
           <div className="flex flex-col gap-1">
-            <p className="font-semibold text-slate-700 mt-10 text-xl">
+            <p className="font-bold text-slate-700 mt-10 text-xl">
               Editar cliente
             </p>
-            <p className="text-slate-600 font-normal text-sm">
-              Aquí puedes editar la información de los clientes.
+            <p className="text-slate-600 font-medium text-sm">
+              Aquí puedes editar la información del cliente.
             </p>
           </div>
 
           <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
             <div className="bg-gray-100 py-4 rounded-t-xl">
-              <p className="text-sky-700 text-center text-base font-semibold">
+              <p className="text-sky-500 text-center text-base font-bold">
                 Formulario
               </p>
             </div>
             <div className="px-10 py-8 flex flex-col gap-5">
-              <div>
-                <p className="text-sm text-sky-700">Editar el cliente</p>
-              </div>
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4"
@@ -129,7 +126,7 @@ export function EditarCliente() {
                     {...register("nombre", { required: true })}
                     type="text"
                     placeholder="Nombre del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
+                    className="text-sm text-slate-700 bg-gray-100 rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1 font-bold"
                   />
                   {errors.nombre && (
                     <span className="text-red-500 text-sm">
@@ -146,7 +143,7 @@ export function EditarCliente() {
                     {...register("apellido", { required: true })}
                     type="text"
                     placeholder="Apellido del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
                   />
                   {errors.apellido && (
                     <span la="text-red-500 text-sm">
@@ -163,7 +160,7 @@ export function EditarCliente() {
                     {...register("localidad", { required: true })}
                     type="text"
                     placeholder="Localidad del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
                   />
                   {errors.localidad && (
                     <span class="text-red-500 text-sm">
@@ -180,7 +177,7 @@ export function EditarCliente() {
                     {...register("provincia", { required: true })}
                     type="text"
                     placeholder="Provincia del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
                   />
                   {errors.provincia && (
                     <span class="text-red-500 text-sm">
@@ -195,7 +192,7 @@ export function EditarCliente() {
                     {...register("dni")}
                     type="text"
                     placeholder="DNI del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
                   />
                 </div>
 
@@ -207,7 +204,7 @@ export function EditarCliente() {
                     {...register("telefono")}
                     type="text"
                     placeholder="Teléfono del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
                   />
                 </div>
 
@@ -217,7 +214,7 @@ export function EditarCliente() {
                     {...register("email")}
                     type="text"
                     placeholder="Email del cliente"
-                    className="text-sm text-slate-700 bg-gray-100 rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
+                    className="text-sm text-slate-700 bg-gray-100 font-bold rounded-lg uppercase py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-700 outline-1"
                   />
                 </div>
 

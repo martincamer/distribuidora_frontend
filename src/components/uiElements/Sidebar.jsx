@@ -34,7 +34,7 @@ export const SideBar = () => {
       <div
         className={`${
           isOpen ? "flex justify-between" : ""
-        } transition-all ease-linear duration-300 py-3 px-4 border-b-[2px] border-slate-300 `}
+        } transition-all ease-linear duration-300 py-[10px] px-4`}
       >
         <button className="text-3xl text-sky-700" onClick={handleToggle}>
           {isOpen ? <IoCloseOutline /> : <IoMenuOutline />}

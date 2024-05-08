@@ -100,6 +100,7 @@ export default function ModalEstado({ isOpen, closeModal, idObtenida }) {
                       >
                         <option value="pendiente">pendiente</option>
                         <option value="aceptada">aceptada</option>
+                        <option value="rechazada">rechazada</option>
                       </select>
                     </div>
                   </div>

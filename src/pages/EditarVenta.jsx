@@ -112,6 +112,7 @@ export function EditarVenta() {
 
   const addToProducto = (
     ObjectId,
+    id,
     codigo,
     detalle,
     imagen,
@@ -124,23 +125,25 @@ export function EditarVenta() {
     cantidad,
     date
   ) => {
-    setProductosSeleccionados((prev) => [
-      ...prev,
-      {
-        ObjectId,
-        codigo,
-        detalle,
-        imagen,
-        color,
-        categoria,
-        kg_barra_estimado,
-        total_kilogramos,
-        precio,
-        total_dinero,
-        cantidad,
-        date,
-      },
-    ]);
+    const nuevoProducto = {
+      ObjectId,
+      id,
+      codigo,
+      detalle,
+      imagen,
+      color,
+      categoria,
+      kg_barra_estimado,
+      total_kilogramos,
+      precio,
+      total_dinero,
+      cantidad,
+      date,
+    };
+
+    setProductosSeleccionados([...productosSeleccionados, nuevoProducto]);
+
+    closeProducto();
   };
 
   const handleEditToggle = (index) => {
@@ -170,13 +173,13 @@ export function EditarVenta() {
             to={"/ventas"}
             className="px-8 text-base py-4 text-gray-700 font-medium hover:text-sky-700 transition-all"
           >
-            Ventas
+            Ventas/Presupuestos
           </Link>
           <Link
             to={`/editar-venta/${id}`}
             className="bg-sky-100 px-8 text-base py-4 text-sky-600 font-medium hover:bg-gray-100 transition-all"
           >
-            Editar venta
+            Editar venta/presupuesto
           </Link>
         </div>
         <div className="flex mx-9">
@@ -195,7 +198,7 @@ export function EditarVenta() {
                   className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer font-bold"
                   to={"/ventas"}
                 >
-                  Ventas
+                  Ventas/Presupuestos
                 </Link>
               </li>
             </ul>
@@ -212,17 +215,17 @@ export function EditarVenta() {
         )}
         <div className="w-3/4">
           <div className="flex flex-col gap-1">
-            <p className="font-semibold text-slate-700 mt-10 text-xl">
+            <p className="font-bold text-slate-700 mt-10 text-xl">
               Editar venta
             </p>
-            <p className="text-slate-600 font-normal text-sm">
+            <p className="text-slate-600 font-medium text-sm">
               En esta sección podrás editar la venta.
             </p>
           </div>
 
           <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
             <div className="bg-gray-100 py-4 rounded-t-xl">
-              <p className="text-sky-700 text-center text-base font-semibold">
+              <p className="text-sky-500 text-center text-base font-bold">
                 Formulario
               </p>
             </div>
@@ -263,10 +266,10 @@ export function EditarVenta() {
                   </button>
                 </div>
 
-                <div className="overflow-x-auto w-full">
+                <div className="overflow-x-auto w-full mb-3">
                   <table className="table">
                     {/* head */}
-                    <thead>
+                    <thead className="uppercase">
                       <tr>
                         <th className="text-slate-500 text-sm">Nombre</th>
                         <th className="text-slate-500 text-sm">Apellido</th>
@@ -320,7 +323,7 @@ export function EditarVenta() {
                 <div className="w-full scroll-bar overflow-x-scroll">
                   <table className="table">
                     {/* head */}
-                    <thead>
+                    <thead className="uppercase">
                       <tr>
                         <th className="text-slate-500 text-sm">Código</th>
                         <th className="text-slate-500 text-sm">Detalle</th>
@@ -338,7 +341,7 @@ export function EditarVenta() {
                     </thead>
                     <tbody>
                       {productosSeleccionados.map((producto, index) => (
-                        <tr key={index}>
+                        <tr className="uppercase" key={index}>
                           <td className="font-semibold text-gray-700">
                             {producto.codigo}
                           </td>
@@ -413,13 +416,14 @@ export function EditarVenta() {
                             )}
                           </td>
                           <td className="font-semibold text-gray-700">
-                            {Number(producto.total_dinero).toLocaleString(
-                              "es-AR",
-                              {
-                                style: "currency",
-                                currency: "ARS",
-                              }
-                            )}
+                            {Number(
+                              producto.total_kilogramos *
+                                producto.cantidad *
+                                producto.precio
+                            ).toLocaleString("es-AR", {
+                              style: "currency",
+                              currency: "ARS",
+                            })}
                           </td>
                           <td>
                             <div className="flex gap-2">
