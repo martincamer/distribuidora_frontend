@@ -2,13 +2,13 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useProductos } from "../context/ProductosContext";
 import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { productoSchema } from "../schemas/productos";
+import { Message } from "../components/ui";
 import axios from "axios"; // Importamos axios para la llamada a Cloudinary
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import FileDropZone from "../components/ui/FileDropZone";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { productoSchema } from "../schemas/productos";
-import { Message } from "../components/ui";
 
 dayjs.extend(utc);
 
