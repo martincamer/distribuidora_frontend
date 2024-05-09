@@ -32,6 +32,8 @@ export function VentasProvider({ children }) {
     try {
       const res = await getVentasRequest(); // Solicitud para obtener todas las ventas
       setVentas(res.data); // Actualiza el estado con las ventas
+
+      console.log("datasss", res.data);
     } catch (error) {
       console.error("Error al obtener ventas:", error); // Manejo de errores
     }

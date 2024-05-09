@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {
   getProductoRequest,
   getProductosRequest,
@@ -23,6 +23,7 @@ import {
 } from "../api/colores";
 
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ProductosContext = createContext();
 
@@ -36,6 +37,16 @@ export function ProductosProvider({ children }) {
   const [productos, setProductos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [colores, setColores] = useState([]);
+  const [error, setError] = useState([]);
+
+  useEffect(() => {
+    if (error.length > 0) {
+      const timer = setTimeout(() => {
+        setError([]);
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   const getProductos = async () => {
     const res = await getProductosRequest();
@@ -67,6 +78,8 @@ export function ProductosProvider({ children }) {
     }
   };
 
+  const navigate = useNavigate();
+
   const createProducto = async (producto) => {
     try {
       // Realizar la solicitud para crear el producto
@@ -93,8 +106,11 @@ export function ProductosProvider({ children }) {
         },
         // transition: "Bounce",
       });
+
+      navigate("/productos");
     } catch (error) {
       console.log(error);
+      setError(error.response.data.message);
     }
   };
 
@@ -351,6 +367,7 @@ export function ProductosProvider({ children }) {
         createColor,
         getColor,
         updateColor,
+        error,
       }}
     >
       {children}

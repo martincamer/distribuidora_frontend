@@ -108,7 +108,7 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className="flex min-h-full h-full items-center justify-center text-center">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -118,11 +118,11 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full transform h-full overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <div className="flex justify-end py-2">
                   <IoMdClose
                     onClick={closeModal}
-                    className="hover:text-sky-700 transition-all cursor-pointer text-4xl text-slate-800 bg-gray-200"
+                    className="hover:text-sky-700 rounded-full transition-all cursor-pointer text-4xl py-1.5 text-slate-800 bg-gray-200"
                   />
                 </div>
 
@@ -152,6 +152,9 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
                           <th className="font-bold text-sm uppercase">
                             Detalle
                           </th>
+                          <th className="font-bold text-sm uppercase">
+                            Categoria
+                          </th>
                           <th className="font-bold text-sm uppercase">Color</th>
                           <th className="font-bold text-sm uppercase">
                             Stock/Fabrica
@@ -176,6 +179,9 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
                             <th className="text-sm">{producto.codigo}</th>
                             <th className="text-sm uppercase">
                               {producto.detalle}
+                            </th>
+                            <th className="text-sm uppercase">
+                              {producto.categoria}
                             </th>
                             <th className="text-sm">{producto.color}</th>
                             <th className="text-sm text-sky-500">

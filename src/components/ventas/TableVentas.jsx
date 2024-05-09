@@ -266,7 +266,7 @@ export const TableVentas = ({ ventas }) => {
                                   className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                   to={`/venta/${v._id}`}
                                 >
-                                  Ver detalles
+                                  Ver venta/facturar
                                 </Link>
                               </li>
                               <li>
@@ -418,7 +418,7 @@ export const TableVentas = ({ ventas }) => {
                                   className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                   to={`/venta/${v._id}`}
                                 >
-                                  Ver detalles
+                                  Ver venta/facturar
                                 </Link>
                               </li>
                               <li>

@@ -19,14 +19,6 @@ export function ClientesPage() {
     getClientes(); // Obtiene los clientes cuando el componente se monta
   }, []); // Recuerda agregar cualquier dependencia necesaria para evitar advertencias
 
-  useEffect(() => {
-    // Muestra el diálogo automáticamente cuando el componente se monta
-    const modal = document.getElementById("my_modal_1");
-    if (modal) {
-      modal.showModal();
-    }
-  }, []); // El array vacío garantiza que el efecto solo se ejecute una vez al montar el componente
-
   const totalDeuda = clientes.reduce((total, c) => {
     return Number(total) + Number(c.total);
   }, 0);
@@ -96,7 +88,7 @@ export function ClientesPage() {
       )}
 
       {clientes.length === 0 && (
-        <div className="flex justify-center w-full">
+        <div className={`w-full flex justify-center`}>
           <button
             className="bg-sky-500 rounded-full text-base px-5 py-3 text-white font-bold hover:shadow-lg transition-all"
             onClick={() => document.getElementById("my_modal_1").showModal()}

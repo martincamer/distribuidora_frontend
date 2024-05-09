@@ -8,7 +8,7 @@ export function Navbar() {
     <header
       className={`${isAuthenticated ? "bg-sky-500" : "bg-white"} z-[-100]`}
     >
-      <nav className="flex justify-between items-center py-2 px-10 container mx-auto">
+      <nav className="flex justify-between items-center py-2 px-10">
         <h1 className="text-2xl font-bold">
           <Link className="relative" to={isAuthenticated ? "/home" : "/"}>
             <p
@@ -57,7 +57,7 @@ export function Navbar() {
         <ul className="flex gap-x-4">
           {isAuthenticated ? (
             <div className="flex justify-between items-center gap-36 w-full">
-              <div className="dropdown dropdown-end">
+              <div className="dropdown dropdown-end z-[100]">
                 <div tabIndex={0} role="button" className="avatar">
                   <div className="w-16 rounded-full">
                     <img

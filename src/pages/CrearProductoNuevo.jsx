@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useProductos } from "../context/ProductosContext";
 import { useEffect, useState } from "react";
@@ -6,19 +6,25 @@ import axios from "axios"; // Importamos axios para la llamada a Cloudinary
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import FileDropZone from "../components/ui/FileDropZone";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { productoSchema } from "../schemas/productos";
+import { Message } from "../components/ui";
 
 dayjs.extend(utc);
 
 export function CrearProductoNuevo() {
-  const { createProducto, colores, categorias, getColores, getCategorias } =
-    useProductos();
-  const navigate = useNavigate();
-
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+    createProducto,
+    colores,
+    categorias,
+    getColores,
+    getCategorias,
+    error,
+  } = useProductos();
+
+  const { register, handleSubmit } = useForm({
+    resolver: zodResolver(productoSchema),
+  });
 
   const [uploadedFile, setUploadedFile] = useState(null);
   const [dragging, setDragging] = useState(false);
@@ -62,10 +68,6 @@ export function CrearProductoNuevo() {
       };
 
       await createProducto(productData);
-
-      setTimeout(() => {
-        navigate("/productos");
-      }, 1000);
     } catch (error) {
       console.error("Error creating product:", error);
     }
@@ -141,6 +143,7 @@ export function CrearProductoNuevo() {
           </div>
         </div>
       </div>
+
       <div className="mx-10 flex justify-start items-start gap-16">
         <div className="w-1/2">
           <div className="flex flex-col gap-1">
@@ -151,13 +154,24 @@ export function CrearProductoNuevo() {
               En esta sección podras crear nuevos perfiles.
             </p>
           </div>
+
           <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
             <div className="bg-gray-100 py-4 rounded-t-xl">
               <p className="text-sky-500 text-center text-base font-bold">
                 Formulario
               </p>
             </div>
+
             <div className="px-10 py-8 flex flex-col gap-5">
+              <div
+                className={`${
+                  error.length > 0 ? "grid grid-cols-3 py-2 px-2 gap-2" : ""
+                }`}
+              >
+                {error?.map((error, i) => (
+                  <Message message={error} key={i} />
+                ))}
+              </div>
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4"
@@ -167,6 +181,7 @@ export function CrearProductoNuevo() {
                     El codigo
                   </label>
                   <input
+                    autoFocus
                     {...register("codigo")}
                     type="text"
                     placeholder="Ej: Tkpr1"

@@ -3,7 +3,13 @@ import { useAuth } from "../../context/authContext";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 import { AiOutlineDatabase } from "react-icons/ai";
-import { CiDatabase, CiUser, CiViewBoard, CiViewList } from "react-icons/ci";
+import {
+  CiDatabase,
+  CiHome,
+  CiUser,
+  CiViewBoard,
+  CiViewList,
+} from "react-icons/ci";
 import { FaMoneyCheckAlt } from "react-icons/fa";
 
 export const SideBar = () => {
@@ -48,6 +54,14 @@ export const SideBar = () => {
       {isOpen ? (
         <div className="w-full flex flex-col gap-0">
           <Link
+            to={"/home"}
+            className={`${
+              location.pathname === "/home" ? "bg-sky-100" : "bg-none"
+            } hover:text-sky-700 text-slate-700 text-sm transition-all py-3 px-3`}
+          >
+            Inicio
+          </Link>
+          <Link
             to={"/productos"}
             className={`${
               location.pathname === "/productos" ? "bg-sky-100" : "bg-none"
@@ -72,6 +86,20 @@ export const SideBar = () => {
         <div className="flex flex-col justify-center">
           <div
             className={`${
+              location.pathname === "/home" ? "bg-sky-100" : "bg-none"
+            } w-full text-center py-2 items-center transition-all`}
+          >
+            <div
+              className="tooltip tooltip-right"
+              data-tip="VER LOS PRODUCTOS/CRAR/ETC"
+            >
+              <Link to={"/home"}>
+                <CiHome className="text-4xl text-sky-700" />
+              </Link>
+            </div>
+          </div>
+          <div
+            className={`${
               location.pathname === "/productos" ||
               location.pathname === "/categorias" ||
               location.pathname === "/crear-producto" ||
@@ -92,6 +120,7 @@ export const SideBar = () => {
               </Link>
             </div>
           </div>
+
           <div
             className={`${
               location.pathname === "/clientes" ||

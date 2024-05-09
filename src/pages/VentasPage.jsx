@@ -6,8 +6,8 @@ import { TableVentas } from "../components/ventas/TableVentas.jsx"; // Cambia a 
 import { IoIosAddCircleOutline } from "react-icons/io"; // Icono para agregar
 import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import video from "../assets/video/producto.mp4";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import video from "../assets/video/producto.mp4";
 
 export function VentasPage() {
   const { ventas, getVentas } = useVentas(); // Cambia a ventas y función para obtener ventas
@@ -15,14 +15,6 @@ export function VentasPage() {
   useEffect(() => {
     getVentas(); // Obtiene las ventas cuando el componente se monta
   }, []); // No olvides agregar dependencias necesarias para evitar advertencias
-
-  useEffect(() => {
-    // Muestra el diálogo automáticamente cuando el componente se monta
-    const modal = document.getElementById("my_modal_1");
-    if (modal) {
-      modal.showModal();
-    }
-  }, []); // El array vacío garantiza que el efecto solo se ejecute una vez al montar el componente
 
   // Filtrar las ventas que son de tipo 'venta'
   const ventasDeTipoVenta = ventas.filter((venta) => venta.tipo === "venta");
@@ -81,7 +73,7 @@ export function VentasPage() {
       )}
 
       {ventas.length === 0 && (
-        <div className="flex justify-center w-full">
+        <div className={`w-full flex justify-center`}>
           <button
             className="bg-sky-500 rounded-full text-base px-5 py-3 text-white font-bold hover:shadow-lg transition-all"
             onClick={() => document.getElementById("my_modal_1").showModal()}
