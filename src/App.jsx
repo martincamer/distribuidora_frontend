@@ -34,8 +34,8 @@ function App() {
           <ClientesProvider>
             <Navbar />
             <Routes>
-              {/* <Route path="/" element={<HomePage />} /> */}
-              <Route path="/" element={<LoginPage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route element={<ProtectedRoute />}>
                 <Route index path="/home" element={<HomeApp />} />

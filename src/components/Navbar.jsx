@@ -117,18 +117,18 @@ export function Navbar() {
               <li>
                 <Link
                   className="font-semibold text-white bg-sky-500 py-2 px-6 rounded-full text-sm hover:shadow-md  transition-all"
-                  to="/"
+                  to="/login"
                 >
                   Iniciar Sesion
                 </Link>
               </li>
               <li>
-                {/* <Link
+                <Link
                   className="font-semibold text-white bg-sky-500 py-2 px-6 rounded-full text-sm hover:shadow-md  transition-all"
                   to="/register"
                 >
                   Registrarte ahora
-                </Link> */}
+                </Link>
               </li>
             </>
           )}
