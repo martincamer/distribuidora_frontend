@@ -26,10 +26,10 @@ export default function ModalCargarImagen({
 
     const data = new FormData();
     data.append("file", file);
-    data.append("upload_preset", "productos");
+    data.append("upload_preset", "imagenes");
 
     try {
-      const api = `https://api.cloudinary.com/v1_1/dgchynrxl/image/upload`;
+      const api = `https://api.cloudinary.com/v1_1/doguyttkd/image/upload`;
       const res = await axios.post(api, data);
       const { secure_url } = res.data; // Obtenemos la URL segura
       return secure_url;

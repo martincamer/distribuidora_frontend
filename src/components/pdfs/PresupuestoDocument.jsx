@@ -160,7 +160,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                 fontWeight: "bold",
               }}
             >
-              Presupuesto
+              {datos?.tipo === "venta" ? "Factura de venta" : "Presupuesto"}
             </Text>
             <Text
               style={{
@@ -611,7 +611,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   display: "flex",
                   flexDirection: "row",
                   gap: "8px",
-                  padding: "10px 5px",
+                  padding: "3px 5px",
                 }}
               >
                 <Text
@@ -667,7 +667,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                     textTransform: "uppercase",
                   }}
                 >
-                  {p.total_kilogramos}
+                  {p.total_kilogramos.toFixed(2)}
                 </Text>
                 <Text
                   style={{

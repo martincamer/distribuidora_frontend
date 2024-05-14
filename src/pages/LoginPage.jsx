@@ -34,6 +34,7 @@ export function LoginPage() {
         {loginErrors.map((error, i) => (
           <Message message={error} key={i} />
         ))}
+
         <h1 className="text-xl font-semibold text-center mb-5">
           Te damos la bienvenida 👋
         </h1>

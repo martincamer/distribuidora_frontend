@@ -27,7 +27,7 @@ function Register() {
   }, [isAuthenticated]);
 
   return (
-    <div className="h-[calc(100vh-100px)] flex gap-12 items-center border-slate-200 border-[1px]">
+    <div className="h-screen flex gap-12 items-center border-slate-200 border-[1px]">
       <img className="w-[55%] object-cover opacity-[0.7] h-[100%]" src={img} />
       <Card>
         {registerErrors?.map((error, i) => (
@@ -48,7 +48,6 @@ function Register() {
           {errors.username?.message && (
             <p className="text-red-500">{errors.username?.message}</p>
           )}
-
           <Label htmlFor="email">Correo electronico</Label>
           <Input
             name="email"
@@ -58,7 +57,6 @@ function Register() {
           {errors.email?.message && (
             <p className="text-red-500">{errors.email?.message}</p>
           )}
-
           <Label htmlFor="password">Contraseña</Label>
           <Input
             type="password"
@@ -69,7 +67,6 @@ function Register() {
           {errors.password?.message && (
             <p className="text-red-500">{errors.password?.message}</p>
           )}
-
           <Label htmlFor="confirmPassword">Confirmar Contraseña</Label>
           <Input
             type="password"
@@ -80,7 +77,9 @@ function Register() {
           {errors.confirmPassword?.message && (
             <p className="text-red-500">{errors.confirmPassword?.message}</p>
           )}
-          <Button>CREAR CUENTA AHORA</Button>
+          <div>
+            <Button>Crear cuenta ahora</Button>
+          </div>{" "}
         </form>
         <p className="justify-between flex mt-5 text-sm">
           Ya tienes una cuenta?

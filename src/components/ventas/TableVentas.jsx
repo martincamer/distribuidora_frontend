@@ -24,7 +24,11 @@ export const TableVentas = ({ ventas }) => {
   // Índices para la paginación
   const indexOfLastVenta = currentPage * ventasPerPage;
   const indexOfFirstVenta = indexOfLastVenta - ventasPerPage;
-  const currentVentas = ventas.slice(indexOfFirstVenta, indexOfLastVenta); // Elementos a mostrar
+  // Ordenar ventas por fecha de creación
+  const sortedVentas = ventas
+    .slice()
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
+  const currentVentas = sortedVentas.slice(indexOfFirstVenta, indexOfLastVenta); // Elementos a mostrar
 
   // Cambiar la página
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -42,7 +46,7 @@ export const TableVentas = ({ ventas }) => {
       venta.cliente.nombre.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(ventas.length / ventasPerPage); // Calcular el total de páginas
+  const totalPages = Math.ceil(sortedVentas.length / ventasPerPage); // Calcular el total de páginas
 
   // Obtener los números de las páginas a mostrar
   const getPageNumbers = () => {

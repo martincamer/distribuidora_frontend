@@ -43,7 +43,7 @@ export function ProductosProvider({ children }) {
     if (error.length > 0) {
       const timer = setTimeout(() => {
         setError([]);
-      }, 7000);
+      }, 5000);
       return () => clearTimeout(timer);
     }
   }, [error]);
@@ -104,7 +104,6 @@ export function ProductosProvider({ children }) {
           padding: "10px",
           borderRadius: "15px",
         },
-        // transition: "Bounce",
       });
 
       navigate("/productos");

@@ -12,9 +12,12 @@ export const TableProducts = ({ productos }) => {
   const [productsPerPage] = useState(15);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Aquí ordenamos los productos por stock de mayor a menor
+  const sortedProducts = productos.slice().sort((a, b) => b.stock - a.stock);
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = productos.slice(
+  const currentProducts = sortedProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
@@ -30,7 +33,7 @@ export const TableProducts = ({ productos }) => {
     product.detalle.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPages = Math.ceil(productos.length / productsPerPage);
+  const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
 
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -141,8 +144,13 @@ export const TableProducts = ({ productos }) => {
                 <th className="px-4 py-4 text-gray-700 uppercase text-sm">
                   {p.kg_barra_estimado}
                 </th>
-                <th className="px-4 py-4 text-sky-700 font-bold uppercase text-sm flex">
-                  <p className="py-2 px-2.5 bg-sky-500/10 rounded-xl">
+                <th className="px-4 py-4 font-bold uppercase text-sm flex">
+                  <p
+                    className={`py-2 px-2.5 ${
+                      (p.stock > 0 && "text-sky-700 bg-sky-500/10") ||
+                      (p.stock <= 0 && "text-red-700 bg-red-500/10")
+                    } rounded-xl`}
+                  >
                     {p.stock}
                   </p>
                 </th>
@@ -169,9 +177,6 @@ export const TableProducts = ({ productos }) => {
                         <Link
                           className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                           to={`/editar-producto/${p._id}`}
-                          // onClick={() => {
-                          //   handleID(p._id), openModal();
-                          // }}
                         >
                           Editar el producto
                         </Link>
@@ -180,9 +185,6 @@ export const TableProducts = ({ productos }) => {
                         <Link
                           className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                           to={`/producto/${p._id}`}
-                          // onClick={() => {
-                          //   handleID(p._id), openModal();
-                          // }}
                         >
                           Ver el producto
                         </Link>

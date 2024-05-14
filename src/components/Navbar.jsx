@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
+import { CiMenuBurger } from "react-icons/ci";
 
 export function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -8,7 +9,7 @@ export function Navbar() {
     <header
       className={`${isAuthenticated ? "bg-sky-500" : "bg-white"} z-[-100]`}
     >
-      <nav className="flex justify-between items-center py-2 px-10">
+      <nav className="flex justify-between items-center py-2 px-10 max-md:flex-row max-md:gap-1 max-md:items-center max-md:justify-between max-md:w-full">
         <h1 className="text-2xl font-bold">
           <Link className="relative" to={isAuthenticated ? "/home" : "/"}>
             <p
@@ -113,7 +114,7 @@ export function Navbar() {
               </div>
             </div>
           ) : (
-            <>
+            <div className="flex gap-2 max-md:hidden">
               <li>
                 <Link
                   className="font-semibold text-white bg-sky-500 py-2 px-6 rounded-full text-sm hover:shadow-md  transition-all"
@@ -130,9 +131,71 @@ export function Navbar() {
                   Registrarte ahora
                 </Link>
               </li>
-            </>
+            </div>
           )}
         </ul>
+        <div className="drawer w-auto md:hidden">
+          <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+          {/* Page content here */}
+          <label
+            htmlFor="my-drawer"
+            className="btn btn-circle swap swap-rotate drawer-button text-sky-500"
+          >
+            {/* this hidden checkbox controls the state */}
+            <input type="checkbox" />
+
+            {/* hamburger icon */}
+            <svg
+              className="swap-off fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 512 512"
+            >
+              <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+            </svg>
+
+            {/* close icon */}
+            <svg
+              className="swap-on fill-current"
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 512 512"
+            >
+              <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+            </svg>
+          </label>
+          <div className="drawer-side">
+            <label
+              htmlFor="my-drawer"
+              aria-label="close sidebar"
+              className="drawer-overlay"
+            ></label>
+            <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content gap-2">
+              {/* Sidebar content here */}
+              <li>
+                <Link
+                  to={"/register"}
+                  className="bg-sky-500 text-white font-bold"
+                >
+                  Registrate ahora.
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to={"/register"}
+                  className="bg-sky-500 text-white font-bold"
+                >
+                  Ya tienes una cuenta? Inicia Sesión.
+                </Link>
+              </li>
+              <div className="font-bold text-lg text-orange-500 w-full text-center">
+                Gestión Prisma
+              </div>
+            </ul>
+          </div>
+        </div>
       </nav>
       {/* {isAuthenticated &&
         (click ? (

@@ -91,7 +91,7 @@ export const SideBar = () => {
           >
             <div
               className="tooltip tooltip-right"
-              data-tip="VER LOS PRODUCTOS/CRAR/ETC"
+              data-tip="VER ESTADISTICAS MENSUALES,VENTAS,ETC."
             >
               <Link to={"/home"}>
                 <CiHome className="text-4xl text-sky-700" />
@@ -133,7 +133,7 @@ export const SideBar = () => {
           >
             <div
               className="tooltip tooltip-right"
-              data-tip="VER LOS PRODUCTOS/CRAR/ETC"
+              data-tip="VER LOS CLIENTES/CREAR/CARGAR COMPROBANTES,ETC"
             >
               <Link to={"/clientes"}>
                 <CiUser className="text-4xl text-sky-700" />

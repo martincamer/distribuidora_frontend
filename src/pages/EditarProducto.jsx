@@ -171,7 +171,7 @@ export function EditarProducto() {
             <p className="font-bold text-slate-700 mt-10 text-xl">
               Editar perfil {producto.id}
             </p>
-            <p className="text-slate-600 font-medium text-sm">
+            <p className="text-slate-600 font-bold text-sm">
               En esta sección podras crear nuevos productos.
             </p>
           </div>

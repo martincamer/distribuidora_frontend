@@ -20,7 +20,7 @@ export const Perfil = () => {
         <div className="flex gap-3 items-center">
           <img
             src={
-              user.imagen ||
+              user?.imagen ||
               "https://ppstatic.s3.amazonaws.com/expenses/uploads/people/app-243391-35471-888.blob"
             }
             className="w-[80px]
@@ -28,7 +28,7 @@ export const Perfil = () => {
           />
           <div>
             <p className="font-semibold capitalize text-gray-700 text-sm">
-              {user.username}
+              {user?.username}
             </p>
           </div>
         </div>
@@ -60,12 +60,12 @@ export const Perfil = () => {
           <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
             Nombre y apellido{" "}
             <span className="font-semibold text-slate-400">
-              {user.username}
+              {user?.username}
             </span>
           </p>
           <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
             Email{" "}
-            <span className="font-semibold text-slate-400">{user.email}</span>
+            <span className="font-semibold text-slate-400">{user?.email}</span>
           </p>
           <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
             Identificación{" "}
@@ -115,7 +115,7 @@ export const Perfil = () => {
             <p className="flex flex-col gap-1 text-gray-700 font-bold text-sm">
               Logo de la factura
               <img
-                src={user.imagen_facturacion}
+                src={user?.imagen_facturacion}
                 className="w-[100px]
            rounded-full object-cover shadow-xl"
               />
@@ -123,35 +123,35 @@ export const Perfil = () => {
             <div className="text-sm font-bold text-gray-700">
               <p>Dni</p>
               <p className="text-xs font-semibold text-gray-500">
-                {user.dni_facturacion ||
+                {user?.dni_facturacion ||
                   "Edita tus datos para poder ver el dni"}
               </p>
             </div>
             <div className="text-sm font-bold text-gray-700">
               <p>Telefono</p>
               <p className="text-xs font-semibold text-gray-500">
-                {user.telefono_facturacion ||
+                {user?.telefono_facturacion ||
                   "Edita tus datos para poder ver el dni"}
               </p>
             </div>
             <div className="text-sm font-bold text-gray-700">
               <p>Email</p>
               <p className="text-xs font-semibold text-gray-500">
-                {user.email_facturacion ||
+                {user?.email_facturacion ||
                   "Edita tus datos para poder ver el dni"}
               </p>
             </div>
             <div className="text-sm font-bold text-gray-700">
               <p>Localidad</p>
               <p className="text-xs font-semibold text-gray-500">
-                {user.localidad_facturacion ||
+                {user?.localidad_facturacion ||
                   "Edita tus datos para poder ver el dni"}
               </p>
             </div>
             <div className="text-sm font-bold text-gray-700">
               <p>Provincia</p>
               <p className="text-xs font-semibold text-gray-500">
-                {user.provincia_facturacion ||
+                {user?.provincia_facturacion ||
                   "Edita tus datos para poder ver el dni"}
               </p>
             </div>

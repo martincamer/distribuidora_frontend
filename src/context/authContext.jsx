@@ -34,6 +34,33 @@ export const AuthProvider = ({ children }) => {
     }
   }, [errors]);
 
+  useEffect(() => {
+    const checkLogin = async () => {
+      const cookies = Cookies.get();
+
+      if (!cookies.token) {
+        setIsAuthenticated(false);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await verifyTokenRequest(cookies.token);
+        console.log(res);
+
+        if (!res.data) return setIsAuthenticated(false);
+
+        setIsAuthenticated(true);
+        setUser(res.data);
+        setLoading(false);
+      } catch (error) {
+        setIsAuthenticated(false);
+        setLoading(false);
+      }
+    };
+    checkLogin();
+  }, []);
+
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
@@ -53,8 +80,7 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
-      console.log(error);
-      // setErrors(error.response.data.message);
+      setErrors(error?.response?.data?.message);
     }
   };
 
@@ -115,39 +141,11 @@ export const AuthProvider = ({ children }) => {
           padding: "10px 15px",
           borderRadius: "15px",
         },
-        // transition: "Bounce",
       });
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    const checkLogin = async () => {
-      const cookies = Cookies.get();
-
-      if (!cookies.token) {
-        setIsAuthenticated(false);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const res = await verifyTokenRequest(cookies.token);
-        console.log(res);
-        if (!res.data) return setIsAuthenticated(false);
-
-        setIsAuthenticated(true);
-        setUser(res.data);
-        setLoading(false);
-        // return;
-      } catch (error) {
-        setIsAuthenticated(false);
-        setLoading(false);
-      }
-    };
-    checkLogin();
-  }, []);
 
   const logout = () => {
     Cookies.remove("token");

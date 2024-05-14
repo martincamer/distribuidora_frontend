@@ -508,11 +508,20 @@ const ImageModal = ({ isVisible, onClose, imageUrl }) => {
   return (
     <div
       onClick={handleClickOutside} // Cierra el modal al hacer clic fuera
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black
-      bg-opacity-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
     >
       <div onClick={handleContentClick} className="relative p-5">
-        <img src={imageUrl} alt="Comprobante" className="w-full h-auto" />{" "}
+        {imageUrl && imageUrl.toLowerCase().endsWith(".pdf") ? (
+          // Si la URL termina en ".pdf", mostrar el archivo PDF en un iframe
+          <iframe
+            src={imageUrl}
+            title="Archivo PDF"
+            className="w-[1220px] h-screen"
+          />
+        ) : (
+          // Si no, mostrar la imagen
+          <img src={imageUrl} alt="Comprobante" className="w-full h-auto" />
+        )}
       </div>
     </div>
   );

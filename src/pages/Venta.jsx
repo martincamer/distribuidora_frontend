@@ -423,21 +423,21 @@ export function Venta() {
       </div>
       {venta.tipo === "venta" ? (
         <div className="mx-10">
-          <button
-            type="button"
+          <Link
+            to={`/factura/${params.id}`}
             className="bg-green-500/90 py-2 px-6 rounded-full text-white font-semibold"
           >
-            Emitir facturación documento
-          </button>
+            Emitir venta documento
+          </Link>
         </div>
       ) : (
         <div className="mx-10">
-          <button
-            type="button"
+          <Link
+            to={`/factura/${params.id}`}
             className="bg-green-500/90 py-2 px-6 rounded-full text-white font-semibold"
           >
             Emitir presupuesto documento
-          </button>
+          </Link>
         </div>
       )}
     </div>

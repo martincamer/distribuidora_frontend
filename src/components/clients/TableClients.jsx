@@ -12,9 +12,15 @@ export const TableClients = ({ clientes }) => {
   const [clientsPerPage] = useState(15);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Aquí ordenamos los clientes por total de mayor a menor
+  const sortedClients = clientes.slice().sort((a, b) => b.total - a.total);
+
   const indexOfLastClient = currentPage * clientsPerPage;
   const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-  const currentClients = clientes.slice(indexOfFirstClient, indexOfLastClient);
+  const currentClients = sortedClients.slice(
+    indexOfFirstClient,
+    indexOfLastClient
+  );
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 

@@ -23,12 +23,16 @@ import { Perfil } from "./pages/Perfil";
 import { PruebasPdf } from "./pages/PruebasPdf";
 import { useAuth } from "./context/authContext";
 import { CuentaInactivaHome } from "./pages/CuentaInactivaHome";
+import { useEffect } from "react";
 import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import VentasProvider from "./context/VentasContext";
+import FacturaPage from "./pages/FacturaPage";
 
 function App() {
   const { user } = useAuth();
+
+  useEffect(() => {}, [user]);
 
   return (
     <VentasProvider>
@@ -45,6 +49,7 @@ function App() {
               ) : (
                 <>
                   <Route index path="/home" element={<HomeApp />} />
+                  <Route index path="/factura" element={<FacturaPage />} />
                   <Route path="/ventas" element={<VentasPage />} />
                   <Route path="/perfil" element={<Perfil />} />
                   <Route path="/clientes" element={<ClientesPage />} />
@@ -73,7 +78,7 @@ function App() {
                     element={<EditarProducto />}
                   />
                   <Route path="/profile" element={<h1>Profile</h1>} />
-                  <Route path="/pruebas/:id" element={<PruebasPdf />} />
+                  <Route path="/factura/:id" element={<PruebasPdf />} />
                 </>
               )}
             </Route>

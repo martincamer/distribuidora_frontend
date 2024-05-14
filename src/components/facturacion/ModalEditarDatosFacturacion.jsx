@@ -25,10 +25,10 @@ export const ModalEditarDatosFacturacion = ({
 
     const data = new FormData();
     data.append("file", file);
-    data.append("upload_preset", "productos");
+    data.append("upload_preset", "imagenes");
 
     try {
-      const api = `https://api.cloudinary.com/v1_1/dgchynrxl/image/upload`;
+      const api = `https://api.cloudinary.com/v1_1/doguyttkd/image/upload`;
       const res = await axios.post(api, data);
       const { secure_url } = res.data; // Obtenemos la URL segura
       return secure_url;
@@ -69,11 +69,11 @@ export const ModalEditarDatosFacturacion = ({
   };
 
   useEffect(() => {
-    setValue("dni_facturacion", user.dni_facturacion);
-    setValue("localidad_facturacion", user.localidad_facturacion);
-    setValue("provincia_facturacion", user.provincia_facturacion);
-    setValue("email_facturacion", user.email_facturacion);
-    setValue("telefono_facturacion", user.telefono_facturacion);
+    setValue("dni_facturacion", user?.dni_facturacion);
+    setValue("localidad_facturacion", user?.localidad_facturacion);
+    setValue("provincia_facturacion", user?.provincia_facturacion);
+    setValue("email_facturacion", user?.email_facturacion);
+    setValue("telefono_facturacion", user?.telefono_facturacion);
   }, []);
 
   const onSubmit = async (formData) => {
@@ -204,7 +204,7 @@ export const ModalEditarDatosFacturacion = ({
                         </p>
                         <img
                           className="w-[150px] rounded-2xl shadow-md border"
-                          src={user.imagen_facturacion}
+                          src={user?.imagen_facturacion}
                         />
                       </div>
                     </div>

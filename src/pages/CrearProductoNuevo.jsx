@@ -2,13 +2,11 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useProductos } from "../context/ProductosContext";
 import { useEffect, useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { productoSchema } from "../schemas/productos";
-import { Message } from "../components/ui";
 import axios from "axios"; // Importamos axios para la llamada a Cloudinary
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import FileDropZone from "../components/ui/FileDropZone";
+import { Message } from "../components/ui/Message";
 
 dayjs.extend(utc);
 
@@ -22,9 +20,7 @@ export function CrearProductoNuevo() {
     error,
   } = useProductos();
 
-  const { register, handleSubmit } = useForm({
-    resolver: zodResolver(productoSchema),
-  });
+  const { register, handleSubmit } = useForm();
 
   const [uploadedFile, setUploadedFile] = useState(null);
   const [dragging, setDragging] = useState(false);
@@ -42,10 +38,10 @@ export function CrearProductoNuevo() {
 
     const data = new FormData();
     data.append("file", file);
-    data.append("upload_preset", "productos");
+    data.append("upload_preset", "imagenes");
 
     try {
-      const api = `https://api.cloudinary.com/v1_1/dgchynrxl/image/upload`;
+      const api = `https://api.cloudinary.com/v1_1/doguyttkd/image/upload`;
       const res = await axios.post(api, data);
       const { secure_url } = res.data; // Obtenemos la URL segura
       return secure_url;
@@ -150,7 +146,7 @@ export function CrearProductoNuevo() {
             <p className="font-bold text-slate-700 mt-10 text-xl">
               Crear nuevo perfil
             </p>
-            <p className="text-slate-600 font-medium text-sm">
+            <p className="text-slate-600 font-bold text-sm">
               En esta sección podras crear nuevos perfiles.
             </p>
           </div>
@@ -163,19 +159,12 @@ export function CrearProductoNuevo() {
             </div>
 
             <div className="px-10 py-8 flex flex-col gap-5">
-              <div
-                className={`${
-                  error.length > 0 ? "grid grid-cols-3 py-2 px-2 gap-2" : ""
-                }`}
-              >
-                {error?.map((error, i) => (
-                  <Message message={error} key={i} />
-                ))}
-              </div>
               <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="flex flex-col gap-4"
               >
+                {error.length > 0 ? <Message message={error} /> : ""}
+
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
                     El codigo
@@ -210,7 +199,7 @@ export function CrearProductoNuevo() {
                     type="text"
                     className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3.5 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   >
-                    <option value="">Seleccionar el color</option>
+                    <option>Seleccionar el color</option>
                     {colores.map((c) => (
                       <option key={c._id}>{c.name}</option>
                     ))}
@@ -226,7 +215,7 @@ export function CrearProductoNuevo() {
                     type="text"
                     className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3.5 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   >
-                    <option value="">Seleccionar la categoria</option>
+                    <option>Seleccionar la categoria</option>
                     {categorias.map((c) => (
                       <option key={c._id}>{c.detalle}</option>
                     ))}
@@ -235,12 +224,12 @@ export function CrearProductoNuevo() {
 
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
-                    Kg estimado de la barra por metro
+                    Kg del perfil
                   </label>
                   <input
                     {...register("kg_barra_estimado")}
                     type="text"
-                    placeholder="Ej: 1 font-bold.05, siempre es con punto."
+                    placeholder="Ej: 1.556, siempre es con punto '.' no con coma ','"
                     className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
                   />
                 </div>

@@ -4,10 +4,10 @@ import { IoMdClose } from "react-icons/io";
 import { v4 as uuidv4 } from "uuid"; // Para generar IDs únicos
 import { useForm } from "react-hook-form";
 import { agregarComprobante } from "../../api/clientes";
-import axios from "axios"; // Para solicitudes HTTP
-import FileDropZoneClient from "./FileDropZoneClients"; // Componente para cargar archivos
-import dayjs from "dayjs";
 import { toast } from "react-toastify";
+import axios from "axios"; // Para solicitudes HTTP
+import FileDropZoneClientsPdfs from "./FileDropZoneClientsPdfs"; // Componente para cargar archivos
+import dayjs from "dayjs";
 
 export default function ModalNuevoComprobante({
   isOpen,
@@ -16,27 +16,32 @@ export default function ModalNuevoComprobante({
   setComprobante,
   setCliente,
 }) {
-  const { register, handleSubmit, watch, reset } = useForm();
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [dragging, setDragging] = useState(false);
 
-  const total = watch("total") || 0;
-
-  const [uploadedFile, setUploadedFile] = useState(null); // Estado para el archivo cargado
-  const [dragging, setDragging] = useState(false); // Estado para el drag-and-drop
+  const { register, handleSubmit, reset, watch } = useForm();
 
   const uploadFile = async (file) => {
     if (!file) {
       return null;
     }
 
-    const data = new FormData(); // Para datos de tipo `multipart/form-data`
+    const data = new FormData();
     data.append("file", file);
-    data.append("upload_preset", "productos"); // Configuración para Cloudinary
+
+    // Set the upload preset based on the file type
+    const uploadPreset = file.type.startsWith("image/")
+      ? "imagenes"
+      : "documentos";
+    data.append("upload_preset", uploadPreset);
 
     try {
-      const api = `https://api.cloudinary.com/v1_1/dgchynrxl/image/upload`; // Endpoint de Cloudinary
-      const res = await axios.post(api, data); // Subir la imagen
-      const { secure_url } = res.data; // URL segura de la imagen
-      return secure_url; // Devuelve la URL de la imagen
+      const api = `https://api.cloudinary.com/v1_1/doguyttkd/${
+        file.type.startsWith("image/") ? "image" : "raw"
+      }/upload`;
+      const res = await axios.post(api, data);
+      const { secure_url } = res.data;
+      return secure_url;
     } catch (error) {
       console.error("Error uploading to Cloudinary:", error);
       return null;
@@ -45,31 +50,29 @@ export default function ModalNuevoComprobante({
 
   const onSubmit = async (formData) => {
     try {
-      const imageURL = await uploadFile(uploadedFile); // Subir la imagen
+      const imageURL = await uploadFile(uploadedFile);
 
       const comprobanteData = {
         ...formData,
-        id: uuidv4(), // Generar un ID único
-        imagen: imageURL, // Añadir la URL de la imagen
+        id: uuidv4(),
+        imagen: imageURL,
         date: dayjs().format("YYYY-MM-DD"),
       };
 
-      const res = await agregarComprobante(idObtenida, comprobanteData); // Llama a la función para agregar el comprobante
+      const res = await agregarComprobante(idObtenida, comprobanteData);
 
       if (res.status === 200 && res.data) {
         const clienteActualizado = res.data.comprobantes;
-        console.log("asd", clienteActualizado);
-        // Actualizar el estado del cliente para reflejar el cambio
-        setComprobante(clienteActualizado); // Actualiza el estado del cliente con la nueva lista de comprobantes
+        setComprobante(clienteActualizado);
         setCliente(res.data);
         console.log("Comprobante creado exitosamente:", res.data);
       } else {
         console.error("Error: No se pudo agregar el comprobante.");
       }
 
-      closeModal(); // Cierra el modal
-
+      closeModal();
       reset();
+      setUploadedFile(null);
 
       toast.success("Comprobante creado correctamente", {
         position: "top-center",
@@ -84,42 +87,42 @@ export default function ModalNuevoComprobante({
           padding: "10px",
           borderRadius: "15px",
         },
-        // transition: "Bounce",
       });
     } catch (error) {
       console.error("Error creando comprobante:", error);
     }
   };
 
-  // Controladores para drag-and-drop
   const handleDragOver = (event) => {
-    event.preventDefault(); // Evita el comportamiento predeterminado
-    setDragging(true); // Activa el estado de arrastre
+    event.preventDefault();
+    setDragging(true);
   };
 
   const handleDragLeave = () => {
-    setDragging(false); // Desactiva el estado de arrastre
+    setDragging(false);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
-    const file = event.dataTransfer.files[0]; // Obtiene el archivo del evento
+    const file = event.dataTransfer.files[0];
     if (file) {
-      setUploadedFile(file); // Establece el archivo cargado
-      setDragging(false); // Desactiva el estado de arrastre
+      setUploadedFile(file);
+      setDragging(false);
     }
   };
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0]; // Obtiene el archivo del input
+    const file = event.target.files[0];
     if (file) {
-      setUploadedFile(file); // Establece el archivo cargado
+      setUploadedFile(file);
     }
   };
 
   const handleRemoveFile = () => {
-    setUploadedFile(null); // Elimina el archivo cargado
+    setUploadedFile(null);
   };
+
+  const total = watch("total");
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -130,7 +133,7 @@ export default function ModalNuevoComprobante({
           enterFrom="opacity-0"
           enterTo="opacity-100"
         >
-          <div className="fixed inset-0 bg-black/10" /> {/* Fondo oscuro */}
+          <div className="fixed inset-0 bg-black/10" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -147,7 +150,7 @@ export default function ModalNuevoComprobante({
               <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <div className="flex justify-end py-2">
                   <IoMdClose
-                    onClick={closeModal} // Cierra el modal al hacer clic
+                    onClick={closeModal}
                     className="hover:text-sky-700 hover:bg-gray-100 transition-all cursor-pointer text-4xl text-slate-800 bg-gray-200 py-2 px-2 rounded-full"
                   />
                 </div>
@@ -160,7 +163,7 @@ export default function ModalNuevoComprobante({
                         className="bg-gray-200/60 text-slae-700 placeholder:text-slate-400 uppercase text-sm py-3 px-3 rounded-xl outline-none ease-linear transition-all focus:outline-sky-700 w-full"
                         type="number"
                         placeholder="Ingresa el total del comprobante ej: $100.000"
-                        {...register("total", { required: true })} // Campo requerido
+                        {...register("total", { required: true })}
                       />
 
                       <div className="bg-sky-500 text-white py-2 px-4 rounded-xl font-bold">
@@ -171,7 +174,7 @@ export default function ModalNuevoComprobante({
                       </div>
                     </div>
 
-                    <FileDropZoneClient
+                    <FileDropZoneClientsPdfs
                       dragging={dragging}
                       handleDragLeave={handleDragLeave}
                       handleDragOver={handleDragOver}

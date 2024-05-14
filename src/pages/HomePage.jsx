@@ -7,7 +7,7 @@ import imagen_cuatro from "../assets/imagenes_sistema/Captura desde 2024-05-09 0
 import imagen_cinco from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-34-55.png";
 import imagen_seis from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-35-06.png";
 import imagen_siete from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-35-18.png";
-import video from "../assets/video/producto.mp4";
+import video from "./../assets/video/video_tutorial.mp4";
 
 function HomePage() {
   window.addEventListener("scroll", function () {
@@ -24,39 +24,39 @@ function HomePage() {
   return (
     <>
       <section className="imagen_url bg-white-500 flex items-center">
-        <header className="p-20 container mx-auto px-10 md:px-0">
-          <h1 className="text-4xl py-2 font-bold text-sky-700">
+        <header className="container mx-auto px-10 md:px-0 max-md:w-full max-md:px-5">
+          <h1 className="text-4xl py-2 font-bold text-sky-700 max-md:text-lg max-md:text-center max-md:shadow-xl max-md:text-white max-md:bg-sky-500 max-md:px-4 max-md:py-2 max-md:rounded-xl">
             SOFTWARE DE GESTIÓN/ALUMINIO
           </h1>
-          <p className="text-md text-slate-900 text-3xl flex flex-col gap-1 mt-2 font-medium">
+          <p className="text-md text-slate-900 text-3xl flex flex-col gap-1 mt-2 font-medium max-md:bg-white max-md:py-2  max-md:px-3 max-md:rounded-xl max-md:text-2xl max-md:shadow-xl">
             Controlá cuánto invertís.
-            <span className="pl-32 text-4xl text-sky-500">
+            <span className="pl-32 max-md:pl-28 text-4xl text-sky-500 max-md:text-xl">
               Conocé cuánto ganás.
             </span>
           </p>
 
-          <p className="mt-6 text-500 text-lg underline">
+          <p className="mt-6 text-500 text-lg underline max-md:bg-orange-500 max-md:py-2 max-md:px-3 max-md:text-center max-md:text-sm max-md:text-white max-md:font-bold max-md:rounded-full">
             ¿Necesitás ordenarte y simplificar la administración para poder
             crecer?
           </p>
 
           <Link
-            className="bg-sky-500 text-sm rounded-xl text-white px-12 uppercase font-semibold py-2 inline-block mt-6"
+            className="bg-sky-500 text-sm rounded-xl text-white px-12 uppercase font-semibold py-2 inline-block mt-6 max-md:rounded-full max-md:text-sm"
             to="/register"
           >
-            USAR GRATÍS AHORA
+            REGISTRATE AHORA
           </Link>
         </header>
       </section>
 
-      <section className=" bg-slate-100 py-20 px-10 flex gap-5 flex-col justify-center items-center">
+      <section className=" bg-slate-100 py-20 px-10 flex gap-5 flex-col justify-center items-center max-md:w-full max-md:px-5">
         <div className="flex flex-col gap-3">
-          <p className="font-semibold text-2xl w-1/2 mx-auto">
+          <p className="font-semibold text-2xl w-1/2 mx-auto max-md:w-full max-md:text-center max-md:text-lg">
             Gestioń Prisma le permite{" "}
             <span className="text-sky-500">presupuestar y vender</span> sus
             perfiles de carpintería de aluminio de manera fácil y rápida.
           </p>
-          <p className="w-1/2 mx-auto text-center text-sm font-medium text-slate-600">
+          <p className="w-1/2 mx-auto text-center text-sm font-medium text-slate-600 max-md:w-full">
             Nuestra herramienta online tiene el funcionamiento de cargar hasta
             100.000 perfiles y una calculadora automática, con los que podrá
             generar presupuestos y ventas eficientemente, tanto para su propio
@@ -65,15 +65,15 @@ function HomePage() {
         </div>
       </section>
 
-      <section className=" bg-white py-14 px-10 flex gap-5 flex-col justify-center items-center">
+      <section className=" bg-white py-14 px-10 flex gap-5 flex-col justify-center items-center max-md:px-5">
         <div className="flex flex-col gap-3">
-          <p className="font-semibold text-2xl w-full mx-auto">
+          <p className="font-semibold text-2xl w-full mx-auto max-md:text-lg max-md:text-center">
             Gestioń Prisma <span className="text-sky-500">Características</span>{" "}
             del sistema.{" "}
           </p>
         </div>
 
-        <article className="h-[100vh] overflow-y-scroll px-5 scroll-bar flex flex-col gap-5">
+        <article className="h-[100vh] max-md:h-[60vh] overflow-y-scroll px-5 scroll-bar flex flex-col gap-5">
           <div className="">
             <div className="w-full h-full">
               <img
@@ -90,7 +90,7 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-3 max-md:grid-cols-1 max-md:gap-5">
             <img
               className="rounded-2xl w-full h-full object-cover"
               src={imagen_tres}
@@ -115,22 +115,28 @@ function HomePage() {
         </article>
       </section>
 
-      <section className=" bg-white py-14 px-10 flex gap-5 flex-col justify-center items-center">
+      <section className=" bg-white py-14 px-10 flex gap-5 flex-col justify-center items-center max-md:py-20 max-md:bg-sky-500 max-md:px-5">
         <div className="flex flex-col gap-3">
-          <p className="font-semibold text-2xl w-full mx-auto">
-            Gestioń Prisma <span className="text-sky-500">Video/Muestra</span>{" "}
+          <p className="font-semibold text-2xl w-full mx-auto max-md:text-white max-md:text-lg max-md:text-center">
+            Gestioń Prisma{" "}
+            <span className="text-sky-500 max-md:text-gray-300">
+              Video/Muestra
+            </span>{" "}
             del sistema.{" "}
           </p>
         </div>
 
-        <video className="h-[60%] w-[60%] rounded-2xl shadow-xl mt-5" controls>
+        <video
+          className="h-[60%] w-[60%] rounded-2xl shadow-xl mt-5 max-md:w-full max-md:h-full max-md:shadow-2xl"
+          controls
+        >
           <source src={video} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </section>
 
       <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-center md:gap-8">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:items-center md:gap-8 max-md:text-sm">
           <div className="rounded-2xl border border-sky-500 p-6 shadow-2xl ring-1 ring-sky-500 sm:order-last sm:px-8 lg:p-12 bg-white">
             <div className="text-center">
               <h2 className="text-lg font-medium text-gray-900">
@@ -452,28 +458,27 @@ function HomePage() {
 
               <ul className="mt-8 space-y-4 text-sm">
                 <li>
-                  <a
+                  <Link
+                    to={"/login"}
                     className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
                   >
                     Iniciar Sesión
-                  </a>
+                  </Link>
                 </li>
 
                 <li>
-                  <a
+                  <Link
+                    to={"/register"}
                     className="text-gray-700 transition hover:text-gray-700/75"
-                    href="#"
                   >
-                    {" "}
-                    Registrate ahora
-                  </a>
+                    Registro
+                  </Link>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="mt-16">
+          <div className="mt-16 hidden">
             <ul className="flex justify-center gap-6 sm:justify-end">
               <li>
                 <a
