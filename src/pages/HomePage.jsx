@@ -8,6 +8,7 @@ import imagen_cinco from "../assets/imagenes_sistema/Captura desde 2024-05-09 00
 import imagen_seis from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-35-06.png";
 import imagen_siete from "../assets/imagenes_sistema/Captura desde 2024-05-09 00-35-18.png";
 import video from "./../assets/video/video_tutorial.mp4";
+import ReactWhatsapp from "react-whatsapp";
 
 function HomePage() {
   window.addEventListener("scroll", function () {
@@ -147,7 +148,7 @@ function HomePage() {
               <p className="mt-2 sm:mt-4">
                 <strong className="text-3xl font-bold text-gray-900 sm:text-4xl">
                   {" "}
-                  $50.000{" "}
+                  $30.000{" "}
                 </strong>
 
                 <span className="text-sm font-medium text-gray-700">
@@ -295,12 +296,13 @@ function HomePage() {
               </li>
             </ul>
 
-            <a
-              href="#"
+            <ReactWhatsapp
               className="mt-8 block rounded-full border border-sky-500 bg-sky-500 px-12 py-3 text-center text-sm font-medium text-white hover:bg-sky-500 hover:ring-1 hover:ring-sky-500 focus:outline-none focus:ring active:text-sky-500"
+              number="3462693961"
+              message={`¡Hola, mi nombre es NOMBRE! Quiero consultar por el sistema de gestión prisma, plan PRO.`}
             >
               Charlar ahora
-            </a>
+            </ReactWhatsapp>
           </div>
 
           <div className="rounded-2xl p-6 shadow-xl sm:px-8 lg:p-12 bg-white">
@@ -313,7 +315,7 @@ function HomePage() {
               <p className="mt-2 sm:mt-4">
                 <strong className="text-3xl font-bold text-gray-900 sm:text-4xl">
                   {" "}
-                  $30.000
+                  $20.000
                 </strong>
 
                 <span className="text-sm font-medium text-gray-700">
@@ -402,12 +404,13 @@ function HomePage() {
               </li>
             </ul>
 
-            <a
-              href="#"
+            <ReactWhatsapp
               className="mt-8 block rounded-full border border-sky-500 bg-white px-12 py-3 text-center text-sm font-medium text-sky-500 hover:ring-1 hover:ring-sky-500 focus:outline-none focus:ring active:text-sky-500"
+              number="3462693961"
+              message={`¡Hola, mi nombre es NOMBRE! Quiero consultar por el sistema de gestión prisma, plan BÁSICO.`}
             >
               Charlar ahora
-            </a>
+            </ReactWhatsapp>
           </div>
         </div>
       </div>
@@ -429,12 +432,12 @@ function HomePage() {
               ¡Que esperas para gestiónar tu empresa!{" "}
             </strong>
 
-            <a
+            <ReactWhatsapp
               className="inline-flex items-center gap-2 rounded-full border border-white bg-white px-8 py-3 text-sky-500 hover:bg-transparent hover:text-sky-500 focus:outline-none focus:ring active:bg-white/90 hover:bg-white"
-              href="#"
+              number="3462693961"
+              message={`¡Hola, mi nombre es NOMBRE, quiero consultar sobre el sistema Gestión Prisma.`}
             >
               <span className="text-sm font-medium"> Charlemos ahora </span>
-
               <svg
                 className="size-5 rtl:rotate-180"
                 xmlns="http://www.w3.org/2000/svg"
@@ -449,7 +452,7 @@ function HomePage() {
                   d="M17 8l4 4m0 0l-4 4m4-4H3"
                 />
               </svg>
-            </a>
+            </ReactWhatsapp>
           </div>
 
           <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">

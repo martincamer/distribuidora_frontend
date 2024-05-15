@@ -330,11 +330,12 @@ export function EditarVenta() {
                         <th className="text-slate-500 text-sm">Color</th>
                         <th className="text-slate-500 text-sm">Categoría</th>
                         <th className="text-slate-500 text-sm">
-                          Peso total (kg)
+                          Peso barra (kg)
                         </th>
                         <th className="text-slate-500 text-sm">
                           Precio kg (ARS)
                         </th>
+                        <th className="text-slate-500 text-sm">Total kg</th>
                         <th className="text-slate-500 text-sm">Cantidad</th>
                         <th className="text-slate-500 text-sm">Total final</th>
                       </tr>
@@ -357,21 +358,19 @@ export function EditarVenta() {
                           <td className="font-semibold text-gray-700">
                             {editIndex === index ? (
                               <input
-                                type="number"
+                                type="text"
                                 className="p-2 rounded w-full bg-gray-200/80 text-gray-700 border-none outline-none"
-                                value={Number(
-                                  producto.total_kilogramos
-                                ).toFixed(2)}
+                                value={producto.kg_barra_estimado}
                                 onChange={(e) =>
                                   handleInputChange(
                                     index,
-                                    "total_kilogramos",
+                                    "kg_barra_estimado",
                                     parseFloat(e.target.value)
                                   )
                                 }
                               />
                             ) : (
-                              `${Number(producto.total_kilogramos).toFixed(
+                              `${Number(producto.kg_barra_estimado).toFixed(
                                 2
                               )} kg`
                             )}
@@ -398,6 +397,13 @@ export function EditarVenta() {
                             )}
                           </td>
                           <td className="font-semibold text-gray-700">
+                            {Number(
+                              Number(
+                                producto.kg_barra_estimado * producto.cantidad
+                              )
+                            )}
+                          </td>
+                          <td className="font-semibold text-gray-700">
                             {editIndex === index ? (
                               <input
                                 type="number"
@@ -417,9 +423,9 @@ export function EditarVenta() {
                           </td>
                           <td className="font-semibold text-gray-700">
                             {Number(
-                              producto.total_kilogramos *
-                                producto.cantidad *
-                                producto.precio
+                              Number(
+                                producto.kg_barra_estimado * producto.cantidad
+                              ) * producto.precio
                             ).toLocaleString("es-AR", {
                               style: "currency",
                               currency: "ARS",

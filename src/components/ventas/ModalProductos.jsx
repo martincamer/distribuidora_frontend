@@ -82,10 +82,11 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
         data.kilogramos || producto.kg_barra_estimado * data.cantidad
       ) || 0,
       parseFloat(data.precio) || 0,
-      (parseFloat(data.kilogramos || producto.kg_barra_estimado) || 0) *
-        (parseFloat(data.precio) || 0) *
-        (parseFloat(data.cantidad) || 1),
-      parseFloat(data.cantidad) || 1,
+      Number(
+        (parseFloat(data.kilogramos || producto.kg_barra_estimado) || 0) *
+          (parseFloat(data.cantidad) || 0)
+      ) * (parseFloat(data.precio) || 0),
+      parseFloat(data.cantidad) || 0,
       fechaActual
     );
 
@@ -94,7 +95,7 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={closeModal}>
+      <Dialog as="div" className="relative z-[103]" onClose={closeModal}>
         <Transition.Child
           as={Fragment}
           enter="transition-opacity"

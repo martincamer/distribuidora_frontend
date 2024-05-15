@@ -5,6 +5,7 @@ import { Card, Message, Button, Input, Label } from "../components/ui";
 import { useForm } from "react-hook-form";
 import { registerSchema } from "../schemas/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { BiLogoPlayStore } from "react-icons/bi";
 import img from "../assets/intro.jpg";
 
 function Register() {
@@ -27,8 +28,17 @@ function Register() {
   }, [isAuthenticated]);
 
   return (
-    <div className="h-screen flex gap-12 items-center border-slate-200 border-[1px]">
-      <img className="w-[55%] object-cover opacity-[0.7] h-[100%]" src={img} />
+    <div className="h-screen flex gap-12 items-center border-slate-200 border-[1px] max-md:px-8">
+      <div class="flex items-center gap-2 justify-center bg-blue-500 text-white px-4 py-2 rounded cursor-pointer md:hidden">
+        <BiLogoPlayStore className="text-5xl" />
+        <span className="font-semibold">
+          Descargar la app en PlayStore o AppStore
+        </span>
+      </div>
+      <img
+        className="w-[55%] object-cover opacity-[0.7] h-[100%] max-md:hidden"
+        src={img}
+      />
       <Card>
         {registerErrors?.map((error, i) => (
           <Message message={error} key={i} />

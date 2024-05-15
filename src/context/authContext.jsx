@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
 
   // clear errors after 5 seconds
   useEffect(() => {
-    if (errors.length > 0) {
+    if (errors?.length > 0) {
       const timer = setTimeout(() => {
         setErrors([]);
       }, 5000);

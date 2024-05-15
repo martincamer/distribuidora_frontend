@@ -7,6 +7,7 @@ import ModalClientes from "../components/ventas/ModalClientes";
 import ModalProductos from "../components/ventas/ModalProductos.jsx";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
+import { formatearDinero } from "../helpers/FormatearDinero.js";
 
 export function CrearVenta() {
   const [clienteSeleccionado, setClienteSeleccionado] = useState([]);
@@ -171,9 +172,10 @@ export function CrearVenta() {
     }
 
     // Sumar los valores al grupo existente
-    groupedByCategoryAndColor[key].total_dinero += producto.total_dinero;
+    groupedByCategoryAndColor[key].total_dinero +=
+      Number(producto.kg_barra_estimado * producto.cantidad) * producto.precio;
     groupedByCategoryAndColor[key].total_kilogramos +=
-      producto.total_kilogramos;
+      producto.kg_barra_estimado * producto.cantidad;
   });
 
   // Convertir el objeto a un arreglo
@@ -387,39 +389,28 @@ export function CrearVenta() {
                   </button>
                 </div>
                 <div className="w-full scroll-bar overflow-x-scroll">
-                  <table className="table uppercase">
+                  <table className="table">
                     {/* head */}
-                    <thead>
+                    <thead className="uppercase">
                       <tr>
-                        <th className="text-slate-500 text-sm uppercase">
-                          Código
+                        <th className="text-slate-500 text-sm">Código</th>
+                        <th className="text-slate-500 text-sm">Detalle</th>
+                        <th className="text-slate-500 text-sm">Color</th>
+                        <th className="text-slate-500 text-sm">Categoría</th>
+                        <th className="text-slate-500 text-sm">
+                          Peso barra (kg)
                         </th>
-                        <th className="text-slate-500 text-sm uppercase">
-                          Detalle
-                        </th>
-                        <th className="text-slate-500 text-sm uppercase">
-                          Color
-                        </th>
-                        <th className="text-slate-500 text-sm uppercase">
-                          Categoría
-                        </th>
-                        <th className="text-slate-500 text-sm uppercase">
-                          Peso Total (kg)
-                        </th>
-                        <th className="text-slate-500 text-sm uppercase">
+                        <th className="text-slate-500 text-sm">
                           Precio kg (ARS)
                         </th>
-                        <th className="text-slate-500 text-sm uppercase">
-                          Cantidad
-                        </th>
-                        <th className="text-slate-500 text-sm uppercase">
-                          Total final
-                        </th>
+                        <th className="text-slate-500 text-sm">Total kg</th>
+                        <th className="text-slate-500 text-sm">Cantidad</th>
+                        <th className="text-slate-500 text-sm">Total final</th>
                       </tr>
                     </thead>
                     <tbody>
                       {productosSeleccionados.map((producto, index) => (
-                        <tr key={index}>
+                        <tr className="uppercase" key={index}>
                           <td className="font-semibold text-gray-700">
                             {producto.codigo}
                           </td>
@@ -432,38 +423,26 @@ export function CrearVenta() {
                           <td className="font-semibold text-gray-700">
                             {producto.categoria}
                           </td>
-                          {/* className="font-semibold text-gray-700" Condicional para permitir o denegar la edición */}
                           <td className="font-semibold text-gray-700">
                             {editIndex === index ? (
                               <input
                                 type="text"
                                 className="p-2 rounded w-full bg-gray-200/80 text-gray-700 border-none outline-none"
-                                // value={Number(
-                                //   producto.total_kilogramos
-                                // ).toFixed(2)}
-                                // onChange={(e) =>
-                                //   handleInputChange(
-                                //     index,
-                                //     "total_kilogramos",
-                                //     parseFloat(e.target.value)
-                                //   )
-                                // }
-                                value={producto.total_kilogramos}
+                                value={producto.kg_barra_estimado}
                                 onChange={(e) =>
                                   handleInputChange(
                                     index,
-                                    "total_kilogramos",
+                                    "kg_barra_estimado",
                                     parseFloat(e.target.value)
                                   )
                                 }
                               />
                             ) : (
-                              `${Number(producto.total_kilogramos).toFixed(
+                              `${Number(producto.kg_barra_estimado).toFixed(
                                 2
                               )} kg`
                             )}
                           </td>
-
                           <td className="font-semibold text-gray-700">
                             {editIndex === index ? (
                               <input
@@ -485,7 +464,13 @@ export function CrearVenta() {
                               })
                             )}
                           </td>
-
+                          <td className="font-semibold text-gray-700">
+                            {Number(
+                              Number(
+                                producto.kg_barra_estimado * producto.cantidad
+                              ).toFixed(2)
+                            )}
+                          </td>
                           <td className="font-semibold text-gray-700">
                             {editIndex === index ? (
                               <input
@@ -504,18 +489,16 @@ export function CrearVenta() {
                               producto.cantidad
                             )}
                           </td>
-
                           <td className="font-semibold text-gray-700">
                             {Number(
-                              producto.total_kilogramos *
-                                producto.cantidad *
-                                producto.precio
+                              Number(
+                                producto.kg_barra_estimado * producto.cantidad
+                              ) * producto.precio
                             ).toLocaleString("es-AR", {
                               style: "currency",
                               currency: "ARS",
                             })}
                           </td>
-
                           <td>
                             <div className="flex gap-2">
                               {/* Botón para alternar entre edición y no edición */}
@@ -546,7 +529,6 @@ export function CrearVenta() {
                     </tbody>
                   </table>
                 </div>
-
                 <div>
                   <button
                     type="submit"
@@ -622,7 +604,7 @@ export function CrearVenta() {
                           {" "}
                           Kg de la barra:{" "}
                           <span className="font-bold text-sky-700">
-                            {p.kg_barra_estimado} kgs
+                            {Number(p?.kg_barra_estimado)?.toFixed(2)} kgs
                           </span>
                         </p>
                       </div>
@@ -631,7 +613,10 @@ export function CrearVenta() {
                           {" "}
                           Total de kgs:{" "}
                           <span className="font-bold text-sky-700">
-                            {p.total_kilogramos} kgs
+                            {Number(
+                              p?.kg_barra_estimado * p?.cantidad
+                            )?.toFixed(2)}{" "}
+                            kgs
                           </span>
                         </p>
                       </div>
@@ -653,7 +638,8 @@ export function CrearVenta() {
                           Precio total:{" "}
                           <span className="font-bold text-sky-700">
                             {Number(
-                              p.total_kilogramos * p.precio * p.cantidad
+                              Number(p.kg_barra_estimado * p.cantidad) *
+                                p.precio
                             ).toLocaleString("es-AR", {
                               style: "currency",
                               currency: "ARS",
@@ -699,11 +685,15 @@ export function CrearVenta() {
                 </p>
                 <p className="font-semibold text-sm uppercase  text-slate-700">
                   Total de kgs{" "}
-                  <span className="text-sky-700">{p.total_kilogramos}</span>
+                  <span className="text-sky-700">
+                    {Number(p.total_kilogramos).toFixed(2)}
+                  </span>
                 </p>
                 <p className="font-semibold text-sm uppercase  text-slate-700">
                   Precio total{" "}
-                  <span className="text-sky-700">{p.total_dinero}</span>
+                  <span className="text-sky-700">
+                    {formatearDinero(p.total_dinero)}
+                  </span>
                 </p>
               </div>
             ))}

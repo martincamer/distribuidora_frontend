@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, Message, Button, Input, Label } from "../components/ui";
 import { loginSchema } from "../schemas/auth";
+import { BiLogoPlayStore } from "react-icons/bi";
 import img from "../assets/intro.jpg";
 
 export function LoginPage() {
@@ -27,11 +28,21 @@ export function LoginPage() {
   }, [isAuthenticated]);
 
   return (
-    <div className="h-screen flex gap-12 items-center">
-      <img className="w-[55%] object-cover opacity-[0.7] h-[100%]" src={img} />
+    <div className="h-screen flex gap-12 items-center max-md:px-8">
+      <div class="flex items-center gap-2 justify-center bg-blue-500 text-white px-4 py-2 rounded cursor-pointer md:hidden">
+        <BiLogoPlayStore className="text-5xl" />
+        <span className="font-semibold">
+          Descargar la app en PlayStore o AppStore
+        </span>
+      </div>
+
+      <img
+        className="w-[55%] object-cover opacity-[0.7] h-[100%] max-md:hidden"
+        src={img}
+      />
 
       <Card>
-        {loginErrors.map((error, i) => (
+        {loginErrors?.map((error, i) => (
           <Message message={error} key={i} />
         ))}
 
