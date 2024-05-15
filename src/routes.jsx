@@ -5,7 +5,7 @@ import { SideBar } from "./components/uiElements/Sidebar";
 export const ProtectedRoute = () => {
   const { isAuthenticated, loading, user } = useAuth();
 
-  if (!isAuthenticated && !loading) return <Navigate to="/" replace />;
+  if (!loading && !isAuthenticated) return <Navigate to="/login" replace />;
   return (
     <main className="flex w-full h-full">
       {user?.cuenta === "desactivada" ? (

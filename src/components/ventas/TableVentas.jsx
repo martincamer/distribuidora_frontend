@@ -76,7 +76,7 @@ export const TableVentas = ({ ventas }) => {
   };
 
   return (
-    <div className="my-5">
+    <div className="py-5">
       <div className="flex items-center">
         {/* Botón para abrir/cerrar el campo de búsqueda */}
         <button
@@ -378,24 +378,7 @@ export const TableVentas = ({ ventas }) => {
                         <td className="px-4 py-4 text-gray-700 font-semibold">
                           {updateFecha(v.date)}
                         </td>
-                        {/* <td className="px-4 py-4 text-gray-700 font-semibold">
-                          <div className="flex">
-                            <p
-                              className={`font-semibold py-2.5 px-5 rounded-2xl ${
-                                (v.estado === "aceptada" &&
-                                  "bg-green-200/90 text-green-700 ") ||
-                                (v.estado === "pendiente" &&
-                                  "bg-orange-200/90 text-orange-700 ") ||
-                                (v.estado === "rechazada" &&
-                                  "bg-red-200/90 text-red-700 ")
-                              }`}
-                            >
-                              {(v.estado === "aceptada" && "aceptado") ||
-                                (v.estado === "pendiente" && "Pendiente") ||
-                                (v.estado === "rechazado" && "Rechazado")}
-                            </p>
-                          </div>
-                        </td> */}
+
                         <td className="px-4 py-4">
                           <div className="dropdown dropdown-left drop-shadow-lg">
                             <div
@@ -447,7 +430,7 @@ export const TableVentas = ({ ventas }) => {
       </Tab.Group>
       {/* Tabla de ventas */}
       {/* Paginación */}
-      <div className="mt-3 flex justify-center items-center space-x-2">
+      <div className="flex pb-12 justify-center items-center space-x-2">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}

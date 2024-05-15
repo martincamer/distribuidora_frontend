@@ -32,8 +32,8 @@ export function VentasPage() {
   }, 0);
 
   return (
-    <div>
-      <div className="bg-white w-full flex justify-between items-center ">
+    <>
+      <div className="bg-white w-full flex justify-between items-center">
         <div className="flex">
           <p className="bg-sky-100/80 px-8 text-[16px] py-4 text-sky-600 font-semibold">
             Ventas
@@ -192,6 +192,6 @@ export function VentasPage() {
           <TableVentas ventas={ventas} /> {/* Cambia a la tabla de ventas */}
         </div>
       )}
-    </div>
+    </>
   );
 }

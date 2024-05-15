@@ -130,27 +130,15 @@ export const TableClients = ({ clientes }) => {
           <tbody className="divide-y divide-slate-200">
             {filteredClients.map((c) => (
               <tr className="hover:bg-gray-100/50 cursor-pointer" key={c._id}>
-                <th className="px-4 py-4 font-medium text-gray-900 uppercase text-sm">
+                <th className="px-4 py-4 text-gray-900 uppercase text-sm">
                   {c.nombre}
                 </th>
-                <th className="px-4 py-4 text-gray-500 uppercase text-sm">
-                  {c.apellido}
-                </th>
-                <th className="px-4 py-4 text-gray-500 uppercase text-sm">
-                  {c.localidad}
-                </th>
-                <th className="px-4 py-4 text-gray-500 uppercase text-sm">
-                  {c.provincia}
-                </th>
-                <th className="px-4 py-4 text-gray-500 uppercase text-sm">
-                  {c.dni}
-                </th>
-                <th className="px-4 py-4 text-gray-500 uppercase text-sm">
-                  {c.telefono}
-                </th>
-                <th className="px-4 py-4 text-gray-500 uppercase text-sm">
-                  {c.email}
-                </th>
+                <th className="px-4 py-4 uppercase text-sm">{c.apellido}</th>
+                <th className="px-4 py-4 uppercase text-sm">{c.localidad}</th>
+                <th className="px-4 py-4 uppercase text-sm">{c.provincia}</th>
+                <th className="px-4 py-4 uppercase text-sm">{c.dni}</th>
+                <th className="px-4 py-4 uppercase text-sm">{c.telefono}</th>
+                <th className="px-4 py-4 uppercase text-sm">{c.email}</th>
                 <th className="px-4 py-4 uppercase text-sm flex">
                   <p
                     className={` py-2 px-3 rounded-full  font-extrabold ${
