@@ -410,7 +410,7 @@ export function Cliente() {
                           className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                           onClick={() => handleViewImage(c.imagen)} // Abre el modal con la imagen
                         >
-                          Ver imagen
+                          Ver comprobante
                         </button>
                       </li>
                       {/* <li>
