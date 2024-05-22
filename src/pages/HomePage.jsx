@@ -148,7 +148,7 @@ function HomePage() {
               <p className="mt-2 sm:mt-4">
                 <strong className="text-3xl font-bold text-gray-900 sm:text-4xl">
                   {" "}
-                  $30.000{" "}
+                  $12.500{" "}
                 </strong>
 
                 <span className="text-sm font-medium text-gray-700">
@@ -315,7 +315,7 @@ function HomePage() {
               <p className="mt-2 sm:mt-4">
                 <strong className="text-3xl font-bold text-gray-900 sm:text-4xl">
                   {" "}
-                  $20.000
+                  $5.000
                 </strong>
 
                 <span className="text-sm font-medium text-gray-700">

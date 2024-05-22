@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Navbar } from "./components/Navbar";
 import { ProtectedRoute } from "./routes";
 import { LoginPage } from "./pages/LoginPage";
@@ -33,6 +33,39 @@ function App() {
   const { user } = useAuth();
 
   useEffect(() => {}, [user]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    document.title = getPageTitle(location.pathname);
+  }, [location]);
+
+  const getPageTitle = (path) => {
+    switch (path) {
+      case "/":
+        return "Gestión Prisma";
+      case "/login":
+        return "Gestión Prisma Login";
+      case "/register":
+        return "Gestión Prisma Registro";
+      case "/home":
+        return "Gestión Prisma Inicio";
+      case "/factura":
+        return "Gestión Prisma Factura";
+      case "/ventas":
+        return "Gestión Prisma Ventas";
+      case "/perfil":
+        return "Gestión Prisma Perfil";
+      case "/clientes":
+        return "Gestión Prisma Clientes";
+      case "/crear-venta":
+        return "Gestión Prisma Crear Venta";
+      case "/productos":
+        return "Gestión Prisma Productos";
+      default:
+        return "Gestión Prisma";
+    }
+  };
 
   return (
     <VentasProvider>
