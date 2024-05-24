@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useVentas } from "../context/VentasContext.jsx"; // Cambia a VentasContext
 import { ImFileEmpty } from "react-icons/im"; // Icono para cuando no hay datos
 import { BsFolderPlus } from "react-icons/bs"; // Icono para agregar
@@ -8,24 +8,87 @@ import { IoClose } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import video from "../assets/video/producto.mp4";
+import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 export function VentasPage() {
   const { ventas, getVentas } = useVentas(); // Cambia a ventas y función para obtener ventas
+  const [ventasSemana, setVentasSemana] = useState([]);
+  const [ventasDia, setVentasDia] = useState([]);
+  const [filtrados, setFiltrados] = useState([]);
 
   useEffect(() => {
     getVentas(); // Obtiene las ventas cuando el componente se monta
   }, []); // No olvides agregar dependencias necesarias para evitar advertencias
 
+  useEffect(() => {
+    const now = dayjs();
+    const currentMonth = now.month();
+    const currentYear = now.year();
+
+    const filtrados = ventas.filter((item) => {
+      const itemDate = dayjs(item.date);
+      return (
+        itemDate.month() === currentMonth && itemDate.year() === currentYear
+      );
+    });
+
+    setFiltrados(filtrados);
+  }, [ventas]);
+
+  useEffect(() => {
+    const now = dayjs();
+    const startOfWeek = now.startOf("week");
+    const endOfWeek = now.endOf("week");
+
+    const ventasSemana = ventas.filter((item) => {
+      const itemDate = dayjs(item.date);
+      return (
+        itemDate.isSameOrAfter(startOfWeek) &&
+        itemDate.isSameOrBefore(endOfWeek)
+      );
+    });
+
+    setVentasSemana(ventasSemana);
+  }, [ventas]);
+
+  useEffect(() => {
+    const now = dayjs();
+
+    const ventasDia = ventas.filter((item) => {
+      const itemDate = dayjs(item.date);
+      return itemDate.isSame(now, "day");
+    });
+
+    setVentasDia(ventasDia);
+  }, [ventas]);
+
   // Filtrar las ventas que son de tipo 'venta'
-  const ventasDeTipoVenta = ventas.filter((venta) => venta.tipo === "venta");
+  const ventasDeTipoVenta = filtrados.filter((venta) => venta.tipo === "venta");
 
   // Calcular el total de ganancias para cada venta de tipo 'venta'
-  const totalGanancias = ventasDeTipoVenta.map((venta) => {
+  const totalGanancias = filtrados.map((venta) => {
     return venta.productos.reduce((suma, producto) => {
       return suma + producto.total_dinero; // Sumar el total_dinero de cada producto
     }, 0);
   });
 
+  // Calcular el total de ganancias para cada venta de tipo 'venta'
+  const totalSemana = ventasSemana.map((venta) => {
+    return venta.productos.reduce((suma, producto) => {
+      return suma + producto.total_dinero; // Sumar el total_dinero de cada producto
+    }, 0);
+  });
+
+  const totalDia = ventasDia.map((venta) => {
+    return venta.productos.reduce((suma, producto) => {
+      return suma + producto.total_dinero; // Sumar el total_dinero de cada producto
+    }, 0);
+  });
   // Calcular el total de ganancias para todas las ventas de tipo 'venta' combinadas
   const sumaTotalGanancias = totalGanancias.reduce((suma, ganancia) => {
     return suma + ganancia;
@@ -116,8 +179,8 @@ export function VentasPage() {
 
       {ventas.length > 0 && (
         <div className="flex flex-col gap-5 mx-10">
-          <section className="py-10 grid grid-cols-3 gap-4">
-            <div className="stats shadow-xl items-center">
+          <section className="py-10 grid grid-cols-4 gap-4">
+            <div className="stats shadow-xl items-center scroll-bar">
               <div className="stat">
                 <div className="stat-title font-semibold">Total ventas</div>
                 <div className="stat-value text-gray-800">
@@ -144,7 +207,7 @@ export function VentasPage() {
                 </div>
               </div>
             </div>
-            <div className="stats shadow-xl items-center">
+            <div className="stats shadow-xl items-center scroll-bar">
               <div className="stat">
                 <div className="stat-title font-semibold">
                   Total ventas del mes
@@ -163,10 +226,80 @@ export function VentasPage() {
               </div>
 
               <div>
-                <div className="py-5 px-5 w-32 font-bold mx-auto">
+                <div className="py-5 px-5 w-32 font-bold mx-auto ">
                   <CircularProgressbar
                     value={Number(sumaTotalGanancias) & 100}
                     text={`${Number(sumaTotalGanancias & 100)}%`}
+                    strokeWidth={9}
+                    // backgroundPadding={"#22c55e"}
+                    styles={buildStyles({
+                      textColor: "#0287e0 ",
+                      pathColor: "#0287e0  ",
+                      trailColor: "#e5e7eb",
+                    })}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="stats shadow-xl items-center scroll-bar">
+              <div className="stat">
+                <div className="stat-title font-semibold">
+                  Total ventas de la semana
+                </div>
+                <div className="stat-value text-sky-500">
+                  {totalSemana.toLocaleString("es-AR", {
+                    style: "currency",
+                    currency: "ARS",
+                    minimumFractionDigits: 2, // Mínimo dos decimales
+                    maximumFractionDigits: 2, // Máximo dos decimales
+                  })}
+                </div>
+                <div className="stat-desc font-bold text-sky-500 mt-1">
+                  ↗︎ {Number(totalSemana & 100).toFixed(2)}%
+                </div>
+              </div>
+
+              <div>
+                <div className="py-5 px-5 w-32 font-bold mx-auto">
+                  <CircularProgressbar
+                    value={Number(totalSemana) & 100}
+                    text={`${Number(totalSemana & 100)}%`}
+                    strokeWidth={9}
+                    // backgroundPadding={"#22c55e"}
+                    styles={buildStyles({
+                      textColor: "#0287e0 ",
+                      pathColor: "#0287e0  ",
+                      trailColor: "#e5e7eb",
+                    })}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="stats shadow-xl items-center scroll-bar">
+              <div className="stat">
+                <div className="stat-title font-semibold">
+                  Total ventas en el día
+                </div>
+                <div className="stat-value text-sky-500">
+                  {totalDia.toLocaleString("es-AR", {
+                    style: "currency",
+                    currency: "ARS",
+                    minimumFractionDigits: 2, // Mínimo dos decimales
+                    maximumFractionDigits: 2, // Máximo dos decimales
+                  })}
+                </div>
+                <div className="stat-desc font-bold text-sky-500 mt-1">
+                  ↗︎ {Number(totalDia & 100).toFixed(2)}%
+                </div>
+              </div>
+
+              <div>
+                <div className="py-5 px-5 w-32 font-bold mx-auto">
+                  <CircularProgressbar
+                    value={Number(totalDia) & 100}
+                    text={`${Number(totalDia & 100)}%`}
                     strokeWidth={9}
                     // backgroundPadding={"#22c55e"}
                     styles={buildStyles({
@@ -186,7 +319,7 @@ export function VentasPage() {
               to={"/crear-venta"}
               className="bg-sky-500 py-3 px-6 rounded-full font-semibold text-white group flex gap-3 items-center relative transition-all"
             >
-              Crear nueva venta
+              Crear nueva venta o presupuesto
             </Link>
           </div>
           <TableVentas ventas={ventas} /> {/* Cambia a la tabla de ventas */}

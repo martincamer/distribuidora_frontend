@@ -102,7 +102,7 @@ export function CrearProductoNuevo() {
   return (
     <section>
       <div className="bg-white w-full flex justify-between items-center ">
-        <div className="flex">
+        <div className="flex max-md:hidden">
           <Link
             to={"/productos"}
             className="bg-gray-100/50 px-8 text-base py-4 text-gray-700 font-medium hover:text-sky-500 transition-all"
@@ -140,8 +140,8 @@ export function CrearProductoNuevo() {
         </div>
       </div>
 
-      <div className="mx-10 flex justify-start items-start gap-16">
-        <div className="w-1/2">
+      <div className="mx-10 flex justify-start items-start gap-16 max-md:flex-col">
+        <div className="w-1/2 max-md:w-full">
           <div className="flex flex-col gap-1">
             <p className="font-bold text-slate-700 mt-10 text-xl">
               Crear nuevo perfil

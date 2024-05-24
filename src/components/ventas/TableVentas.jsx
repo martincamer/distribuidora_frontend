@@ -8,15 +8,24 @@ import { Tab, Transition } from "@headlessui/react";
 import { updateFecha } from "../../helpers/FechaUpdate";
 import { useObtenerId } from "../../helpers/obtenerId";
 import ModalEstado from "./ModalEstado";
+import { useModal } from "../../helpers/modal";
+import ModalConvertirVenta from "./ModalConvertirVenta";
 
 export const TableVentas = ({ ventas }) => {
   const { deleteVenta } = useVentas(); // Asegúrate de tener la función para eliminar ventas
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [ventasPerPage] = useState(15); // Número de elementos por página
+  const [ventasPerPage] = useState(10); // Número de elementos por página
   const [searchTerm, setSearchTerm] = useState(""); // Para la búsqueda
 
+  const {
+    openModal: openModalGenerarVenta,
+    closeModal: closeModalGenerarVenta,
+    isOpen: isOpenGenerarVenta,
+  } = useModal();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { handleObtenerId, idObtenida } = useObtenerId();
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -397,8 +406,20 @@ export const TableVentas = ({ ventas }) => {
                                   className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
                                   to={`/editar-venta/${v._id}`}
                                 >
-                                  Editar venta/Convertir en venta
+                                  Editar venta
                                 </Link>
+                              </li>
+                              <li>
+                                <button
+                                  onClick={() => {
+                                    handleObtenerId(v._id),
+                                      openModalGenerarVenta();
+                                  }} // Función para eliminar venta
+                                  type="button"
+                                  className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
+                                >
+                                  Generar venta manera rapida
+                                </button>
                               </li>
                               <li>
                                 <Link
@@ -466,6 +487,12 @@ export const TableVentas = ({ ventas }) => {
       <ModalEstado
         closeModal={closeModal}
         isOpen={isModalOpen}
+        idObtenida={idObtenida}
+      />
+
+      <ModalConvertirVenta
+        closeModal={closeModalGenerarVenta}
+        isOpen={isOpenGenerarVenta}
         idObtenida={idObtenida}
       />
     </div>

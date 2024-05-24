@@ -113,7 +113,7 @@ export const SideBar = () => {
           >
             <div
               className="tooltip tooltip-right"
-              data-tip="VER LOS PRODUCTOS/CRAR/ETC"
+              data-tip="VER LOS PERFILES/CREAR/ETC"
             >
               <Link to={"/productos"}>
                 <CiViewList className="text-4xl text-sky-700" />

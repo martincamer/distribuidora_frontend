@@ -77,11 +77,18 @@ export function Cliente() {
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(7);
+  const [productsPerPage] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Ordenar comprobantes por fecha de mayor a menor
+  const sortedComprobantes = [...comprobante].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentComprobantes = comprobante.slice(
+
+  const currentComprobantes = sortedComprobantes.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
@@ -413,22 +420,6 @@ export function Cliente() {
                           Ver comprobante
                         </button>
                       </li>
-                      {/* <li>
-                        <Link
-                          className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
-                          to={`/cliente/${c._id}`}
-                        >
-                          Descargar comprobante
-                        </Link>
-                      </li> */}
-                      {/* <li>
-                        <button
-                          type="button"
-                          className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
-                        >
-                          Eliminar el comprobante
-                        </button>
-                      </li> */}
                     </ul>
                   </div>
                 </td>

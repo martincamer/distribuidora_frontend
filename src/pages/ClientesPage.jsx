@@ -29,8 +29,6 @@ export function ClientesPage() {
 
       // Llama a la función para actualizar el cliente en el backend
 
-      console.log(response);
-
       return setComprobante(response.data); // Devuelve los comprobantes del mes actual
     } catch (error) {
       console.error("Error al obtener comprobantes del mes:", error);

@@ -4,18 +4,34 @@ import { useVentas } from "../context/VentasContext";
 import instance from "../api/axios";
 import VentasAreaChart from "../components/charts/VentasAreaChart";
 import ComprobantesLineChart from "../components/charts/ComprobantesLineChart";
+import dayjs from "dayjs";
 
 export function HomeApp() {
   const [comprobante, setComprobante] = useState([]);
+  const [filtrados, setFiltrados] = useState([]);
 
   const { ventas, getVentas } = useVentas(); // Cambia a ventas y función para obtener ventas
 
   useEffect(() => {
     getVentas(); // Obtiene las ventas cuando el componente se monta
   }, []); // No olvides agregar dependencias necesarias para evitar advertencias
+  useEffect(() => {
+    const now = dayjs();
+    const currentMonth = now.month();
+    const currentYear = now.year();
+
+    const filtrados = ventas.filter((item) => {
+      const itemDate = dayjs(item.date);
+      return (
+        itemDate.month() === currentMonth && itemDate.year() === currentYear
+      );
+    });
+
+    setFiltrados(filtrados);
+  }, [ventas]);
 
   // Filtrar las ventas que son de tipo 'venta'
-  const ventasDeTipoVenta = ventas.filter((venta) => venta.tipo === "venta");
+  const ventasDeTipoVenta = filtrados.filter((venta) => venta.tipo === "venta");
 
   // Calcular el total de ganancias para cada venta de tipo 'venta'
   const totalVentas = ventasDeTipoVenta.map((venta) => {
@@ -53,7 +69,7 @@ export function HomeApp() {
   }, 0);
 
   // console.log(comprobante);
-  const totalPorCategoriaColor = ventas.reduce((acumulador, venta) => {
+  const totalPorCategoriaColor = filtrados.reduce((acumulador, venta) => {
     venta.productos.forEach((producto) => {
       const { categoria, color, total_dinero, total_kilogramos } = producto;
 
@@ -161,17 +177,20 @@ export function HomeApp() {
             <div className="stat-title font-semibold">
               Total de ventas del mes
             </div>
-            <div className="stat-value text-orange-500"> {ventas.length}</div>
+            <div className="stat-value text-orange-500">
+              {" "}
+              {filtrados.length}
+            </div>
             <div className="stat-desc font-bold text-orange-500 mt-1">
-              ↗︎ {Number(ventas.length & 100).toFixed(2)}%
+              ↗︎ {Number(filtrados.length & 100).toFixed(2)}%
             </div>
           </div>
 
           <div>
             <div className="py-5 px-5 w-32 font-bold mx-auto">
               <CircularProgressbar
-                value={Number(ventas.length) & 100}
-                text={`${Number(ventas.length & 100)}%`}
+                value={Number(filtrados.length) & 100}
+                text={`${Number(filtrados.length & 100)}%`}
                 strokeWidth={9}
                 // backgroundPadding={"#22c55e"}
                 styles={buildStyles({
@@ -189,7 +208,7 @@ export function HomeApp() {
           <p className="font-semibold text-sky-500 px-5">
             Ventas generadas mensuales grafico
           </p>
-          <VentasAreaChart ventas={ventas} />
+          <VentasAreaChart ventas={filtrados} />
         </div>
         <div className="bg-white py-5 px-5 rounded-xl">
           <p className="font-semibold text-sky-500 px-5">
