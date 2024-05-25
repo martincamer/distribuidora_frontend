@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useProductos } from "../../context/ProductosContext";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Importar los iconos de flecha
-import { IoIosMore } from "react-icons/io";
+import { IoIosMore, IoMdClose } from "react-icons/io";
 import { FiPlus } from "react-icons/fi";
 import { Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
+import { ModalCrearPerfil } from "./ModalCrearPerfil";
 
 export const TableProducts = ({ productos }) => {
   const { deleleteProducto } = useProductos();
@@ -321,9 +322,14 @@ export const TableProducts = ({ productos }) => {
         </button>
       </div>
 
-      <div className="rounded-full fixed bottom-3 bg-sky-700 py-2 text-white text-2xl px-2 right-3 cursor-pointer">
+      <div
+        onClick={() => document.getElementById("my_modal_3").showModal()}
+        className="rounded-full fixed bottom-3 bg-sky-700 py-2 text-white text-2xl px-2 right-3 cursor-pointer"
+      >
         <FiPlus />
       </div>
+
+      <ModalCrearPerfil />
     </div>
   );
 };

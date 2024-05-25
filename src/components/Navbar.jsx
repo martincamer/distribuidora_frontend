@@ -190,7 +190,7 @@ export function Navbar() {
                 </li>
                 <li>
                   <Link
-                    to="/register"
+                    to="/login"
                     className="bg-sky-500 text-white font-bold"
                     onClick={handleLinkClick}
                   >

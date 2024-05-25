@@ -163,7 +163,7 @@ export function ProductosPage() {
       )}
 
       {productos.length > 0 && (
-        <div className="flex flex-col gap-2 mx-10 max-md:mx-5">
+        <div className="flex flex-col gap-2 mx-10 max-md:mx-5 max-md:min-h-screen max-md:max-h-full max-md:h-full">
           <section className="py-10 grid grid-cols-4 gap-4 max-md:grid-cols-1">
             <div className="stats shadow-xl items-center scroll-bar">
               <div className="stat">

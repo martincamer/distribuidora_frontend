@@ -10,7 +10,7 @@ const FileDropZone = ({
   handleRemoveFile,
 }) => {
   return (
-    <div className="bg-white py-5 px-5 rounded-xl shadow-xl w-full">
+    <div className="bg-white py-5 px-5 rounded-xl shadow-xl w-full max-md:border max-md:border-gray-200">
       <div className="p-6 bg-white">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
@@ -25,7 +25,7 @@ const FileDropZone = ({
             {/* Label que actúa como botón, enlazado con el input por el ID */}
             <label
               htmlFor="file-upload"
-              className="bg-sky-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-sky-700"
+              className="bg-sky-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-sky-700 max-md:font-semibold max-md:text-sm"
             >
               Cargar imagen
             </label>
@@ -33,7 +33,7 @@ const FileDropZone = ({
         </div>
         {/* Zona para arrastrar y soltar archivos */}
         <div
-          className={`border-2 border-dashed border-gray-300 p-6 text-center ${
+          className={`border-2 border-dashed border-gray-300 p-6 text-center max-md:text-sm ${
             dragging ? "bg-gray-100" : ""
           }`}
           onDragOver={handleDragOver}
@@ -67,13 +67,13 @@ const FileDropZone = ({
             </div>
           ) : (
             <div>
-              <div className="text-gray-500">
+              <div className="text-gray-500 max-md:text-sm">
                 Arrastra y suelta o{" "}
                 <span className="text-sky-500 cursor-pointer">
                   carga tu imagen aquí
                 </span>
               </div>
-              <div className="mt-2 text-sm text-gray-500">
+              <div className="mt-2 text-sm text-gray-500 max-md:text-sm">
                 Máximo disponible para subir <b>una</b> imagen.
               </div>
             </div>
