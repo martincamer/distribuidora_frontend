@@ -53,8 +53,8 @@ export function ProductosPage() {
 
   return (
     <div>
-      <div className="bg-white w-full flex justify-between items-center ">
-        <div className="flex">
+      <div className="bg-white w-full flex justify-between items-center">
+        <div className="flex max-md:hidden">
           <Link
             to={"/productos"}
             className="bg-sky-100 px-8 text-[16px] py-4 text-sky-500 font-semibold cursor-pointer"
@@ -62,7 +62,7 @@ export function ProductosPage() {
             Perfiles
           </Link>
         </div>
-        <div className="mx-5 z-[0] flex gap-2">
+        <div className="mx-5 z-[0] flex gap-2 max-md:hidden">
           <Link
             to={"/colores"}
             className="text-sm font-semibold bg-green-500 py-2 px-5 rounded-2xl text-white group flex gap-3 items-center relative transition-all ease-linear duration-300 z-0"
@@ -163,9 +163,9 @@ export function ProductosPage() {
       )}
 
       {productos.length > 0 && (
-        <div className="flex flex-col gap-2 mx-10">
-          <section className="py-10 grid grid-cols-4 gap-4">
-            <div className="stats shadow-xl items-center">
+        <div className="flex flex-col gap-2 mx-10 max-md:mx-5">
+          <section className="py-10 grid grid-cols-4 gap-4 max-md:grid-cols-1">
+            <div className="stats shadow-xl items-center scroll-bar">
               <div className="stat">
                 <div className="stat-title font-semibold">
                   Total perfiles cargados
@@ -191,7 +191,7 @@ export function ProductosPage() {
               </div>
             </div>
           </section>
-          <div className="bg-white rounded-xl py-5 px-5 transition-all ease-linear flex gap-2 text-sm">
+          <div className="bg-white rounded-xl py-5 px-5 transition-all ease-linear flex gap-2 text-sm max-md:hidden">
             <Link
               to={"/crear-producto"}
               className="bg-sky-500 font-semibold py-3 px-6 rounded-full text-white group flex gap-3 items-center relative transition-all"
@@ -219,6 +219,37 @@ export function ProductosPage() {
               </span>
               <IoFilterOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
             </Link>
+          </div>
+          <div className="bg-white rounded-xl py-4 px-2 text-sm md:hidden overflow-x-scroll scroll-bar">
+            <div className="flex w-[630px] gap-3 text-xs">
+              <Link
+                to={"/crear-producto"}
+                className="bg-sky-500 font-semibold py-3 px-6 rounded-full text-white group flex gap-3 items-center relative transition-all"
+              >
+                <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
+                  Crear nuevo producto
+                </span>
+                <BsFolderPlus className="text-white text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
+              </Link>
+              <Link
+                to={"/categorias"}
+                className="bg-green-500/90 py-3 px-6 rounded-full text-white font-semibold group flex gap-3 items-center relative transition-all"
+              >
+                <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
+                  Crear nuevas categorias
+                </span>
+                <IoFilterOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
+              </Link>
+              <Link
+                to={"/colores"}
+                className="bg-orange-500/90 py-3 px-6 rounded-full text-white font-semibold group flex gap-3 items-center relative transition-all"
+              >
+                <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">
+                  Crear nuevos colores
+                </span>
+                <IoFilterOutline className="text-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute left-0 right-0 top-0 bottom-0 m-auto" />
+              </Link>
+            </div>
           </div>
 
           <TableProducts

@@ -40,12 +40,28 @@ export function VentasPage() {
     setFiltrados(filtrados);
   }, [ventas]);
 
+  // useEffect(() => {
+  //   const now = dayjs();
+  //   const startOfWeek = now.startOf("week");
+  //   const endOfWeek = now.endOf("week");
+
+  //   const ventasSemana = ventas.filter((item) => {
+  //     const itemDate = dayjs(item.date);
+  //     return (
+  //       itemDate.isSameOrAfter(startOfWeek) &&
+  //       itemDate.isSameOrBefore(endOfWeek)
+  //     );
+  //   });
+
+  //   setVentasSemana(ventasSemana);
+  // }, [ventas]);
+
   useEffect(() => {
     const now = dayjs();
     const startOfWeek = now.startOf("week");
     const endOfWeek = now.endOf("week");
 
-    const ventasSemana = ventas.filter((item) => {
+    const ventasDia = ventas.filter((item) => {
       const itemDate = dayjs(item.date);
       return (
         itemDate.isSameOrAfter(startOfWeek) &&
@@ -53,7 +69,7 @@ export function VentasPage() {
       );
     });
 
-    setVentasSemana(ventasSemana);
+    setVentasSemana(ventasDia);
   }, [ventas]);
 
   useEffect(() => {
@@ -84,11 +100,16 @@ export function VentasPage() {
     }, 0);
   });
 
+  const totalSemanaReduce = totalSemana.reduce((suma, venta) => {
+    return suma + venta;
+  }, 0);
+
   const totalDia = ventasDia.map((venta) => {
     return venta.productos.reduce((suma, producto) => {
       return suma + producto.total_dinero; // Sumar el total_dinero de cada producto
     }, 0);
   });
+
   // Calcular el total de ganancias para todas las ventas de tipo 'venta' combinadas
   const sumaTotalGanancias = totalGanancias.reduce((suma, ganancia) => {
     return suma + ganancia;
@@ -248,7 +269,7 @@ export function VentasPage() {
                   Total ventas de la semana
                 </div>
                 <div className="stat-value text-sky-500">
-                  {totalSemana.toLocaleString("es-AR", {
+                  {totalSemanaReduce.toLocaleString("es-AR", {
                     style: "currency",
                     currency: "ARS",
                     minimumFractionDigits: 2, // Mínimo dos decimales
@@ -256,15 +277,15 @@ export function VentasPage() {
                   })}
                 </div>
                 <div className="stat-desc font-bold text-sky-500 mt-1">
-                  ↗︎ {Number(totalSemana & 100).toFixed(2)}%
+                  ↗︎ {Number(totalSemanaReduce & 100).toFixed(2)}%
                 </div>
               </div>
 
               <div>
                 <div className="py-5 px-5 w-32 font-bold mx-auto">
                   <CircularProgressbar
-                    value={Number(totalSemana) & 100}
-                    text={`${Number(totalSemana & 100)}%`}
+                    value={Number(totalSemanaReduce) & 100}
+                    text={`${Number(totalSemanaReduce & 100)}%`}
                     strokeWidth={9}
                     // backgroundPadding={"#22c55e"}
                     styles={buildStyles({

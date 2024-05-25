@@ -98,9 +98,9 @@ export function HomeApp() {
     .reduce((total, value) => total + value.total_kilogramos, 0);
 
   return (
-    <section className="mx-10 my-10">
-      <div className="grid grid-cols-3 gap-3">
-        <div className="stats items-center">
+    <section className="mx-10 my-10 max-md:mx-4">
+      <div className="grid grid-cols-3 gap-3 max-md:grid-cols-1">
+        <div className="stats items-center scroll-bar max-md:scroll-hidden">
           <div className="stat">
             <div className="stat-title font-semibold">
               Total ganancias del mes
@@ -136,7 +136,7 @@ export function HomeApp() {
           </div>
         </div>
 
-        <div className="stats items-center scroll-bar">
+        <div className="stats items-center scroll-bar max-md:scroll-hidden">
           <div className="stat">
             <div className="stat-title font-semibold">
               Total generado en ventas del mes
@@ -172,7 +172,7 @@ export function HomeApp() {
           </div>
         </div>
 
-        <div className="stats items-center scroll-bar">
+        <div className="stats items-center scroll-bar max-md:scroll-hidden">
           <div className="stat">
             <div className="stat-title font-semibold">
               Total de ventas del mes
@@ -203,7 +203,7 @@ export function HomeApp() {
           </div>
         </div>
       </div>
-      <div className="mt-12  grid grid-cols-2 gap-4">
+      <div className="mt-12  grid grid-cols-2 gap-4 max-md:grid-cols-1">
         <div className="bg-white py-5 px-5 rounded-xl">
           <p className="font-semibold text-sky-500 px-5">
             Ventas generadas mensuales grafico
@@ -223,7 +223,7 @@ export function HomeApp() {
           <div className="text-sky-500 font-semibold text-sm mb-2 pb-2 mt-4">
             PROGRESO EN VENTAS/GANANCIAS POR CATEGORIA
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
             {Object.entries(totalPorCategoriaColor).map(
               ([categoria, colores]) => (
                 <div

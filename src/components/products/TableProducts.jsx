@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useProductos } from "../../context/ProductosContext";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Importar los iconos de flecha
 import { IoIosMore } from "react-icons/io";
+import { FiPlus } from "react-icons/fi";
 import { Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
 
@@ -53,8 +54,8 @@ export const TableProducts = ({ productos }) => {
   };
 
   return (
-    <div className="my-6">
-      <div className="flex items-center">
+    <div className="">
+      <div className="flex items-center max-md:mb-4 max-md:mt-2 mt-5 mb-6">
         {/* Botón para abrir/cerrar el campo de búsqueda */}
         <button
           onClick={toggleSearchBar}
@@ -91,11 +92,92 @@ export const TableProducts = ({ productos }) => {
             placeholder="Buscar producto por codigo o detalle..."
             value={searchTerm}
             onChange={handleSearch}
-            className="px-4 py-2.5 ml-3 rounded-full shadow-lg outline-none focus:ring-sky-500 focus:border-sky-500 font-bold text-sm w-[400px]"
+            className="px-4 py-2.5 ml-3 rounded-full shadow-lg outline-none focus:ring-sky-500 focus:border-sky-500 font-bold text-sm w-[400px] max-md:w-[350px]"
           />
         </Transition>
       </div>
-      <div className="transition-all ease-linear rounded-2xl mt-6 z-0">
+      <div className="flex flex-col gap-4 md:hidden">
+        {filteredProducts.map((p) => (
+          <div className="bg-white rounded-xl py-5 px-5 flex items-start justify-between">
+            <div>
+              <p className="font-semibold text-xs uppercase">
+                Codigo{" "}
+                <span className="text-sky-500 font-bold">{p.codigo}</span>
+              </p>
+              <p className="font-semibold text-xs uppercase">
+                Detalle{" "}
+                <span className="text-sky-500 font-bold">{p.detalle}</span>
+              </p>
+              <p className="font-semibold text-xs uppercase">
+                Color <span className="text-sky-500 font-bold">{p.color}</span>
+              </p>
+              <p className="font-semibold text-xs uppercase">
+                Categoria{" "}
+                <span className="text-sky-500 font-bold">{p.categoria}</span>
+              </p>
+              <p className="font-semibold text-xs uppercase">
+                Kg estimado{" "}
+                <span className="text-sky-500 font-bold">
+                  {Number(p.kg_barra_estimado).toFixed(2)}
+                </span>
+              </p>
+              <div className="flex font-semibold text-xs uppercase items-center gap-2">
+                Stock{" "}
+                <p
+                  className={`py-1 px-2 ${
+                    (p.stock > 0 && "text-sky-700 bg-sky-500/10") ||
+                    (p.stock <= 0 && "text-red-700 bg-red-500/10")
+                  } rounded-xl`}
+                >
+                  {p.stock}
+                </p>
+              </div>
+            </div>
+            <div>
+              <div className="dropdown dropdown-left drop-shadow-lg">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="py-2 px-2 transition-all hover:bg-sky-500 hover:text-white border-none rounded-full"
+                >
+                  <IoIosMore className="text-2xl" />
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52"
+                >
+                  <li>
+                    <Link
+                      className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700 text-xs"
+                      to={`/editar-producto/${p._id}`}
+                    >
+                      Editar el producto
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700 text-xs"
+                      to={`/producto/${p._id}`}
+                    >
+                      Ver el producto
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => deleleteProducto(p._id)}
+                      type="button"
+                      className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700 text-xs"
+                    >
+                      Eliminar el producto
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="transition-all ease-linear rounded-2xl mt-6 z-0 max-md:hidden">
         <table className="min-w-full divide-y-[1px] divide-slate-200 bg-white text-sm rounded-2xl table">
           <thead>
             <tr>
@@ -206,7 +288,7 @@ export const TableProducts = ({ productos }) => {
           </tbody>
         </table>
       </div>
-      <div className="mt-3 flex justify-center items-center space-x-2">
+      <div className="mt-3 flex justify-center items-center space-x-2 max-md:pb-10">
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
@@ -237,6 +319,10 @@ export const TableProducts = ({ productos }) => {
         >
           <FaArrowRight />
         </button>
+      </div>
+
+      <div className="rounded-full fixed bottom-3 bg-sky-700 py-2 text-white text-2xl px-2 right-3 cursor-pointer">
+        <FiPlus />
       </div>
     </div>
   );

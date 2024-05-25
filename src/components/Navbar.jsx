@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
-import { CiMenuBurger } from "react-icons/ci";
 
 export function Navbar() {
   const { isAuthenticated, logout, user } = useAuth();
+
+  const handleLinkClick = () => {
+    document.getElementById("my-drawer").checked = false;
+  };
 
   return (
     <header
@@ -55,7 +58,7 @@ export function Navbar() {
             </Link>
           </ul>
         )}
-        <ul className="flex gap-x-4">
+        <ul className="flex gap-x-4 max-md:hidden">
           {isAuthenticated ? (
             <div className="flex justify-between items-center gap-36 w-full">
               <div className="dropdown dropdown-end z-[100]">
@@ -134,126 +137,147 @@ export function Navbar() {
             </div>
           )}
         </ul>
-        <div className="drawer w-auto md:hidden">
-          <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-          {/* Page content here */}
-          <label
-            htmlFor="my-drawer"
-            className="btn btn-circle swap swap-rotate drawer-button text-sky-500"
-          >
-            {/* this hidden checkbox controls the state */}
-            <input type="checkbox" />
-
-            {/* hamburger icon */}
-            <svg
-              className="swap-off fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 512 512"
-            >
-              <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
-            </svg>
-
-            {/* close icon */}
-            <svg
-              className="swap-on fill-current"
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="32"
-              viewBox="0 0 512 512"
-            >
-              <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
-            </svg>
-          </label>
-          <div className="drawer-side">
+        {isAuthenticated ? (
+          ""
+        ) : (
+          <div className="drawer w-auto md:hidden">
+            <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+            {/* Page content here */}
             <label
               htmlFor="my-drawer"
-              aria-label="close sidebar"
-              className="drawer-overlay"
-            ></label>
-            <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content gap-2">
-              {/* Sidebar content here */}
-              <li>
-                <Link
-                  to={"/register"}
-                  className="bg-sky-500 text-white font-bold"
-                >
-                  Registrate ahora.
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to={"/register"}
-                  className="bg-sky-500 text-white font-bold"
-                >
-                  Ya tienes una cuenta? Inicia Sesión.
-                </Link>
-              </li>
-              <div className="font-bold text-lg text-orange-500 w-full text-center">
-                Gestión Prisma
-              </div>
-            </ul>
-          </div>
-        </div>
-      </nav>
-      {/* {isAuthenticated &&
-        (click ? (
-          <div
-            className={`transition-all ease-linear duration-300 absolute flex justify-center items-center flex-col rounded-bl-xl right-0 bg-white shadow-xl shadow-black/20  py-5 w-1/6 gap-2 z-[100]`}
-            ref={menuRef}
-          >
-            <Link onClick={() => setClick(false)} to={"/perfil"}>
-              <img
-                src={
-                  user?.imagen ||
-                  "https://ppstatic.s3.amazonaws.com/expenses/uploads/people/default.png"
-                }
-                className="
-                text-6xl text-sky-600 cursor-pointer hover:shadow transition-all ease-linear rounded-full w-[80px] h-[80px] border shadow-md shadow-gray-300"
-              />
-            </Link>
-            <p className="text-sm capitalize text-slate-700 font-bold">
-              {" "}
-              {user?.username}
-            </p>
-            <p className="text-sm capitalize text-slate-500 font-light">
-              {" "}
-              {user?.email}
-            </p>
+              className="btn btn-circle swap swap-rotate drawer-button text-sky-500"
+            >
+              <input type="checkbox" />
 
-            <div className="mt-5 flex flex-col gap-2 w-full">
-              <div className="cursor-pointer flex gap-2 items-center text-slate-700 font-light hover:bg-sky-100 px-5 py-2 hover:text-sky-600 transition-all ease-linear">
-                <MdPerson className="text-4xl" />{" "}
-                <Link to={"/perfil"}>Perfil</Link>
-              </div>
+              {/* hamburger icon */}
+              <svg
+                className="swap-off fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 512 512"
+              >
+                <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+              </svg>
 
-              <div className="cursor-pointer flex gap-2 items-center text-slate-700 font-light hover:bg-sky-100 px-5 py-2 hover:text-sky-600 transition-all ease-linear">
-                <MdWork className="text-4xl" /> Empresa
-              </div>
-
-              <div className="cursor-pointer flex gap-2 items-center text-slate-700 font-light hover:bg-sky-100 px-5 py-2 hover:text-sky-600 transition-all ease-linear">
-                <BsFiletypePdf className="text-4xl" /> Facturación
-              </div>
-
-              <div className="mx-5 my-4">
-                <button
-                  className="bg-white text-sm border-slate-300 border-[1px] text-sky-700 hover:shadow transition-all ease-linear px-4 py-2 text-white-500 rounded-xl flex items-center gap-2"
-                  to="/"
-                  onClick={() => {
-                    setClick(false);
-                    logout();
-                  }}
-                >
-                  Salir de la app
-                  <IoLogOutOutline className="text-3xl" />
-                </button>
-              </div>
+              {/* close icon */}
+              <svg
+                className="swap-on fill-current"
+                xmlns="http://www.w3.org/2000/svg"
+                width="32"
+                height="32"
+                viewBox="0 0 512 512"
+              >
+                <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+              </svg>
+            </label>
+            <div className="drawer-side">
+              <label
+                htmlFor="my-drawer"
+                aria-label="close sidebar"
+                className="drawer-overlay"
+              ></label>
+              <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content gap-2">
+                {/* Sidebar content here */}
+                <li>
+                  <Link
+                    to="/register"
+                    className="bg-sky-500 text-white font-bold"
+                    onClick={handleLinkClick}
+                  >
+                    Registrate ahora.
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/register"
+                    className="bg-sky-500 text-white font-bold"
+                    onClick={handleLinkClick}
+                  >
+                    Ya tienes una cuenta? Inicia Sesión.
+                  </Link>
+                </li>
+                <div className="font-bold text-lg text-orange-500 w-full text-center">
+                  Gestión Prisma
+                </div>
+              </ul>
             </div>
           </div>
-        ) : (
-          ""
-        ))} */}
+        )}
+        {isAuthenticated && (
+          <div className="drawer w-auto z-[999] p-0 md:hidden">
+            <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+            <div className="drawer-content ">
+              <label htmlFor="my-drawer" className=" btn-primary drawer-button">
+                <div className="swap swap-rotate">
+                  {/* this hidden checkbox controls the state */}
+                  <input type="checkbox" />
+
+                  {/* hamburger icon */}
+                  <svg
+                    className="swap-off fill-current"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 512 512"
+                  >
+                    <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+                  </svg>
+
+                  {/* close icon */}
+                  <svg
+                    className="swap-on fill-current"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 512 512"
+                  >
+                    <polygon points="400 145.49 366.51 112 256 222.51 145.49 112 112 145.49 222.51 256 112 366.51 145.49 400 256 289.49 366.51 400 400 366.51 289.49 256 400 145.49" />
+                  </svg>
+                </div>
+              </label>
+            </div>
+            <div className="drawer-side">
+              <label
+                htmlFor="my-drawer"
+                aria-label="close sidebar"
+                className="drawer-overlay"
+              ></label>
+              <ul className="menu p-8 w-80 min-h-full text-base-content bg-white gap-2">
+                {/* Sidebar content here */}
+                <Link
+                  onClick={() => handleLinkClick()}
+                  to={"/home"}
+                  className="font-semibold text-xl text-sky-500"
+                >
+                  Inicio
+                </Link>{" "}
+                <Link
+                  onClick={() => handleLinkClick()}
+                  to={"/productos"}
+                  className="font-semibold text-xl text-sky-500"
+                >
+                  Perfiles
+                </Link>
+                <Link
+                  onClick={() => handleLinkClick()}
+                  to={"/clientes"}
+                  className="font-semibold text-xl text-sky-500"
+                >
+                  Clientes
+                </Link>
+                <Link
+                  onClick={() => handleLinkClick()}
+                  to={"/ventas"}
+                  className="font-semibold text-xl text-sky-500"
+                >
+                  Ventas/Presupuestos
+                </Link>
+              </ul>
+            </div>
+          </div>
+        )}{" "}
+      </nav>
     </header>
   );
 }

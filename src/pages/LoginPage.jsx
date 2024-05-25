@@ -28,13 +28,13 @@ export function LoginPage() {
   }, [isAuthenticated]);
 
   return (
-    <div className="h-screen flex gap-12 items-center max-md:px-8">
-      <div class="flex items-center gap-2 justify-center bg-blue-500 text-white px-4 py-2 rounded cursor-pointer md:hidden">
+    <div className="h-screen flex gap-12 items-center max-md:px-4">
+      {/* <div class="flex items-center gap-2 justify-center bg-blue-500 text-white px-4 py-2 rounded cursor-pointer md:hidden">
         <BiLogoPlayStore className="text-5xl" />
         <span className="font-semibold">
           Descargar la app en PlayStore o AppStore
         </span>
-      </div>
+      </div> */}
 
       <img
         className="w-[55%] object-cover opacity-[0.7] h-[100%] max-md:hidden"
