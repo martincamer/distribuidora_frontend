@@ -123,13 +123,13 @@ export const TableVentas = ({ ventas }) => {
             placeholder="Buscar producto por el cliente..."
             value={searchTerm}
             onChange={handleSearch}
-            className="px-4 py-2.5 ml-3 rounded-full shadow-lg outline-none focus:ring-sky-500 focus:border-sky-500 font-bold text-sm w-[400px]"
+            className="px-4 py-2.5 ml-3 max-md:mb-5 rounded-full shadow-lg outline-none focus:ring-sky-500 focus:border-sky-500 font-bold text-sm w-[400px] max-md:w-[350px]"
           />
         </Transition>
       </div>
 
       <Tab.Group>
-        <Tab.List className={"gap-3 flex mt-8"}>
+        <Tab.List className={"gap-3 flex md:mt-8"}>
           <Tab className={({ selected }) => tabStyle(selected)}>
             Ver Ventas <CiCreditCard1 className="font-bold text-2xl" />
           </Tab>
@@ -139,7 +139,135 @@ export const TableVentas = ({ ventas }) => {
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
-            <div className="transition-all ease-linear rounded-2xl mt-3 py-5">
+            <div className="mt-5 flex flex-col gap-3 mb-8">
+              {filteredVentas
+                .filter((v) => v.tipo === "venta") // Filtra solo los elementos con tipo "venta"
+                .map((v) => (
+                  <div className="bg-white py-2 px-3 rounded-xl relative">
+                    <div className="flex justify-between">
+                      <div>
+                        <p className="font-bold text-sm flex gap-2">
+                          Tipo
+                          <span className="text-sky-500 capitalize">
+                            {v.tipo}
+                          </span>
+                        </p>
+                        <p className="font-bold text-sm flex gap-2">
+                          Cliente
+                          <span className="text-sky-500 capitalize">
+                            {v.cliente.nombre} {v.cliente.apellido}
+                          </span>
+                        </p>
+                        <p className="font-bold text-sm flex gap-2">
+                          Total brs
+                          <span className="text-sky-500 capitalize">
+                            {v.productos.reduce(
+                              (total, producto) => total + producto.cantidad,
+                              0
+                            )}{" "}
+                            brs
+                          </span>
+                        </p>
+                        <p className="font-bold text-sm flex gap-2">
+                          Total kgs
+                          <span className="text-sky-500 capitalize">
+                            {v.productos
+                              .reduce(
+                                (total, producto) =>
+                                  total + producto.total_kilogramos,
+                                0
+                              )
+                              .toFixed(2)}{" "}
+                            kgs
+                          </span>
+                        </p>
+                        <p className="font-bold text-sm flex gap-2">
+                          Total dinero
+                          <span className="text-sky-500 capitalize">
+                            {" "}
+                            {v.productos
+                              .reduce(
+                                (total, producto) =>
+                                  total + producto.total_dinero,
+                                0
+                              )
+                              .toLocaleString("es-AR", {
+                                style: "currency",
+                                currency: "ARS",
+                              })}
+                          </span>
+                        </p>
+                        <p className="font-bold text-sm flex gap-2">
+                          Fecha
+                          <span className="text-sky-500 capitalize">
+                            {updateFecha(v.date)}
+                          </span>
+                        </p>
+                      </div>
+
+                      <div className="dropdown dropdown-left drop-shadow-lg z-[999]">
+                        <div
+                          tabIndex={0}
+                          role="button"
+                          className="py-2 px-2 transition-all hover:bg-sky-500 hover:text-white border-none rounded-full"
+                        >
+                          <IoIosMore className="text-2xl" />
+                        </div>
+                        <ul
+                          tabIndex={0}
+                          className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 gap-1"
+                        >
+                          <li>
+                            <Link
+                              className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
+                              to={`/editar-venta/${v._id}`}
+                            >
+                              Editar venta
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
+                              to={`/venta/${v._id}`}
+                            >
+                              Ver venta/facturar
+                            </Link>
+                          </li>
+                          <li>
+                            <button
+                              onClick={() => deleteVenta(v._id)} // Función para eliminar venta
+                              type="button"
+                              className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
+                            >
+                              Eliminar venta
+                            </button>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <p className="absolute right-3 bottom-2 capitalize font-bold text-sm z-0">
+                      <div className="flex">
+                        <p
+                          className={`font-semibold py-2.5 px-5 rounded-2xl text-sm ${
+                            (v.estado === "aceptada" &&
+                              "bg-green-200/90 text-green-700 ") ||
+                            (v.estado === "pendiente" &&
+                              "bg-orange-200/90 text-orange-700 ") ||
+                            (v.estado === "rechazada" &&
+                              "bg-red-200/90 text-red-700 ")
+                          }`}
+                        >
+                          {(v.estado === "aceptada" && "aceptada") ||
+                            (v.estado === "pendiente" && "Pendiente") ||
+                            (v.estado === "rechazada" && "Rechazada")}
+                        </p>
+                      </div>
+                    </p>
+                  </div>
+                ))}
+            </div>
+            <div className="transition-all ease-linear rounded-2xl mt-3 py-5 max-md:hidden">
               <table className="min-w-full table bg-white text-sm rounded-2xl">
                 <thead>
                   <tr>

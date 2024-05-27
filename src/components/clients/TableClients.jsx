@@ -52,55 +52,8 @@ export const TableClients = ({ clientes }) => {
     setIsOpen(!isOpen);
   };
 
-  const [slidRow, setSlidRow] = useState(null);
-
-  const handleMouseDown = (e, id) => {
-    setSlidRow(null);
-    const startX = e.clientX;
-    const handleMouseMove = (moveEvent) => {
-      const currentX = moveEvent.clientX;
-      if (currentX - startX > 50) {
-        // Deslizar hacia la derecha
-        setSlidRow(id);
-        document.removeEventListener("mousemove", handleMouseMove);
-      } else if (startX - currentX > 50) {
-        // Deslizar hacia la izquierda
-        setSlidRow(id);
-        document.removeEventListener("mousemove", handleMouseMove);
-      }
-    };
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener(
-      "mouseup",
-      () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-      },
-      { once: true }
-    );
-  };
-
-  const handleTouchStart = (e, id) => {
-    setSlidRow(null);
-    const startX = e.touches[0].clientX;
-    const handleTouchMove = (moveEvent) => {
-      const currentX = moveEvent.touches[0].clientX;
-      if (currentX - startX > 50 || startX - currentX > 50) {
-        // Deslizar en cualquier dirección
-        setSlidRow(id);
-        document.removeEventListener("touchmove", handleTouchMove);
-      }
-    };
-    document.addEventListener("touchmove", handleTouchMove);
-    document.addEventListener(
-      "touchend",
-      () => {
-        document.removeEventListener("touchmove", handleTouchMove);
-      },
-      { once: true }
-    );
-  };
   return (
-    <div className="mt-5">
+    <div className="mt-5 max-md:flex max-md:flex-col max-md:gap-5">
       <div className="flex items-center">
         {/* Botón para abrir/cerrar el campo de búsqueda */}
         <button
@@ -143,113 +96,85 @@ export const TableClients = ({ clientes }) => {
         </Transition>
       </div>
 
-      <div className="transition-all ease-linear rounded-2xl mt-6 overflow-x-scroll scrollbar-hidden">
-        <table className="min-w-full bg-white text-sm rounded-2xl table">
-          <thead>
-            <tr>
-              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
-                Nombre
-              </th>
-              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
-                Apellido
-              </th>
-              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
-                Localidad
-              </th>
-              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
-                Provincia
-              </th>
-              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
-                DNI
-              </th>
-              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
-                Teléfono
-              </th>
-              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
-                Email
-              </th>
-              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
-                Deuda
-              </th>
-            </tr>
-          </thead>
+      <div className="flex flex-col gap-5 md:hidden">
+        {filteredClients.map((c) => (
+          <div className="bg-white rounded-xl py-5 px-5">
+            <div className="flex justify-between">
+              <div className="flex flex-col gap-1 w-full">
+                <p className="text-xs font-semibold ">
+                  Nombre{" "}
+                  <span className="text-sky-500 capitalize">
+                    {c.nombre} {c.apellido}
+                  </span>
+                </p>
+                <p className="text-xs font-semibold capitalize">
+                  Localidad <span className="text-sky-500">{c.localidad}</span>
+                </p>
 
-          <tbody className="divide-y divide-slate-200">
-            {filteredClients.map((c) => (
-              <tr
-                key={c._id}
-                className={`hover:bg-gray-100/50 cursor-pointer relative`}
-                onMouseDown={(e) => handleMouseDown(e, c._id)}
-                onTouchStart={(e) => handleTouchStart(e, c._id)}
-              >
-                {slidRow === c._id ? (
-                  <td
-                    colSpan="8"
-                    className="px-4 py-4 text-gray-500 uppercase text-sm"
-                  >
-                    <div className="flex gap-10">
-                      <Link
-                        className="capitalize bg-sky-500 text-white font-semibold py-2 px-5 rounded-xl"
-                        to={`/editar-cliente/${c._id}`}
-                      >
-                        Editar
-                      </Link>
-                      <Link
-                        className="capitalize bg-orange-500 text-white font-semibold py-2 px-5 rounded-xl"
-                        to={`/cliente/${c._id}`}
-                      >
-                        Ver
-                      </Link>
-                      <button
-                        onClick={() => deleteCliente(c._id)}
-                        type="button"
-                        className="capitalize bg-red-500 text-white font-semibold py-2 px-5 rounded-xl"
-                      >
-                        Eliminar
-                      </button>
-                    </div>
-                  </td>
-                ) : (
-                  <>
-                    <th className="px-4 py-4 text-gray-900 uppercase text-sm">
-                      {c.nombre}
-                    </th>
-                    <th className="px-4 py-4 uppercase text-sm">
-                      {c.apellido}
-                    </th>
-                    <th className="px-4 py-4 uppercase text-sm">
-                      {c.localidad}
-                    </th>
-                    <th className="px-4 py-4 uppercase text-sm">
-                      {c.provincia}
-                    </th>
-                    <th className="px-4 py-4 uppercase text-sm">{c.dni}</th>
-                    <th className="px-4 py-4 uppercase text-sm">
-                      {c.telefono}
-                    </th>
-                    <th className="px-4 py-4 uppercase text-sm">{c.email}</th>
-                    <th className="px-4 py-4 uppercase text-sm flex">
-                      <p
-                        className={`py-2 px-3 rounded-full font-extrabold ${
-                          c.total > 0
-                            ? "bg-orange-100 text-orange-500"
-                            : "bg-green-100 text-green-600"
-                        }`}
-                      >
-                        {c.total.toLocaleString("es-AR", {
-                          style: "currency",
-                          currency: "ARS",
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                      </p>
-                    </th>
-                  </>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                <p className="text-xs font-semibold capitalize">
+                  Provincia <span className="text-sky-500">{c.provincia}</span>
+                </p>
+              </div>
+              <div className="dropdown dropdown-left drop-shadow-lg">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="py-2 px-2 transition-all hover:bg-sky-500 hover:text-white border-none rounded-full"
+                >
+                  <IoIosMore className="text-2xl" />
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 gap-1"
+                >
+                  <li>
+                    <Link
+                      className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700 text-xs"
+                      to={`/editar-cliente/${c._id}`}
+                    >
+                      Editar el cliente
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700 text-xs"
+                      to={`/cliente/${c._id}`}
+                    >
+                      Ver el cliente
+                    </Link>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => deleteCliente(c._id)}
+                      type="button"
+                      className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700 text-xs"
+                    >
+                      Eliminar el cliente
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <p
+              className={` py-2 px-3 rounded-full  font-extrabold flex justify-between text-sm mt-2 ${
+                c.total > 0
+                  ? "bg-orange-100 text-orange-500"
+                  : "bg-green-100 text-green-600"
+              }`}
+            >
+              <p>{c.total > 0 ? "Deuda" : "No tiene deudas"}</p>
+              <span>
+                {" "}
+                {c.total.toLocaleString("es-AR", {
+                  style: "currency",
+                  currency: "ARS",
+                  minimumFractionDigits: 2, // Mínimo dos decimales
+                  maximumFractionDigits: 2, // Máximo dos decimales
+                })}
+              </span>
+            </p>
+          </div>
+        ))}
       </div>
 
       <div className="transition-all ease-linear rounded-2xl mt-6 max-md:hidden">

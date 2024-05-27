@@ -117,7 +117,7 @@ export function VentasPage() {
 
   return (
     <>
-      <div className="bg-white w-full flex justify-between items-center">
+      <div className="bg-white w-full flex justify-between items-center max-md:hidden">
         <div className="flex">
           <p className="bg-sky-100/80 px-8 text-[16px] py-4 text-sky-600 font-semibold">
             Ventas
@@ -199,8 +199,143 @@ export function VentasPage() {
       )}
 
       {ventas.length > 0 && (
-        <div className="flex flex-col gap-5 mx-10">
-          <section className="py-10 grid grid-cols-4 gap-4">
+        <div className="flex flex-col gap-5 mx-10 max-md:mx-5">
+          <section className="overflow-x-scroll mb-5 scrollbar-hidden md:hidden">
+            <div className="grid grid-cols-4 w-[1450px] gap-5 py-5 ">
+              <div className="stats items-center scroll-bar">
+                <div className="stat">
+                  <div className="stat-title font-semibold">Total ventas</div>
+                  <div className="stat-value text-gray-800">
+                    {ventasDeTipoVenta.length}
+                  </div>
+                  <div className="stat-desc font-bold text-green-500 mt-1">
+                    ↗︎ {Number(ventasDeTipoVenta.length % 100).toFixed(2)}%
+                  </div>
+                </div>
+
+                <div>
+                  <div className="py-5 px-5 w-32 font-bold mx-auto">
+                    <CircularProgressbar
+                      value={Number(ventasDeTipoVenta.length) % 100}
+                      text={`${Number(ventasDeTipoVenta.length % 100)}%`}
+                      strokeWidth={9}
+                      // backgroundPadding={"#22c55e"}
+                      styles={buildStyles({
+                        textColor: "#0287e0 ",
+                        pathColor: "#0287e0  ",
+                        trailColor: "#e5e7eb",
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="stats items-center scroll-bar">
+                <div className="stat">
+                  <div className="stat-title font-semibold">
+                    Total ventas del mes
+                  </div>
+                  <div className="stat-value text-sky-500">
+                    {sumaTotalGanancias.toLocaleString("es-AR", {
+                      style: "currency",
+                      currency: "ARS",
+                      minimumFractionDigits: 2, // Mínimo dos decimales
+                      maximumFractionDigits: 2, // Máximo dos decimales
+                    })}
+                  </div>
+                  <div className="stat-desc font-bold text-sky-500 mt-1">
+                    ↗︎ {Number(sumaTotalGanancias & 100).toFixed(2)}%
+                  </div>
+                </div>
+
+                <div>
+                  <div className="py-5 px-5 w-32 font-bold mx-auto ">
+                    <CircularProgressbar
+                      value={Number(sumaTotalGanancias) & 100}
+                      text={`${Number(sumaTotalGanancias & 100)}%`}
+                      strokeWidth={9}
+                      // backgroundPadding={"#22c55e"}
+                      styles={buildStyles({
+                        textColor: "#0287e0 ",
+                        pathColor: "#0287e0  ",
+                        trailColor: "#e5e7eb",
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="stats items-center scroll-bar">
+                <div className="stat">
+                  <div className="stat-title font-semibold">
+                    Total ventas de la semana
+                  </div>
+                  <div className="stat-value text-sky-500">
+                    {totalSemanaReduce.toLocaleString("es-AR", {
+                      style: "currency",
+                      currency: "ARS",
+                      minimumFractionDigits: 2, // Mínimo dos decimales
+                      maximumFractionDigits: 2, // Máximo dos decimales
+                    })}
+                  </div>
+                  <div className="stat-desc font-bold text-sky-500 mt-1">
+                    ↗︎ {Number(totalSemanaReduce & 100).toFixed(2)}%
+                  </div>
+                </div>
+
+                <div>
+                  <div className="py-5 px-5 w-32 font-bold mx-auto">
+                    <CircularProgressbar
+                      value={Number(totalSemanaReduce) & 100}
+                      text={`${Number(totalSemanaReduce & 100)}%`}
+                      strokeWidth={9}
+                      // backgroundPadding={"#22c55e"}
+                      styles={buildStyles({
+                        textColor: "#0287e0 ",
+                        pathColor: "#0287e0  ",
+                        trailColor: "#e5e7eb",
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="stats items-center scroll-bar">
+                <div className="stat">
+                  <div className="stat-title font-semibold">
+                    Total ventas en el día
+                  </div>
+                  <div className="stat-value text-sky-500">
+                    {totalDia.toLocaleString("es-AR", {
+                      style: "currency",
+                      currency: "ARS",
+                      minimumFractionDigits: 2, // Mínimo dos decimales
+                      maximumFractionDigits: 2, // Máximo dos decimales
+                    })}
+                  </div>
+                  <div className="stat-desc font-bold text-sky-500 mt-1">
+                    ↗︎ {Number(totalDia & 100).toFixed(2)}%
+                  </div>
+                </div>
+
+                <div>
+                  <div className="py-5 px-5 w-32 font-bold mx-auto">
+                    <CircularProgressbar
+                      value={Number(totalDia) & 100}
+                      text={`${Number(totalDia & 100)}%`}
+                      strokeWidth={9}
+                      // backgroundPadding={"#22c55e"}
+                      styles={buildStyles({
+                        textColor: "#0287e0 ",
+                        pathColor: "#0287e0  ",
+                        trailColor: "#e5e7eb",
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section className="py-10 grid grid-cols-4 gap-4 max-md:hidden">
             <div className="stats shadow-xl items-center scroll-bar">
               <div className="stat">
                 <div className="stat-title font-semibold">Total ventas</div>

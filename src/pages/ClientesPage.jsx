@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { IoClose } from "react-icons/io5";
 import instance from "../api/axios";
 import video from "../assets/video/producto.mp4";
+import { FiPlus } from "react-icons/fi";
 
 export function ClientesPage() {
   const { clientes, getClientes } = useClientes(); // Cambia a clientes y función para obtener clientes
@@ -356,6 +357,13 @@ export function ClientesPage() {
           <TableClients clientes={clientes} />{" "}
         </div>
       )}
+
+      <Link
+        to={"/crear-cliente"}
+        className="rounded-full fixed bottom-3 bg-sky-700 py-2 text-white text-2xl px-2 right-3 cursor-pointer"
+      >
+        <FiPlus />
+      </Link>
     </div>
   );
 }

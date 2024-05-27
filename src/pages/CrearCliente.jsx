@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useClientes } from "../context/ClientesContext"; // Cambia al contexto de clientes
 import { useEffect } from "react";
+import { FaArrowLeft } from "react-icons/fa";
 
 export function CrearClienteNuevo() {
   const { createCliente, getClientes } = useClientes(); // Cambia al método para crear cliente
@@ -28,7 +29,7 @@ export function CrearClienteNuevo() {
 
   return (
     <section>
-      <div className="bg-white w-full flex justify-between items-center">
+      <div className="bg-white w-full flex justify-between items-center max-md:hidden">
         <div className="flex">
           <Link
             to={"/clientes"}
@@ -67,8 +68,8 @@ export function CrearClienteNuevo() {
         </div>
       </div>
 
-      <div className="mx-10 flex justify-start items-start gap-16">
-        <div className="w-1/2">
+      <div className="mx-10 flex justify-start items-start gap-16 max-md:mx-5">
+        <div className="w-1/2 max-md:w-full max-md:mb-10">
           <div className="flex flex-col gap-1">
             <p className="font-bold text-slate-700 mt-10 text-xl">
               Crear Cliente
@@ -205,6 +206,11 @@ export function CrearClienteNuevo() {
             </div>
           </div>
         </div>
+      </div>
+      <div className="fixed bottom-3 left-5 bg-white border border-slate-300 py-3 px-3 rounded-full">
+        <Link to={"/clientes"}>
+          <FaArrowLeft className="text-2xl text-sky-700" />
+        </Link>
       </div>
     </section>
   );

@@ -127,7 +127,7 @@ export function Cliente() {
 
   return (
     <div className="pb-12">
-      <div className="bg-white w-full flex justify-between items-center">
+      <div className="bg-white w-full flex justify-between items-center max-md:hidden">
         <div className="flex">
           <Link
             to={"/clientes"}
@@ -166,7 +166,7 @@ export function Cliente() {
         </div>
       </div>
 
-      <div className="mx-10 py-10">
+      <div className="mx-10 py-10 max-md:mx-5">
         <div className="flex flex-col gap-1">
           <p className="font-bold text-slate-700 text-xl">
             Datos del cliente{" "}
@@ -179,9 +179,9 @@ export function Cliente() {
           </p>
         </div>
 
-        <div className="flex gap-10 mt-10">
-          <div className="bg-white rounded-xl w-4/5">
-            <div className="py-10 px-10 bg-gray-100/80 rounded-t-xl flex justify-between">
+        <div className="flex gap-10 mt-10 max-md:flex-col-reverse">
+          <div className="bg-white rounded-xl w-4/5 max-md:w-full max-md:text-sm">
+            <div className="py-10 px-10 bg-gray-100/80 rounded-t-xl flex justify-between max-md:px-5 max-md:py-5">
               <div className="flex flex-col gap-5">
                 <p>
                   Fecha de creación{" "}
@@ -214,7 +214,7 @@ export function Cliente() {
             <div className="py-5 px-5 bg-sky-100 text-center text-sky-500 font-bold">
               Información del cliente
             </div>
-            <div className="py-10 px-10 bg-white grid grid-cols-2 gap-6">
+            <div className="py-10 px-10 bg-white grid grid-cols-2 gap-6 max-md:px-5 max-md:py-5">
               <p className="font-bold flex flex-col">
                 DNI{" "}
                 <span className="text-gray-400 font-normal">{cliente.dni}</span>
@@ -233,8 +233,8 @@ export function Cliente() {
               </p>
             </div>
 
-            <div className="py-10 px-10 bg-white rounded-b-xl">
-              <div className="flex justify-end gap-6 my-4">
+            <div className="py-10 px-10 bg-white rounded-b-xl max-md:px-2 max-md:py-2 max-md:text-xs">
+              <div className="flex justify-end gap-6 my-4 max-md:justify-center">
                 <button
                   onClick={() => {
                     {
@@ -259,7 +259,7 @@ export function Cliente() {
             </div>
           </div>
           <div class="w-full mx-auto">
-            <div class="grid grid-cols-3 gap-4">
+            <div class="grid grid-cols-3 gap-4 max-md:grid-cols-1 max-md:text-sm">
               <div
                 id="jh-stats-positive"
                 class="flex flex-col justify-center px-4 py-4 bg-white border rounded-xl"
@@ -358,7 +358,7 @@ export function Cliente() {
         </div>
       </div>
 
-      <div className="mb-8 flex justify-between mx-10">
+      <div className="mb-8 flex justify-between mx-10 max-md:flex-col max-md:gap-3 max-md:mx-5">
         <div className="flex flex-col gap-1">
           <p className="font-bold text-gray-700 text-xl">
             Comprobantes mensuales{" "}
@@ -369,7 +369,7 @@ export function Cliente() {
         </div>
         <div>
           <Link
-            className="text-white bg-green-500/90 py-4 px-6 rounded-full font-semibold"
+            className="text-white bg-green-500/90 py-4 px-6 rounded-full font-semibold max-md:text-sm max-md:py-3"
             // to={"/cargar-comprobante"}
             onClick={() => openModalComprobante()}
           >
@@ -378,7 +378,7 @@ export function Cliente() {
         </div>
       </div>
 
-      <div className="mb-10 mx-10 rounded-xl">
+      <div className="mb-10 mx-10 rounded-xl max-md:overflow-x-scroll max-md:mx-5 scrollbar-hidden">
         <table className="table bg-white uppercase">
           {/* head */}
           <thead>
@@ -479,6 +479,12 @@ export function Cliente() {
         onClose={handleCloseModal} // Cierra el modal
         imageUrl={selectedImage} // URL de la imagen seleccionada
       />
+
+      <div className="fixed bottom-3 left-5 bg-white border border-slate-300 py-3 px-3 rounded-full">
+        <Link to={"/clientes"}>
+          <FaArrowLeft className="text-2xl text-sky-700" />
+        </Link>
+      </div>
     </div>
   );
 }
