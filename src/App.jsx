@@ -77,43 +77,31 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route element={<ProtectedRoute />}>
-              {user?.cuenta === "desactivada" ? (
+              {/* {user?.cuenta === "desactivada" ? (
                 <Route index path="/home" element={<CuentaInactivaHome />} />
               ) : (
-                <>
-                  <Route index path="/home" element={<HomeApp />} />
-                  <Route index path="/factura" element={<FacturaPage />} />
-                  <Route path="/ventas" element={<VentasPage />} />
-                  <Route path="/perfil" element={<Perfil />} />
-                  <Route path="/clientes" element={<ClientesPage />} />
-                  <Route path="/cliente/:id" element={<Cliente />} />
-                  <Route
-                    path="/editar-cliente/:id"
-                    element={<EditarCliente />}
-                  />
-                  <Route
-                    path="/crear-cliente"
-                    element={<CrearClienteNuevo />}
-                  />
-                  <Route path="/venta/:id" element={<Venta />} />
-                  <Route path="/editar-venta/:id" element={<EditarVenta />} />
-                  <Route path="/crear-venta" element={<CrearVenta />} />
-                  <Route path="/productos" element={<ProductosPage />} />
-                  <Route path="/producto/:id" element={<Producto />} />
-                  <Route path="/categorias" element={<CrearCategorias />} />
-                  <Route path="/colores" element={<CrearColores />} />
-                  <Route
-                    path="/crear-producto"
-                    element={<CrearProductoNuevo />}
-                  />
-                  <Route
-                    path="/editar-producto/:id"
-                    element={<EditarProducto />}
-                  />
-                  <Route path="/profile" element={<h1>Profile</h1>} />
-                  <Route path="/factura/:id" element={<PruebasPdf />} />
-                </>
-              )}
+                <> */}
+              <Route index path="/home" element={<HomeApp />} />
+              <Route index path="/factura" element={<FacturaPage />} />
+              <Route path="/ventas" element={<VentasPage />} />
+              <Route path="/perfil" element={<Perfil />} />
+              <Route path="/clientes" element={<ClientesPage />} />
+              <Route path="/cliente/:id" element={<Cliente />} />
+              <Route path="/editar-cliente/:id" element={<EditarCliente />} />
+              <Route path="/crear-cliente" element={<CrearClienteNuevo />} />
+              <Route path="/venta/:id" element={<Venta />} />
+              <Route path="/editar-venta/:id" element={<EditarVenta />} />
+              <Route path="/crear-venta" element={<CrearVenta />} />
+              <Route path="/productos" element={<ProductosPage />} />
+              <Route path="/producto/:id" element={<Producto />} />
+              <Route path="/categorias" element={<CrearCategorias />} />
+              <Route path="/colores" element={<CrearColores />} />
+              <Route path="/crear-producto" element={<CrearProductoNuevo />} />
+              <Route path="/editar-producto/:id" element={<EditarProducto />} />
+              <Route path="/profile" element={<h1>Profile</h1>} />
+              <Route path="/factura/:id" element={<PruebasPdf />} />
+              {/* </>
+              )} */}
             </Route>
           </Routes>
         </ClientesProvider>

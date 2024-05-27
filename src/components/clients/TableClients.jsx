@@ -52,6 +52,53 @@ export const TableClients = ({ clientes }) => {
     setIsOpen(!isOpen);
   };
 
+  const [slidRow, setSlidRow] = useState(null);
+
+  const handleMouseDown = (e, id) => {
+    setSlidRow(null);
+    const startX = e.clientX;
+    const handleMouseMove = (moveEvent) => {
+      const currentX = moveEvent.clientX;
+      if (currentX - startX > 50) {
+        // Deslizar hacia la derecha
+        setSlidRow(id);
+        document.removeEventListener("mousemove", handleMouseMove);
+      } else if (startX - currentX > 50) {
+        // Deslizar hacia la izquierda
+        setSlidRow(id);
+        document.removeEventListener("mousemove", handleMouseMove);
+      }
+    };
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener(
+      "mouseup",
+      () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+      },
+      { once: true }
+    );
+  };
+
+  const handleTouchStart = (e, id) => {
+    setSlidRow(null);
+    const startX = e.touches[0].clientX;
+    const handleTouchMove = (moveEvent) => {
+      const currentX = moveEvent.touches[0].clientX;
+      if (currentX - startX > 50 || startX - currentX > 50) {
+        // Deslizar en cualquier dirección
+        setSlidRow(id);
+        document.removeEventListener("touchmove", handleTouchMove);
+      }
+    };
+    document.addEventListener("touchmove", handleTouchMove);
+    document.addEventListener(
+      "touchend",
+      () => {
+        document.removeEventListener("touchmove", handleTouchMove);
+      },
+      { once: true }
+    );
+  };
   return (
     <div className="mt-5">
       <div className="flex items-center">
@@ -91,12 +138,121 @@ export const TableClients = ({ clientes }) => {
             placeholder="Buscar el cliente por el nombre o apellido..."
             value={searchTerm}
             onChange={handleSearch}
-            className="px-4 py-2.5 ml-3 rounded-full shadow-lg outline-none focus:ring-sky-500 focus:border-sky-500 font-bold text-sm w-[400px]"
+            className="px-4 py-2.5 ml-3 rounded-full shadow-lg outline-none focus:ring-sky-500 focus:border-sky-500 font-bold text-sm w-[400px] max-md:w-[350px]"
           />
         </Transition>
       </div>
 
-      <div className="transition-all ease-linear rounded-2xl mt-6">
+      <div className="transition-all ease-linear rounded-2xl mt-6 overflow-x-scroll scrollbar-hidden">
+        <table className="min-w-full bg-white text-sm rounded-2xl table">
+          <thead>
+            <tr>
+              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
+                Nombre
+              </th>
+              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
+                Apellido
+              </th>
+              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
+                Localidad
+              </th>
+              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
+                Provincia
+              </th>
+              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
+                DNI
+              </th>
+              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
+                Teléfono
+              </th>
+              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
+                Email
+              </th>
+              <th className="text-left px-4 py-4 text-sky-500 text-sm uppercase">
+                Deuda
+              </th>
+            </tr>
+          </thead>
+
+          <tbody className="divide-y divide-slate-200">
+            {filteredClients.map((c) => (
+              <tr
+                key={c._id}
+                className={`hover:bg-gray-100/50 cursor-pointer relative`}
+                onMouseDown={(e) => handleMouseDown(e, c._id)}
+                onTouchStart={(e) => handleTouchStart(e, c._id)}
+              >
+                {slidRow === c._id ? (
+                  <td
+                    colSpan="8"
+                    className="px-4 py-4 text-gray-500 uppercase text-sm"
+                  >
+                    <div className="flex gap-10">
+                      <Link
+                        className="capitalize bg-sky-500 text-white font-semibold py-2 px-5 rounded-xl"
+                        to={`/editar-cliente/${c._id}`}
+                      >
+                        Editar
+                      </Link>
+                      <Link
+                        className="capitalize bg-orange-500 text-white font-semibold py-2 px-5 rounded-xl"
+                        to={`/cliente/${c._id}`}
+                      >
+                        Ver
+                      </Link>
+                      <button
+                        onClick={() => deleteCliente(c._id)}
+                        type="button"
+                        className="capitalize bg-red-500 text-white font-semibold py-2 px-5 rounded-xl"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </td>
+                ) : (
+                  <>
+                    <th className="px-4 py-4 text-gray-900 uppercase text-sm">
+                      {c.nombre}
+                    </th>
+                    <th className="px-4 py-4 uppercase text-sm">
+                      {c.apellido}
+                    </th>
+                    <th className="px-4 py-4 uppercase text-sm">
+                      {c.localidad}
+                    </th>
+                    <th className="px-4 py-4 uppercase text-sm">
+                      {c.provincia}
+                    </th>
+                    <th className="px-4 py-4 uppercase text-sm">{c.dni}</th>
+                    <th className="px-4 py-4 uppercase text-sm">
+                      {c.telefono}
+                    </th>
+                    <th className="px-4 py-4 uppercase text-sm">{c.email}</th>
+                    <th className="px-4 py-4 uppercase text-sm flex">
+                      <p
+                        className={`py-2 px-3 rounded-full font-extrabold ${
+                          c.total > 0
+                            ? "bg-orange-100 text-orange-500"
+                            : "bg-green-100 text-green-600"
+                        }`}
+                      >
+                        {c.total.toLocaleString("es-AR", {
+                          style: "currency",
+                          currency: "ARS",
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                      </p>
+                    </th>
+                  </>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="transition-all ease-linear rounded-2xl mt-6 max-md:hidden">
         <table className="min-w-full bg-white text-sm rounded-2xl table">
           <thead>
             <tr>

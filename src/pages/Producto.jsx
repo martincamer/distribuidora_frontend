@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { useProductos } from "../context/ProductosContext";
 import { useEffect, useState } from "react";
-import { FaPencilAlt } from "react-icons/fa";
+import { FaArrowLeft, FaPencilAlt } from "react-icons/fa";
 import { useObtenerId } from "../helpers/obtenerId";
 import { useModal } from "../helpers/modal";
 import ModalEliminarProducto from "../components/products/ModalEliminarProducto";
@@ -47,7 +47,7 @@ export function Producto() {
 
   return (
     <div>
-      <div className="bg-white w-full flex justify-between items-center ">
+      <div className="bg-white w-full flex justify-between items-center max-md:hidden">
         <div className="flex">
           <Link
             to={"/productos"}
@@ -93,20 +93,20 @@ export function Producto() {
           </div>
         </div>
       </div>
-      <div className="mx-10 py-10">
-        <div className="flex flex-col gap-1">
+      <div className="mx-10 py-10 max-md:mx-0 max-md:rounded-none">
+        <div className="flex flex-col gap-1 max-md:px-6">
           <p className="font-bold text-slate-700 text-xl">
-            Producto obtenido{" "}
+            Perfil obtenido{" "}
             <span className="text-sky-500">{producto.codigo}</span>
           </p>
           <p className="text-slate-600 font-medium text-sm">
-            En esta sección podras crear nuevos productos.
+            En esta sección podras observar el perfil.
           </p>
         </div>
 
         <div className="flex gap-10 mt-10">
-          <div className="bg-white rounded-xl shadow-lg w-1/2">
-            <div className="py-10 px-10 bg-gray-100/80 rounded-t-xl flex justify-between">
+          <div className="bg-white rounded-xl shadow-lg w-1/2 max-md:w-auto max-md:rounded-none">
+            <div className="max-md:rounded-none py-10 px-10 bg-gray-100/80 rounded-t-xl flex justify-between max-md:flex-col max-md:gap-5 max-md:px-6 max-md:py-5 max-md:text-sm">
               <div className="flex flex-col gap-5">
                 <p>
                   Fecha de creación{" "}
@@ -160,7 +160,7 @@ export function Producto() {
             <div className="py-5 px-5 bg-sky-100 text-center text-sky-500 font-bold">
               Descripción del producto
             </div>
-            <div className="py-10 px-10 bg-white  grid grid-cols-3 gap-6">
+            <div className="py-10 px-10 bg-white  grid grid-cols-3 gap-6 max-md:grid-cols-2 max-md:px-6 max-md:py-5 max-md:text-sm">
               <p className="font-bold flex flex-col">
                 Categoria del producto{" "}
                 <span className="text-gray-400 font-normal">
@@ -198,12 +198,17 @@ export function Producto() {
                 </span>
               </p>
             </div>
-            <div className="py-10 px-10 bg-white rounded-b-xl">
-              <p className="font-bold flex flex-col">Imagen del producto </p>
+            <div className="py-10 px-10 bg-white rounded-b-xl max-md:px-0">
+              <p className="font-bold flex flex-col max-md:px-6 max-md:text-sm">
+                Imagen del producto{" "}
+              </p>
 
-              <img src={producto.imagen} className="w-[300px]" />
+              <img
+                src={producto.imagen}
+                className="w-[300px] max-md:w-[200px] max-md:mx-auto"
+              />
 
-              <div className="flex justify-end gap-6 my-4">
+              <div className="flex justify-end max-md:justify-center gap-6 my-4 max-md:text-sm max-md:gap-2 max-md:px-3">
                 <button
                   onClick={() => {
                     handleObtenerId(producto._id), openModal();
@@ -220,7 +225,7 @@ export function Producto() {
                   className="bg-sky-500 text-white font-semibold text-[15px] px-6 py-3 rounded-full transition-all flex items-center gap-2 hover:bg-sky-600"
                 >
                   Editar producto
-                  <FaPencilAlt className="w-4 h-4" />{" "}
+                  <FaPencilAlt className="w-4 h-4 max-md:hidden" />{" "}
                 </Link>
               </div>
             </div>
@@ -232,6 +237,12 @@ export function Producto() {
         isOpen={isOpen}
         idObtenida={idObtenida}
       />
+
+      <div className="fixed bottom-3 left-5 bg-white border border-slate-300 py-3 px-3 rounded-full">
+        <Link to={"/productos"}>
+          <FaArrowLeft className="text-2xl text-sky-700" />
+        </Link>
+      </div>
     </div>
   );
 }

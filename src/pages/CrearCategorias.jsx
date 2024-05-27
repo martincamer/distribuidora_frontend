@@ -4,6 +4,7 @@ import { TableCategorias } from "../components/categorias/TableCategorias";
 import { useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { FaArrowLeft } from "react-icons/fa";
 dayjs.extend(utc);
 
 export function CrearCategorias() {
@@ -35,7 +36,7 @@ export function CrearCategorias() {
 
   return (
     <section>
-      <div className="bg-white w-full flex justify-between items-center ">
+      <div className="bg-white w-full flex justify-between items-center max-md:hidden">
         <div className="flex">
           <Link
             to={"/productos"}
@@ -73,7 +74,7 @@ export function CrearCategorias() {
           </div>
         </div>
       </div>
-      <div className="mx-10 w-1/2 flex flex-col gap-2">
+      <div className="mx-10 w-1/2 flex flex-col gap-2 max-md:w-auto max-md:mx-4">
         <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
           <div className="bg-gray-100 py-4 rounded-t-xl">
             <p className="text-sky-500 text-center text-base font-bold">
@@ -106,9 +107,14 @@ export function CrearCategorias() {
           </div>
         </div>
       </div>
-      <div className="mx-10 w-2/3">
+      <div className="mx-10 w-2/3 max-md:w-auto max-md:mx-4 max-md:min-h-screen max-md:h-full max-md:max-h-full">
         <TableCategorias />
       </div>{" "}
+      <div className="fixed bottom-3 left-5 bg-white border border-slate-300 py-3 px-3 rounded-full">
+        <Link to={"/productos"}>
+          <FaArrowLeft className="text-2xl text-sky-700" />
+        </Link>
+      </div>
     </section>
   );
 }

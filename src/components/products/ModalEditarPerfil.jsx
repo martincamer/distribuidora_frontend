@@ -1,5 +1,4 @@
 import { IoMdClose } from "react-icons/io";
-import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useProductos } from "../../context/ProductosContext";
 import { useEffect, useState } from "react";
@@ -7,9 +6,8 @@ import { Message } from "../ui/Message";
 import FileDropZone from "../ui/FileDropZone";
 import axios from "axios"; // Importamos axios para la llamada a Cloudinary
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 
-export const ModalCrearPerfil = () => {
+export const ModalEditarPerfil = () => {
   const {
     createProducto,
     colores,
@@ -65,7 +63,7 @@ export const ModalCrearPerfil = () => {
       await createProducto(productData);
 
       //   document.getElementById("my_modal_3").onclose();
-      document.getElementById("my_modal_3").close();
+      document.getElementById("my_modal_editar_producto").close();
 
       reset();
     } catch (error) {
@@ -104,7 +102,7 @@ export const ModalCrearPerfil = () => {
   };
 
   return (
-    <dialog id="my_modal_3" className="modal">
+    <dialog id="my_modal_editar_producto" className="modal">
       <div className="modal-box h-full w-full min-h-full rounded-none">
         <form method="dialog">
           {/* if there is a button in form, it will close the modal */}
@@ -112,9 +110,9 @@ export const ModalCrearPerfil = () => {
             <IoMdClose className="cursor-pointer text-4xl text-red-800 hover:shadow-md transition-all ease-linear bg-red-100 py-2 px-2 rounded-full" />
           </button>
         </form>
-        <h3 className="font-bold text-lg text-sky-700">Crea un nuevo perfil</h3>
+        <h3 className="font-bold text-lg text-sky-700">Editar el perfil</h3>
         <p className="py-1 text-sm font-medium">
-          En esta sección podras crear un nuevo perfil de aluminio.
+          En esta sección podras editar el perfil obtenido.
         </p>
 
         <form

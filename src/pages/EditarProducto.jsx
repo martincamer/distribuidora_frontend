@@ -6,6 +6,7 @@ import axios from "axios"; // Importamos axios para la llamada a Cloudinary
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import FileDropZone from "../components/ui/FileDropZone";
+import { FaArrowLeft } from "react-icons/fa";
 
 dayjs.extend(utc);
 
@@ -130,7 +131,7 @@ export function EditarProducto() {
 
   return (
     <section>
-      <div className="bg-white w-full flex justify-between items-center ">
+      <div className="bg-white w-full flex justify-between items-center max-md:hidden">
         <div className="flex">
           <Link
             to={"/productos"}
@@ -165,14 +166,14 @@ export function EditarProducto() {
           </div>
         </div>
       </div>
-      <div className="mx-10 flex justify-start items-start gap-16">
-        <div className="w-1/2">
+      <div className="mx-10 flex justify-start items-start gap-16 max-md:flex-col max-md:w-auto max-md:mx-5 max-md:gap-3">
+        <div className="w-1/2 max-md:w-auto">
           <div className="flex flex-col gap-1">
             <p className="font-bold text-slate-700 mt-10 text-xl">
               Editar perfil {producto.id}
             </p>
             <p className="text-slate-600 font-bold text-sm">
-              En esta sección podras crear nuevos productos.
+              En esta sección podras editar el perfil.
             </p>
           </div>
           <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
@@ -314,7 +315,7 @@ export function EditarProducto() {
             </div>
           </div>
         </div>
-        <div className="mt-28">
+        <div className="mt-28 max-md:mt-0 max-md:mb-12">
           <FileDropZone
             dragging={dragging}
             handleDragLeave={handleDragLeave}
@@ -327,6 +328,11 @@ export function EditarProducto() {
             uploadedFile={uploadedFile}
           />
         </div>
+      </div>
+      <div className="fixed bottom-3 left-5 bg-white border border-slate-300 py-3 px-3 rounded-full">
+        <Link to={"/productos"}>
+          <FaArrowLeft className="text-2xl text-sky-700" />
+        </Link>
       </div>
     </section>
   );

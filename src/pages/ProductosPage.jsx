@@ -221,9 +221,12 @@ export function ProductosPage() {
             </Link>
           </div>
           <div className="bg-white rounded-xl py-4 px-2 text-sm md:hidden overflow-x-scroll scroll-bar">
-            <div className="flex w-[630px] gap-3 text-xs">
+            <div className="flex w-[560px] gap-3 text-xs">
               <Link
-                to={"/crear-producto"}
+                // to={"/crear-producto"}
+                onClick={() =>
+                  document.getElementById("my_modal_3").showModal()
+                }
                 className="bg-sky-500 font-semibold py-3 px-6 rounded-full text-white group flex gap-3 items-center relative transition-all"
               >
                 <span className="transition-opacity duration-300 opacity-100 group-hover:opacity-0">

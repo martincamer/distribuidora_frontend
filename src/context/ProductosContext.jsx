@@ -296,8 +296,9 @@ export function ProductosProvider({ children }) {
         autoClose: 500,
         hideProgressBar: true,
         closeOnClick: true,
-        pauseOnHover,
-        draggable,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
         theme: "light",
         style: {
           padding: "10px",

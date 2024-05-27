@@ -6,6 +6,7 @@ import { FiPlus } from "react-icons/fi";
 import { Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
 import { ModalCrearPerfil } from "./ModalCrearPerfil";
+import { ModalEditarPerfil } from "./ModalEditarPerfil";
 
 export const TableProducts = ({ productos }) => {
   const { deleleteProducto } = useProductos();
@@ -151,6 +152,11 @@ export const TableProducts = ({ productos }) => {
                     <Link
                       className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700 text-xs"
                       to={`/editar-producto/${p._id}`}
+                      // onClick={() =>
+                      //   document
+                      //     .getElementById("my_modal_editar_producto")
+                      //     .showModal()
+                      // }
                     >
                       Editar el producto
                     </Link>
@@ -330,6 +336,7 @@ export const TableProducts = ({ productos }) => {
       </div>
 
       <ModalCrearPerfil />
+      <ModalEditarPerfil />
     </div>
   );
 };

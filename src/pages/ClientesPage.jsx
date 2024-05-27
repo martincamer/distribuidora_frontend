@@ -46,7 +46,7 @@ export function ClientesPage() {
 
   return (
     <div>
-      <div className="bg-white w-full flex justify-between items-center ">
+      <div className="bg-white w-full flex justify-between items-center max-md:hidden">
         <div className="flex">
           <p className="bg-sky-100/80 px-8 text-[16px] py-4 text-sky-600 font-semibold">
             Clientes
@@ -128,7 +128,7 @@ export function ClientesPage() {
       )}
 
       {clientes.length > 0 && (
-        <div className="flex flex-col gap-5 mx-10">
+        <div className="flex flex-col gap-5 mx-10 max-md:hidden">
           <section className="py-10 grid grid-cols-3 gap-4">
             <div className="stats shadow-xl items-center">
               <div className="stat">
@@ -224,6 +224,122 @@ export function ClientesPage() {
                       trailColor: "#e5e7eb",
                     })}
                   />
+                </div>
+              </div>
+            </div>
+            {/* Aquí podrías agregar otras métricas relacionadas con clientes */}
+          </section>
+          <div className="bg-white rounded-xl py-5 px-5 transition-all ease-linear flex gap-2 text-sm">
+            <Link
+              to={"/crear-cliente"}
+              className="bg-sky-500 py-3 px-6 rounded-full text-white font-semibold group flex gap-3 items-center relative transition-all"
+            >
+              Crear nuevo cliente
+            </Link>
+          </div>
+          <TableClients clientes={clientes} />{" "}
+        </div>
+      )}
+
+      {clientes.length > 0 && (
+        <div className="flex flex-col gap-5 mx-10 max-md:block md:hidden min-h-screen max-h-full h-full max-md:mx-5">
+          <section className="overflow-x-scroll mb-5 scrollbar-hidden">
+            <div className="grid grid-cols-3 w-[1450px] gap-5 py-5 ">
+              <div className="stats shadow-none items-center ">
+                <div className="stat">
+                  <div className="stat-title font-semibold">
+                    Total clientes cargados
+                  </div>
+                  <div className="stat-value">{clientes.length}</div>
+                  <div className="stat-desc font-bold text-green-500 mt-1">
+                    ↗︎ {clientes.length % 100}%
+                  </div>
+                </div>
+
+                <div>
+                  <div className="py-5 px-5 w-32 font-bold mx-auto">
+                    <CircularProgressbar
+                      value={clientes.length % 100}
+                      text={`${clientes.length % 100}%`}
+                      strokeWidth={9}
+                      // backgroundPadding={"#22c55e"}
+                      styles={buildStyles({
+                        textColor: "#0287e0",
+                        pathColor: "#0287e0",
+                        trailColor: "#e5e7eb",
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="stats shadow-none items-center">
+                <div className="stat">
+                  <div className="stat-title font-semibold">
+                    Total deuda clientes
+                  </div>
+                  <div className="stat-value text-red-500">
+                    {" "}
+                    {totalDeuda.toLocaleString("es-AR", {
+                      style: "currency",
+                      currency: "ARS",
+                      minimumFractionDigits: 2, // Mínimo dos decimales
+                      maximumFractionDigits: 2, // Máximo dos decimales
+                    })}
+                  </div>
+                  <div className="stat-desc font-bold text-red-500 mt-1">
+                    ↗︎ {Number(totalDeuda & 100).toFixed(2)}%
+                  </div>
+                </div>
+
+                <div>
+                  <div className="py-5 px-5 w-32 font-bold mx-auto">
+                    <CircularProgressbar
+                      value={Number(totalDeuda) & 100}
+                      text={`${Number(totalDeuda & 100)}%`}
+                      strokeWidth={9}
+                      // backgroundPadding={"#22c55e"}
+                      styles={buildStyles({
+                        textColor: "#ef4444",
+                        pathColor: "#ef4444 ",
+                        trailColor: "#e5e7eb",
+                      })}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="stats shadow-none items-center">
+                <div className="stat">
+                  <div className="stat-title font-semibold">
+                    Total ganancias del mes
+                  </div>
+                  <div className="stat-value text-sky-500">
+                    {totalGanancias.toLocaleString("es-AR", {
+                      style: "currency",
+                      currency: "ARS",
+                      minimumFractionDigits: 2, // Mínimo dos decimales
+                      maximumFractionDigits: 2, // Máximo dos decimales
+                    })}
+                  </div>
+                  <div className="stat-desc font-bold text-sky-500 mt-1">
+                    ↗︎ {Number(totalGanancias & 100).toFixed(2)}%
+                  </div>
+                </div>
+
+                <div>
+                  <div className="py-5 px-5 w-32 font-bold mx-auto">
+                    <CircularProgressbar
+                      value={Number(totalGanancias) & 100}
+                      text={`${Number(totalGanancias & 100)}%`}
+                      strokeWidth={9}
+                      // backgroundPadding={"#22c55e"}
+                      styles={buildStyles({
+                        textColor: "#0287e0 ",
+                        pathColor: "#0287e0  ",
+                        trailColor: "#e5e7eb",
+                      })}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
