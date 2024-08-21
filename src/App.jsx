@@ -1,5 +1,4 @@
 import { Routes, Route, useLocation } from "react-router-dom";
-import { Navbar } from "./components/Navbar";
 import { ProtectedRoute } from "./routes";
 import { LoginPage } from "./pages/LoginPage";
 import { ProductosPage } from "./pages/ProductosPage";
@@ -22,12 +21,13 @@ import { EditarVenta } from "./pages/EditarVenta";
 import { Perfil } from "./pages/Perfil";
 import { PruebasPdf } from "./pages/PruebasPdf";
 import { useAuth } from "./context/authContext";
-import { CuentaInactivaHome } from "./pages/CuentaInactivaHome";
 import { useEffect } from "react";
 import RegisterPage from "./pages/RegisterPage";
-import HomePage from "./pages/HomePage";
 import VentasProvider from "./context/VentasContext";
 import FacturaPage from "./pages/FacturaPage";
+// import { Navbar } from "./components/Navbar";
+// import { CuentaInactivaHome } from "./pages/CuentaInactivaHome";
+// import HomePage from "./pages/HomePage";
 
 function App() {
   const { user } = useAuth();
@@ -61,7 +61,7 @@ function App() {
       case "/crear-venta":
         return "Gestión Prisma Crear Venta";
       case "/productos":
-        return "Gestión Prisma Productos";
+        return "Gestión Prisma Perfiles";
       default:
         return "Gestión Prisma";
     }
@@ -71,16 +71,10 @@ function App() {
     <VentasProvider>
       <ProductosProvider>
         <ClientesProvider>
-          <Navbar />
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
+            <Route path="/" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route element={<ProtectedRoute />}>
-              {/* {user?.cuenta === "desactivada" ? (
-                <Route index path="/home" element={<CuentaInactivaHome />} />
-              ) : (
-                <> */}
               <Route index path="/home" element={<HomeApp />} />
               <Route index path="/factura" element={<FacturaPage />} />
               <Route path="/ventas" element={<VentasPage />} />
@@ -98,10 +92,7 @@ function App() {
               <Route path="/colores" element={<CrearColores />} />
               <Route path="/crear-producto" element={<CrearProductoNuevo />} />
               <Route path="/editar-producto/:id" element={<EditarProducto />} />
-              <Route path="/profile" element={<h1>Profile</h1>} />
               <Route path="/factura/:id" element={<PruebasPdf />} />
-              {/* </>
-              )} */}
             </Route>
           </Routes>
         </ClientesProvider>

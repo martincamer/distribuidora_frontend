@@ -101,60 +101,21 @@ export function CrearProductoNuevo() {
 
   return (
     <section>
-      <div className="bg-white w-full flex justify-between items-center ">
-        <div className="flex max-md:hidden">
-          <Link
-            to={"/productos"}
-            className="bg-gray-100/50 px-8 text-base py-4 text-gray-700 font-medium hover:text-sky-500 transition-all"
-          >
-            Perfiles
-          </Link>
-          <Link
-            to={"/categorias"}
-            className="bg-sky-500/10 px-8 text-base py-4 text-sky-500 font-medium hover:bg-gray-100 transition-all"
-          >
-            Crear nuevo perfil
-          </Link>
-        </div>
-        <div className="flex mx-9">
-          <div className="text-sm breadcrumbs">
-            <ul>
-              <li>
-                <Link
-                  className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl cursor-pointer font-semibold"
-                  to={"/home"}
-                >
-                  Inicio
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer font-semibold"
-                  to={"/productos"}
-                >
-                  Perfiles
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
       <div className="mx-10 flex justify-start items-start gap-16 max-md:flex-col">
-        <div className="w-1/2 max-md:w-full">
-          <div className="flex flex-col gap-1">
-            <p className="font-bold text-slate-700 mt-10 text-xl">
-              Crear nuevo perfil
+        <div className="w-2/3 max-md:w-full mx-auto">
+          <div className="flex flex-col gap-1 my-10">
+            <p className="font-bold text-slate-700 text-xl">
+              Crear nuevo perfil de aluminio
             </p>
             <p className="text-slate-600 font-bold text-sm">
               En esta sección podras crear nuevos perfiles.
             </p>
           </div>
 
-          <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
-            <div className="bg-gray-100 py-4 rounded-t-xl">
-              <p className="text-sky-500 text-center text-base font-bold">
-                Formulario
+          <div className="bg-white my-5 border rounded-md flex flex-col gap-3">
+            <div className="bg-gray-800 py-4 rounded-t-md">
+              <p className="text-white text-center text-base font-bold">
+                Formulario para crear una perfil.
               </p>
             </div>
 
@@ -165,115 +126,131 @@ export function CrearProductoNuevo() {
               >
                 {error.length > 0 ? <Message message={error} /> : ""}
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700">
-                    El codigo
-                  </label>
-                  <input
-                    autoFocus
-                    {...register("codigo")}
-                    type="text"
-                    placeholder="Ej: Tkpr1"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
-                  />
-                </div>
+                <article className="grid grid-cols-2 gap-2">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-slate-700">
+                      El codigo
+                    </label>
+                    <input
+                      autoFocus
+                      {...register("codigo")}
+                      type="text"
+                      placeholder="Ej: Tkpr1"
+                      className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                    />
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700">
-                    La descripción
-                  </label>
-                  <input
-                    {...register("detalle")}
-                    type="text"
-                    placeholder="Ej: Marco pesado"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
-                  />
-                </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-slate-700">
+                      La descripción
+                    </label>
+                    <input
+                      {...register("detalle")}
+                      type="text"
+                      placeholder="Ej: Marco pesado"
+                      className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                    />
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700">
-                    Seleccionar un color
-                  </label>
-                  <select
-                    {...register("color")}
-                    type="text"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3.5 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
-                  >
-                    <option>Seleccionar el color</option>
-                    {colores.map((c) => (
-                      <option key={c._id}>{c.name}</option>
-                    ))}
-                  </select>
-                </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-slate-700">
+                      Seleccionar un color
+                    </label>
+                    <select
+                      {...register("color")}
+                      type="text"
+                      className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                    >
+                      <option>Seleccionar el color</option>
+                      {colores.map((c) => (
+                        <option key={c._id}>{c.name}</option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700">
-                    Seleccionar una categoria
-                  </label>
-                  <select
-                    {...register("categoria")}
-                    type="text"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3.5 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
-                  >
-                    <option>Seleccionar la categoria</option>
-                    {categorias.map((c) => (
-                      <option key={c._id}>{c.detalle}</option>
-                    ))}
-                  </select>
-                </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-slate-700">
+                      Seleccionar una categoria
+                    </label>
+                    <select
+                      {...register("categoria")}
+                      type="text"
+                      className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                    >
+                      <option>Seleccionar la categoria</option>
+                      {categorias.map((c) => (
+                        <option key={c._id}>{c.detalle}</option>
+                      ))}
+                    </select>
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700">
-                    Kg del perfil
-                  </label>
-                  <input
-                    {...register("kg_barra_estimado")}
-                    type="text"
-                    placeholder="Ej: 1.556, siempre es con punto '.' no con coma ','"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
-                  />
-                </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-slate-700">
+                      Kg del perfil
+                    </label>
+                    <input
+                      {...register("kg_barra_estimado")}
+                      type="text"
+                      placeholder="Ej: 1.556, siempre es con punto '.' no con coma ','"
+                      className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                    />
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700">
-                    Stock del producto en fabrica
-                  </label>
-                  <input
-                    {...register("stock")}
-                    type="text"
-                    placeholder="Ej: 100"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
-                  />
-                </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-slate-700">
+                      Stock del producto en fabrica
+                    </label>
+                    <input
+                      {...register("stock")}
+                      type="text"
+                      placeholder="Ej: 100"
+                      className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                    />
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700">
-                    Stock del producto minimo
-                  </label>
-                  <input
-                    {...register("stock_minimo")}
-                    type="text"
-                    placeholder="Ej: 200"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
-                  />
-                </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-slate-700">
+                      Stock del producto minimo
+                    </label>
+                    <input
+                      {...register("stock_minimo")}
+                      type="text"
+                      placeholder="Ej: 200"
+                      className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                    />
+                  </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-sm font-bold text-slate-700">
-                    Stock del producto maximo
-                  </label>
-                  <input
-                    {...register("stock_maximo")}
-                    type="text"
-                    placeholder="Ej: 300"
-                    className="text-sm uppercase text-slate-700 bg-gray-100 rounded-lg py-3 px-3 outline-none ease-linear transition-all focus:outline-sky-500 outline-1 font-bold"
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm font-bold text-slate-700">
+                      Stock del producto maximo
+                    </label>
+                    <input
+                      {...register("stock_maximo")}
+                      type="text"
+                      placeholder="Ej: 300"
+                      className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                    />
+                  </div>
+                </article>
+
+                <div className="w-1/3">
+                  <FileDropZone
+                    dragging={dragging}
+                    handleDragLeave={handleDragLeave}
+                    handleDragOver={handleDragOver}
+                    handleDrop={handleDrop}
+                    handleFileChange={handleFileChange}
+                    handleRemoveFile={handleRemoveFile}
+                    setDragging={setDragging}
+                    setUploadedFile={setUploadedFile}
+                    uploadedFile={uploadedFile}
                   />
                 </div>
 
                 <div>
                   <button
                     type="submit"
-                    className="bg-green-500 py-3 px-8 text-sm rounded-full font-semibold text-white mt-3 hover:bg-green-500/90 cursor-pointer"
+                    className="bg-primary py-3 px-8 text-sm rounded-full font-semibold text-white mt-3 hover:bg-blue-500 cursor-pointer"
                   >
                     Guardar producto
                   </button>
@@ -281,19 +258,6 @@ export function CrearProductoNuevo() {
               </form>
             </div>
           </div>
-        </div>
-        <div className="mt-28">
-          <FileDropZone
-            dragging={dragging}
-            handleDragLeave={handleDragLeave}
-            handleDragOver={handleDragOver}
-            handleDrop={handleDrop}
-            handleFileChange={handleFileChange}
-            handleRemoveFile={handleRemoveFile}
-            setDragging={setDragging}
-            setUploadedFile={setUploadedFile}
-            uploadedFile={uploadedFile}
-          />
         </div>
       </div>
     </section>

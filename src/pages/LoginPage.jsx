@@ -1,11 +1,10 @@
 import { useAuth } from "../context/authContext";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, Message, Button, Input, Label } from "../components/ui";
 import { loginSchema } from "../schemas/auth";
-import { BiLogoPlayStore } from "react-icons/bi";
 import img from "../assets/intro.jpg";
 
 export function LoginPage() {
@@ -29,13 +28,6 @@ export function LoginPage() {
 
   return (
     <div className="h-screen flex gap-12 items-center max-md:px-4">
-      {/* <div class="flex items-center gap-2 justify-center bg-blue-500 text-white px-4 py-2 rounded cursor-pointer md:hidden">
-        <BiLogoPlayStore className="text-5xl" />
-        <span className="font-semibold">
-          Descargar la app en PlayStore o AppStore
-        </span>
-      </div> */}
-
       <img
         className="w-[55%] object-cover opacity-[0.7] h-[100%] max-md:hidden"
         src={img}
@@ -79,12 +71,15 @@ export function LoginPage() {
           </div>
         </form>
 
-        <p className="flex gap-x-2 justify-between mt-3 text-sm">
+        {/* <p className="flex gap-x-2 justify-between mt-3 text-sm">
           No tienes una cuenta aun?{" "}
-          <Link to="/register" className="text-sky-500 font-semibold underline">
+          <Link
+            to="/register"
+            className="text-gray-900 font-semibold underline"
+          >
             Registrate ahora
           </Link>
-        </p>
+        </p> */}
       </Card>
     </div>
   );

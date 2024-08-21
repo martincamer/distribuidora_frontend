@@ -100,7 +100,7 @@ export function HomeApp() {
   return (
     <section className="mx-10 my-10 max-md:mx-4">
       <div className="grid grid-cols-3 gap-3 max-md:grid-cols-1">
-        <div className="stats items-center scroll-bar max-md:scroll-hidden">
+        <div className="stats items-center scroll-bar max-md:scroll-hidden border border-gray-300">
           <div className="stat">
             <div className="stat-title font-semibold">
               Total ganancias del mes
@@ -136,12 +136,12 @@ export function HomeApp() {
           </div>
         </div>
 
-        <div className="stats items-center scroll-bar max-md:scroll-hidden">
+        <div className="stats items-center scroll-bar max-md:scroll-hidden border border-gray-300">
           <div className="stat">
             <div className="stat-title font-semibold">
               Total generado en ventas del mes
             </div>
-            <div className="stat-value text-sky-500">
+            <div className="stat-value text-blue-500">
               {" "}
               {sumaTotalGanancias?.toLocaleString("es-AR", {
                 style: "currency",
@@ -150,7 +150,7 @@ export function HomeApp() {
                 maximumFractionDigits: 2, // Máximo dos decimales
               })}
             </div>
-            <div className="stat-desc font-bold text-sky-500 mt-1">
+            <div className="stat-desc font-bold text-blue-500 mt-1">
               ↗︎ {Number(sumaTotalGanancias & 100).toFixed(2)}%
             </div>
           </div>
@@ -172,16 +172,13 @@ export function HomeApp() {
           </div>
         </div>
 
-        <div className="stats items-center scroll-bar max-md:scroll-hidden">
+        <div className="stats items-center scroll-bar max-md:scroll-hidden border border-gray-300">
           <div className="stat">
             <div className="stat-title font-semibold">
               Total de ventas del mes
             </div>
-            <div className="stat-value text-orange-500">
-              {" "}
-              {filtrados.length}
-            </div>
-            <div className="stat-desc font-bold text-orange-500 mt-1">
+            <div className="stat-value text-primary"> {filtrados.length}</div>
+            <div className="stat-desc font-bold text-primarymt-1">
               ↗︎ {Number(filtrados.length & 100).toFixed(2)}%
             </div>
           </div>
@@ -204,14 +201,14 @@ export function HomeApp() {
         </div>
       </div>
       <div className="mt-12  grid grid-cols-2 gap-4 max-md:grid-cols-1">
-        <div className="bg-white py-5 px-5 rounded-xl">
-          <p className="font-semibold text-sky-500 px-5">
+        <div className="bg-white py-5 px-5 rounded-md border-gray-300 border">
+          <p className=" text-gray-800 px-5 font-bold">
             Ventas generadas mensuales grafico
           </p>
           <VentasAreaChart ventas={filtrados} />
         </div>
-        <div className="bg-white py-5 px-5 rounded-xl">
-          <p className="font-semibold text-sky-500 px-5">
+        <div className="bg-white py-5 px-5 rounded-md border-gray-300 border">
+          <p className=" text-gray-800 px-5 font-bold">
             Comprobantes cargados mensuales grafico
           </p>
           <ComprobantesLineChart datos={comprobante} />
@@ -220,7 +217,7 @@ export function HomeApp() {
 
       <div className="bg-white py-5 px-5 rounded-xl mt-10">
         <div>
-          <div className="text-sky-500 font-semibold text-sm mb-2 pb-2 mt-4">
+          <div className="text-gray-800 font-semibold text-sm mb-2 pb-2 mt-4">
             PROGRESO EN VENTAS/GANANCIAS POR CATEGORIA
           </div>
           <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
@@ -242,7 +239,7 @@ export function HomeApp() {
                       <div key={color}>
                         <p className="uppercase font-semibold text-slate-600">
                           {color}{" "}
-                          <span className="font-normal text-sky-700">
+                          <span className="font-normal text-blue-700">
                             {total_dinero.toLocaleString("es-ar", {
                               style: "currency",
                               currency: "ARS",
@@ -252,7 +249,7 @@ export function HomeApp() {
                         </p>
                         {/* Progreso por Dinero */}
                         <progress
-                          className="[&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg rounded-full [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-sky-500 [&::-moz-progress-bar]:bg-sky-400 w-full"
+                          className="[&::-webkit-progress-bar]:rounded-lg [&::-webkit-progress-value]:rounded-lg rounded-full [&::-webkit-progress-bar]:bg-slate-300 [&::-webkit-progress-value]:bg-blue-500 [&::-moz-progress-bar]:bg-blue-400 w-full"
                           value={porcentajeDinero}
                           max="100"
                         >

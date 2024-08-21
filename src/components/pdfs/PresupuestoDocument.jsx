@@ -114,16 +114,6 @@ export const PresupuestoDocument = ({ datos, user }) => {
     0
   );
 
-  // const totalKIlogramos = datos?.productos?.reduce(
-  //   (total, producto) => total + producto.total_kilogramos,
-  //   0
-  // );
-
-  // const totalPerfiles = datos?.productos?.reduce(
-  //   (total, producto) => total + producto.cantidad,
-  //   0
-  // );
-
   return (
     <Document
       style={{
@@ -219,7 +209,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                     textTransform: "capitalize",
                   }}
                 >
-                  {user.username}
+                  {user?.username}
                 </Text>
               </View>
               <View>
@@ -240,7 +230,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                     textTransform: "capitalize",
                   }}
                 >
-                  {user.dni_facturacion}
+                  {user?.dni_facturacion}
                 </Text>
               </View>
               <View>
@@ -261,7 +251,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                     textTransform: "capitalize",
                   }}
                 >
-                  {user.telefono_facturacion}
+                  {user?.telefono_facturacion}
                 </Text>
               </View>
               <View>
@@ -282,7 +272,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                     textTransform: "capitalize",
                   }}
                 >
-                  {user.localidad_facturacion}
+                  {user?.localidad_facturacion}
                 </Text>
               </View>
               <View>
@@ -303,7 +293,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                     textTransform: "capitalize",
                   }}
                 >
-                  {user.provincia_facturacion}
+                  {user?.provincia_facturacion}
                 </Text>
               </View>
               <View>
@@ -324,7 +314,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                     textTransform: "capitalize",
                   }}
                 >
-                  {user.email_facturacion}
+                  {user?.email_facturacion}
                 </Text>
               </View>
             </View>
@@ -781,7 +771,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
                     textTransform: "uppercase",
                   }}
                 >
-                  <Text>Total Dinero</Text>{" "}
+                  <Text>Monto</Text>{" "}
                   <Text
                     style={{
                       fontWeight: "bold",

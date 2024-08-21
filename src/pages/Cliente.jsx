@@ -4,11 +4,20 @@ import { useEffect, useState } from "react";
 import { FaArrowLeft, FaArrowRight, FaPencilAlt } from "react-icons/fa"; // Icono para editar
 import { useModal } from "../helpers/modal"; // Para el uso de modales
 import { useObtenerId } from "../helpers/obtenerId";
+import { IoIosMore } from "react-icons/io";
+import { v4 as uuidv4 } from "uuid"; // Para generar IDs únicos
+import { BsCash } from "react-icons/bs";
+import { useForm } from "react-hook-form";
+import { agregarComprobante } from "../../../frontend/src/api/clientes";
 import ModalEliminarCliente from "../components/clients/ModalEliminarCliente"; // El modal para eliminar clientes
 import ModalNuevoComprobante from "../components/clients/ModalNuevoComprobante";
 import dayjs from "dayjs"; // Para formatear fechas
 import instance from "../api/axios";
-import { IoIosMore } from "react-icons/io";
+import utc from "dayjs/plugin/utc";
+import FileDropZoneClientsPdfs from "../components/clients/FileDropZoneClientsPdfs";
+import { formatearDinero } from "../helpers/FormatearDinero";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 export function Cliente() {
   const { getCliente } = useClientes(); // Función para obtener un cliente
@@ -127,50 +136,11 @@ export function Cliente() {
 
   return (
     <div className="pb-12">
-      <div className="bg-white w-full flex justify-between items-center max-md:hidden">
-        <div className="flex">
-          <Link
-            to={"/clientes"}
-            className="px-8 text-base py-4 text-gray-700 font-medium hover:text-sky-700 transition-all"
-          >
-            Clientes
-          </Link>
-          <Link
-            to={`/cliente/${params.id}`}
-            className="bg-sky-100 px-8 text-base py-4 text-sky-700 font-medium hover:bg-gray-100 transition-all"
-          >
-            Detalle del cliente
-          </Link>
-        </div>
-        <div className="flex mx-9">
-          <div className="text-sm breadcrumbs">
-            <ul>
-              <li>
-                <Link
-                  className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl cursor-pointer font-bold"
-                  to={"/home"}
-                >
-                  Inicio
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer font-bold"
-                  to={"/clientes"}
-                >
-                  Clientes
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
       <div className="mx-10 py-10 max-md:mx-5">
         <div className="flex flex-col gap-1">
-          <p className="font-bold text-slate-700 text-xl">
+          <p className="font-bold text-gray-700 text-xl">
             Datos del cliente{" "}
-            <span className="text-sky-700 capitalize">
+            <span className="text-primary capitalize">
               {cliente.nombre} {cliente.apellido}
             </span>
           </p>
@@ -181,17 +151,17 @@ export function Cliente() {
 
         <div className="flex gap-10 mt-10 max-md:flex-col-reverse">
           <div className="bg-white rounded-xl w-4/5 max-md:w-full max-md:text-sm">
-            <div className="py-10 px-10 bg-gray-100/80 rounded-t-xl flex justify-between max-md:px-5 max-md:py-5">
+            <div className="py-10 px-10 bg-gray-800 text-gray-400 rounded-t-xl flex justify-between max-md:px-5 max-md:py-5">
               <div className="flex flex-col gap-5">
                 <p>
                   Fecha de creación{" "}
-                  <span className="text-slate-600 font-bold">
+                  <span className="text-white font-bold">
                     {formatDate(cliente.date)} {/* Fecha de creación */}
                   </span>
                 </p>
                 <p>
                   Nombre completo{" "}
-                  <span className="text-slate-600 font-bold capitalize">
+                  <span className="text-white font-bold capitalize">
                     {cliente.nombre} {cliente.apellido}
                   </span>
                 </p>
@@ -199,62 +169,55 @@ export function Cliente() {
               <div className="flex flex-col gap-5">
                 <p>
                   Localidad{" "}
-                  <span className="text-slate-600 font-bold capitalize">
+                  <span className="text-white font-bold capitalize">
                     {cliente.localidad}
                   </span>
                 </p>
                 <p>
                   Provincia{" "}
-                  <span className="text-slate-600 font-bold capitalize">
+                  <span className="text-white font-bold capitalize">
                     {cliente.provincia}
                   </span>
                 </p>
               </div>
             </div>
-            <div className="py-5 px-5 bg-sky-100 text-center text-sky-500 font-bold">
+            <div className="py-5 px-5 bg-primary text-white text-center  font-bold">
               Información del cliente
             </div>
-            <div className="py-10 px-10 bg-white grid grid-cols-2 gap-6 max-md:px-5 max-md:py-5">
+            <div className="py-10 px-10 bg-gray-50 grid grid-cols-2 gap-6 max-md:px-5 max-md:py-5">
               <p className="font-bold flex flex-col">
                 DNI{" "}
-                <span className="text-gray-400 font-normal">{cliente.dni}</span>
+                <span className="text-gray-600 font-normal">{cliente.dni}</span>
               </p>
               <p className="font-bold flex flex-col">
                 Teléfono{" "}
-                <span className="text-gray-400 font-normal">
+                <span className="text-gray-600 font-normal">
                   {cliente.telefono}
                 </span>
               </p>
               <p className="font-bold flex flex-col">
                 Email{" "}
-                <span className="text-gray-400 font-normal">
+                <span className="text-gray-600 font-normal">
                   {cliente.email}
                 </span>
               </p>
             </div>
 
-            <div className="py-10 px-10 bg-white rounded-b-xl max-md:px-2 max-md:py-2 max-md:text-xs">
+            <div className="py-10 px-10 bg-gray-50 rounded-b-xl max-md:px-2 max-md:py-2 max-md:text-xs">
               <div className="flex justify-end gap-6 my-4 max-md:justify-center">
                 <button
                   onClick={() => {
-                    {
-                      handleObtenerId(cliente._id), openModal();
-                    } // Abre el modal para eliminar el cliente
+                    handleObtenerId(cliente._id),
+                      document
+                        .getElementById("my_modal_actualizar_cliente")
+                        .showModal();
                   }}
                   type="button"
-                  className="hover:bg-orange-100 text-orange-400 transition-all font-semibold text-[15px] px-6 py-2 rounded-full"
-                >
-                  Eliminar cliente
-                </button>
-
-                <Link
-                  to={`/editar-cliente/${params.id}`}
-                  type="button"
-                  className="bg-sky-700 text-white font-semibold text-[15px] px-6 py-3 rounded-full transition-all flex items-center gap-2 hover:bg-sky-700/90"
+                  className="bg-blue-500 text-white font-semibold text-sm px-6 py-2 rounded-md transition-all flex items-center gap-2 hover:bg-blue-500"
                 >
                   Editar cliente
                   <FaPencilAlt className="w-4 h-4" /> {/* Icono para editar */}
-                </Link>
+                </button>
               </div>
             </div>
           </div>
@@ -262,7 +225,7 @@ export function Cliente() {
             <div class="grid grid-cols-3 gap-4 max-md:grid-cols-1 max-md:text-sm">
               <div
                 id="jh-stats-positive"
-                class="flex flex-col justify-center px-4 py-4 bg-white border rounded-xl"
+                class="flex flex-col justify-center px-4 py-4  bg-white rounded-xl sm:mt-0 border border-gray-300"
               >
                 <div>
                   <div>
@@ -293,7 +256,7 @@ export function Cliente() {
 
               <div
                 id="jh-stats-negative"
-                class="flex flex-col justify-center px-4 py-4 bg-white border rounded-xl"
+                class="flex flex-col justify-center px-4 py-4  bg-white rounded-xl sm:mt-0 border border-gray-300"
               >
                 <div>
                   <div>
@@ -327,7 +290,7 @@ export function Cliente() {
 
               <div
                 id="jh-stats-neutral"
-                class="flex flex-col justify-center px-4 py-4  bg-white rounded-xl sm:mt-0"
+                class="flex flex-col justify-center px-4 py-4  bg-white rounded-xl sm:mt-0 border border-gray-300"
               >
                 <div>
                   <div>
@@ -368,43 +331,49 @@ export function Cliente() {
           </p>
         </div>
         <div>
-          <Link
-            className="text-white bg-green-500/90 py-4 px-6 rounded-full font-semibold max-md:text-sm max-md:py-3"
-            // to={"/cargar-comprobante"}
-            onClick={() => openModalComprobante()}
+          <button
+            type="button"
+            className="text-white bg-green-500/90 py-2 px-6 rounded-md font-bold text-sm flex gap-2 items-center"
+            // onClick={() => openModalComprobante()}
+            onClick={() =>
+              document.getElementById("my_modal_cargar_comprobante").showModal()
+            }
           >
-            Cargar nuevo comprobante o total $
-          </Link>
+            Cargar nuevo comprobante de pago <BsCash className="text-2xl" />
+          </button>
         </div>
       </div>
 
-      <div className="mb-10 mx-10 rounded-xl max-md:overflow-x-scroll max-md:mx-5 scrollbar-hidden">
-        <table className="table bg-white uppercase">
+      <div className="px-10">
+        <table className="table bg-white">
           {/* head */}
-          <thead>
+          <thead className="font-bold text-gray-800 text-sm">
             <tr>
-              <th className="py-4 text-sky-500 text-base">Fecha de emisión</th>
-              <th className="py-4 text-sky-500 text-base">
-                Total del comprobante/$
-              </th>
+              <th>Fecha de emisión</th>
+              <th>Total del comprobante/$</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="text-xs font-bold">
             {currentComprobantes.map((c) => (
               <tr key={c.id}>
-                <th className="py-5 text-slate-600">{c.date}</th>
-                <td className="py-5 text-sky-500 font-bold">
-                  {Number(c.total).toLocaleString("es-AR", {
-                    style: "currency",
-                    currency: "ARS",
-                  })}
+                <th className="">{c.date}</th>
+                <th className="uppercase">{c.tipo_pago}</th>
+                <td className="">
+                  <div className="flex">
+                    <p className="bg-green-100/90 text-green-700 font-bold py-2 px-3 rounded-md">
+                      {Number(c.total).toLocaleString("es-AR", {
+                        style: "currency",
+                        currency: "ARS",
+                      })}
+                    </p>
+                  </div>
                 </td>
                 <td className="py-5">
                   <div className="dropdown dropdown-left drop-shadow-lg">
                     <div
                       tabIndex={0}
                       role="button"
-                      className="py-2 px-2 transition-all hover:bg-sky-500 hover:text-white border-none rounded-full"
+                      className="py-2 px-2 transition-all hover:bg-gray-800 hover:text-white border-none rounded-full"
                     >
                       <IoIosMore className="text-2xl" />
                     </div>
@@ -414,7 +383,7 @@ export function Cliente() {
                     >
                       <li>
                         <button
-                          className="capitalize hover:bg-sky-500 hover:text-white font-semibold text-gray-700"
+                          className="capitalize hover:bg-gray-800 hover:text-white font-semibold text-gray-700"
                           onClick={() => handleViewImage(c.imagen)} // Abre el modal con la imagen
                         >
                           Ver comprobante
@@ -429,60 +398,22 @@ export function Cliente() {
         </table>
       </div>
 
-      <div className="mt-3 flex justify-center items-center space-x-2">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
-        >
-          <FaArrowLeft />
-        </button>
-        <ul className="flex space-x-2">
-          {getPageNumbers().map((number) => (
-            <li key={number} className="cursor-pointer">
-              <button
-                onClick={() => paginate(number)}
-                className={`${
-                  currentPage === number ? "bg-white" : "bg-gray-300"
-                } py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100`}
-              >
-                {number}
-              </button>
-            </li>
-          ))}
-        </ul>
-        <button
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-          }
-          disabled={currentPage === totalPages}
-          className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
-        >
-          <FaArrowRight />
-        </button>
-      </div>
-
-      <ModalEliminarCliente
-        closeModal={closeModal}
-        isOpen={isOpen}
-        clienteId={idObtenida} // Pasa el ID del cliente al modal para eliminarlo
-      />
-      <ModalNuevoComprobante
+      <ModalComprobante
         setCliente={setCliente}
         setComprobante={setComprobante}
-        closeModal={closeModalComprobante}
-        isOpen={isOpenComprobante}
-        idObtenida={params.id}
+        idObtenida={cliente._id}
       />
+
       <ImageModal
         isVisible={isModalVisible}
         onClose={handleCloseModal} // Cierra el modal
         imageUrl={selectedImage} // URL de la imagen seleccionada
       />
+      <ModalActualizarCliente idObtenida={idObtenida} />
 
-      <div className="fixed bottom-3 left-5 bg-white border border-slate-300 py-3 px-3 rounded-full">
+      <div className="fixed bottom-3 left-5 bg-white border border-slate-300 py-3 px-3 rounded-full hover:text-primary text-primary/20 cursor-pointer">
         <Link to={"/clientes"}>
-          <FaArrowLeft className="text-2xl text-sky-700" />
+          <FaArrowLeft className="text-2xl " />
         </Link>
       </div>
     </div>
@@ -521,5 +452,399 @@ const ImageModal = ({ isVisible, onClose, imageUrl }) => {
         )}
       </div>
     </div>
+  );
+};
+
+const ModalActualizarCliente = ({ idObtenida }) => {
+  dayjs.extend(utc);
+  const [cliente, setCliente] = useState({}); // Estado para almacenar datos del cliente
+
+  const {
+    updateCliente, // Método para actualizar clientes
+    getCliente, // Método para obtener un cliente por su ID
+  } = useClientes(); // Usar el contexto de clientes
+
+  const {
+    register, // Para registrar campos en el formulario
+    handleSubmit, // Para manejar el envío del formulario
+    setValue, // Para establecer valores en el formulario
+  } = useForm(); // Uso de React Hook Form para el formulario
+
+  // Efecto para cargar datos del cliente cuando el componente se monta
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await getCliente(idObtenida); // Obtiene el cliente por ID
+      setValue("nombre", res.nombre);
+      setValue("apellido", res.apellido);
+      setValue("localidad", res.localidad);
+      setValue("provincia", res.provincia);
+      setValue("dni", res.dni);
+      setValue("telefono", res.telefono);
+      setValue("email", res.email);
+
+      setCliente(res); // Establece el estado del cliente
+    };
+    loadData(); // Carga los datos del cliente al montar el componente
+  }, [idObtenida]); // Asegúrate de incluir todas las dependencias necesarias
+
+  const onSubmit = async (formData) => {
+    try {
+      // Crea el objeto del cliente con los datos del formulario
+      const clientData = {
+        ...formData,
+      };
+
+      await updateCliente(idObtenida, clientData); // Actualiza el cliente
+      document.getElementById("my_modal_actualizar_cliente").close();
+    } catch (error) {
+      console.error("Error actualizando cliente:", error); // Manejo de errores
+    }
+  };
+
+  return (
+    <dialog id="my_modal_actualizar_cliente" className="modal">
+      <div className="modal-box rounded-md max-w-4xl scroll-bar">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+
+        <div className="flex flex-col gap-5 items-start">
+          <div className="w-full">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-4 w-full"
+            >
+              {/* {error.length > 0 ? <Message message={error} /> : ""} */}
+
+              <article className="grid grid-cols-2 gap-3 mt-3">
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Nombre
+                  </label>
+                  <input
+                    {...register("nombre", { required: true })}
+                    type="text"
+                    placeholder="Ej: Martin.."
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Apellido
+                  </label>
+                  <input
+                    {...register("apellido", { required: true })}
+                    type="text"
+                    placeholder="Ej: Juarez.."
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Localidad
+                  </label>
+                  <input
+                    {...register("localidad", { required: true })}
+                    type="text"
+                    placeholder="Ej: Elortondo.."
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Provincia
+                  </label>
+                  <input
+                    {...register("provincia", { required: true })}
+                    type="text"
+                    placeholder="Ej: Santa Fe.."
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Dni
+                  </label>
+                  <input
+                    {...register("dni")}
+                    type="text"
+                    placeholder="Ej: 44555111.."
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Telefono
+                  </label>
+                  <input
+                    {...register("telefono")}
+                    type="text"
+                    placeholder="Ej: 3466 5551122.."
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                  />
+                </div>
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Email
+                  </label>
+                  <input
+                    {...register("email")}
+                    type="text"
+                    placeholder="Ej: martina@gmail.com..."
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
+                  />
+                </div>
+              </article>
+
+              <div>
+                <button
+                  type="submit"
+                  className="bg-primary py-2 px-4 text-sm rounded-md font-semibold text-white mt-3 hover:bg-blue-500 cursor-pointer"
+                >
+                  Actualizar el cliente
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  );
+};
+
+export const ModalComprobante = ({
+  idObtenida,
+  setCliente,
+  setComprobante,
+}) => {
+  const [uploadedFile, setUploadedFile] = useState(null);
+  const [dragging, setDragging] = useState(false);
+
+  const { register, handleSubmit, reset, watch } = useForm();
+
+  const uploadFile = async (file) => {
+    if (!file) {
+      return null;
+    }
+
+    const data = new FormData();
+    data.append("file", file);
+
+    // Set the upload preset based on the file type
+    const uploadPreset = file.type.startsWith("image/")
+      ? "imagenes"
+      : "documentos";
+    data.append("upload_preset", uploadPreset);
+
+    try {
+      const api = `https://api.cloudinary.com/v1_1/doguyttkd/${
+        file.type.startsWith("image/") ? "image" : "raw"
+      }/upload`;
+      const res = await axios.post(api, data);
+      const { secure_url } = res.data;
+      return secure_url;
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      return null;
+    }
+  };
+
+  const onSubmit = async (formData) => {
+    try {
+      const imageURL = await uploadFile(uploadedFile);
+
+      const comprobanteData = {
+        ...formData,
+        id: uuidv4(),
+        imagen: imageURL,
+        date: dayjs().format("YYYY-MM-DD"),
+      };
+
+      const res = await agregarComprobante(idObtenida, comprobanteData);
+
+      if (res.status === 200 && res.data) {
+        const clienteActualizado = res.data.comprobantes;
+        setComprobante(clienteActualizado);
+        setCliente(res.data);
+      } else {
+        console.error("Error: No se pudo agregar el comprobante.");
+      }
+
+      reset();
+      setUploadedFile(null);
+
+      toast.success("Comprobante creado correctamente", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        style: {
+          padding: "10px",
+          borderRadius: "15px",
+        },
+      });
+
+      document.getElementById("my_modal_cargar_comprobante").close();
+    } catch (error) {
+      console.error("Error creando comprobante:", error);
+    }
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    setDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setDragging(false);
+  };
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      setUploadedFile(file);
+      setDragging(false);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setUploadedFile(file);
+    }
+  };
+
+  const handleRemoveFile = () => {
+    setUploadedFile(null);
+  };
+
+  const total = watch("total");
+
+  const [isEditable, setIsEditable] = useState(false);
+
+  const handleInputClick = () => {
+    setIsEditable(true);
+  };
+  return (
+    <dialog id="my_modal_cargar_comprobante" className="modal">
+      <div className="modal-box rounded-md max-w-xl">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex flex-col gap-2 w-full items-start">
+            <div className="cursor-pointer" onClick={handleInputClick}>
+              {isEditable ? (
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Total del comprobante
+                  </label>
+                  <input
+                    {...register("total", { required: true })}
+                    onBlur={() => {
+                      setIsEditable(false);
+                    }}
+                    type="text"
+                    className="border border-gray-300 py-2 px-2 rounded-md font-medium capitalize text-sm outline-none w-auto"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <label className="font-bold text-sm">
+                    Total del comprobante
+                  </label>
+
+                  <p className="border border-gray-300 font-bold py-2 px-2 rounded-md capitalize text-sm outline-none w-auto">
+                    {formatearDinero(Number(total) || 0)}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-bold text-slate-700">
+                Seleccionar el método de pago
+              </label>
+              <select
+                {...register("tipo_pago", { required: true })}
+                className="text-sm border rounded-md py-2 px-2 outline-none font-medium"
+              >
+                <option
+                  className="font-bold text-primary"
+                  value=""
+                  disabled
+                  selected
+                >
+                  Elige un método de pago
+                </option>
+                <option
+                  className="text-xs font-semibold"
+                  value="transferencia bancaria"
+                >
+                  Transferencia Bancaria
+                </option>
+                <option
+                  className="text-xs font-semibold"
+                  value="tarjeta credito"
+                >
+                  Tarjeta de Crédito
+                </option>
+                <option
+                  className="text-xs font-semibold"
+                  value="tarjeta debito"
+                >
+                  Tarjeta de Débito
+                </option>
+                <option className="text-xs font-semibold" value="paypal">
+                  PayPal
+                </option>
+                <option className="text-xs font-semibold" value="efectivo">
+                  Efectivo
+                </option>
+                <option className="text-xs font-semibold" value="cheque">
+                  Cheque
+                </option>
+                <option className="text-xs font-semibold" value="bitcoin">
+                  Bitcoin
+                </option>
+                <option className="text-xs font-semibold" value="otros">
+                  Otros
+                </option>
+              </select>
+            </div>
+
+            <FileDropZoneClientsPdfs
+              dragging={dragging}
+              handleDragLeave={handleDragLeave}
+              handleDragOver={handleDragOver}
+              handleDrop={handleDrop}
+              handleFileChange={handleFileChange}
+              handleRemoveFile={handleRemoveFile}
+              setDragging={setDragging}
+              setUploadedFile={setUploadedFile}
+              uploadedFile={uploadedFile}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="bg-primary py-2 px-4 text-sm rounded-md font-semibold text-white mt-3 hover:bg-blue-500 cursor-pointer"
+          >
+            Cargar el comprobante de pago
+          </button>
+        </form>
+      </div>
+    </dialog>
   );
 };

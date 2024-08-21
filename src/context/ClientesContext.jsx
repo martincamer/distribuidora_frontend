@@ -120,13 +120,14 @@ export function ClientesProvider({ children }) {
       const clientesActualizados = clientes.map((c) =>
         c._id === id ? res.data : c
       );
+
       setClientes(clientesActualizados);
 
-      toast.success("Cliente editado correctamente", {
+      toast.success("Cliente actualizado correctamente", {
         position: "top-center",
         autoClose: 500,
-        hideProgressBar,
-        closeOnClick,
+        hideProgressBar: true,
+        closeOnClick: true,
         pauseOnHover,
         draggable,
         theme: "light",

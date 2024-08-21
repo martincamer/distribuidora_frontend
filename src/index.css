@@ -7,11 +7,9 @@
 @tailwind utilities;
 
 body {
-  /* font-family: "Lexend Deca", sans-serif; */
-  /* font-family: "Nunito Sans", sans-serif; */
   font-family: "Plus Jakarta Sans", sans-serif;
   /* background-color: #ecf0f1; */
-  background-color: #ecf0f1;
+  /* background-color: #ecf0f1; */
   &::-webkit-scrollbar {
     width: 10px; /* Ancho de la barra de desplazamiento */
     border-radius: 2px; /* Bordes redondeados */
@@ -30,7 +28,7 @@ body {
     border-radius: 2px; /* Bordes redondeados para el pulgar */
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: rgb(211, 237, 255); /* Color al pasar el mouse por encima */
+    background: rgb(77, 77, 77); /* Color al pasar el mouse por encima */
   }
   /* background-color: rgb(255, 255, 255); */
 }
@@ -55,7 +53,7 @@ body {
     border-radius: 2px; /* Bordes redondeados para el pulgar */
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: rgb(211, 237, 255); /* Color al pasar el mouse por encima */
+    background: rgb(77, 77, 77); /* Color al pasar el mouse por encima */
   }
 }
 

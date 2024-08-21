@@ -88,18 +88,15 @@ export default function ModalEstado({ isOpen, closeModal, idObtenida }) {
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="mt-4">
                     <div className="flex flex-col gap-2">
-                      <label
-                        htmlFor=""
-                        className="font-semibold text-gray-700 text-sm"
-                      >
+                      <label className="text-sm font-bold text-slate-700">
                         Seleccionar el estado
                       </label>
                       <select
-                        className="bg-gray-200/80 py-2 px-2 rounded-xl text-gray-700 font-semibold text-sm outline-none focus:outline-sky-700"
+                        className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                         {...register("estado", { required: true })}
                       >
                         <option value="pendiente">pendiente</option>
-                        <option value="aceptada">aceptada</option>
+                        <option value="completada">completada</option>
                         <option value="rechazada">rechazada</option>
                       </select>
                     </div>

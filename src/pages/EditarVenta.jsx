@@ -4,9 +4,15 @@ import { useVentas } from "../context/VentasContext"; // Para obtener la venta a
 import { useEffect, useState } from "react";
 import { useModal } from "../helpers/modal"; // Para manejar modales
 import { useProductos } from "../context/ProductosContext.jsx";
-import ModalClientes from "../components/ventas/ModalClientes";
-import ModalProductos from "../components/ventas/ModalProductos.jsx";
+import { FaCheck, FaSearch } from "react-icons/fa";
+import { useClientes } from "../context/ClientesContext.jsx";
+import { generateRandomNumericId } from "../helpers/generateId.js";
+import { useObtenerId } from "../helpers/obtenerId.js";
+import { formatearDinero } from "../helpers/FormatearDinero.js";
+import instance from "../api/axios.js";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import { FaDeleteLeft } from "react-icons/fa6";
 
 export function EditarVenta() {
   const { id } = useParams(); // Obtener el ID de la venta
@@ -83,9 +89,9 @@ export function EditarVenta() {
     setProductos(productosActualizados);
 
     // Aquí podrías llamar a tu función para actualizar la venta en el backend
-    await updateVenta(id, ventaData); // Actualizar la venta
+    const res = await updateVenta(id, ventaData); // Actualizar la venta
 
-    console.log("DATA", ventaData);
+    console.log("DATA", res);
   };
 
   const addToCliente = (
@@ -146,6 +152,33 @@ export function EditarVenta() {
     closeProducto();
   };
 
+  // Objeto para agrupar por categoria y color
+  const groupedByCategoryAndColor = {};
+
+  // Agrupar productos por categoria y color
+  productosSeleccionados.forEach((producto) => {
+    const key = `${producto.categoria}-${producto.color}`; // Clave para agrupar
+
+    if (!groupedByCategoryAndColor[key]) {
+      // Si la clave no existe, crear una nueva entrada
+      groupedByCategoryAndColor[key] = {
+        categoria: producto.categoria,
+        color: producto.color,
+        total_dinero: 0,
+        total_kilogramos: 0,
+      };
+    }
+
+    // Sumar los valores al grupo existente
+    groupedByCategoryAndColor[key].total_dinero +=
+      Number(producto.kg_barra_estimado * producto.cantidad) * producto.precio;
+    groupedByCategoryAndColor[key].total_kilogramos +=
+      producto.kg_barra_estimado * producto.cantidad;
+  });
+
+  // Convertir el objeto a un arreglo
+  const groupedProducts = Object.values(groupedByCategoryAndColor);
+
   const handleEditToggle = (index) => {
     setEditIndex(index === editIndex ? null : index);
   };
@@ -164,87 +197,60 @@ export function EditarVenta() {
     setProductosSeleccionados((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const calculateFinalValue = (productos) => {
+    return productos.reduce((total, producto) => {
+      return total + parseFloat(producto.total_dinero);
+    }, 0);
+  };
+
+  const calculateFinalValueKgs = (productos) => {
+    return productos.reduce((total, producto) => {
+      return total + parseFloat(producto.total_kilogramos);
+    }, 0);
+  };
+
+  const finalValue = calculateFinalValue(productosSeleccionados);
+  const finalValueKgs = calculateFinalValueKgs(productosSeleccionados);
+
   return (
     <section>
-      {/* Navegación para volver a la página de ventas */}
-      <div className="bg-white w-full flex justify-between items-center">
-        <div className="flex">
-          <Link
-            to={"/ventas"}
-            className="px-8 text-base py-4 text-gray-700 font-medium hover:text-sky-700 transition-all"
-          >
-            Ventas/Presupuestos
-          </Link>
-          <Link
-            to={`/editar-venta/${id}`}
-            className="bg-sky-100 px-8 text-base py-4 text-sky-600 font-medium hover:bg-gray-100 transition-all"
-          >
-            Editar venta/presupuesto
-          </Link>
-        </div>
-        <div className="flex mx-9">
-          <div className="text-sm breadcrumbs">
-            <ul>
-              <li>
-                <Link
-                  className="bg-gray-100 text-gray-700 py-2 px-4 rounded-xl cursor-pointer font-bold"
-                  to={"/home"}
-                >
-                  Inicio
-                </Link>
-              </li>
-              <li>
-                <Link
-                  className="bg-sky-100 text-sky-700 py-2 px-4 rounded-xl cursor-pointer font-bold"
-                  to={"/ventas"}
-                >
-                  Ventas/Presupuestos
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Formulario para editar la venta */}
-      <div className="mx-10 flex justify-start items-start gap-8 relative">
-        {error.length > 0 && (
-          <div className="bg-red-100 uppercase  rounded-2xl py-6 px-6 text-sm text-red-800 font-semibold fixed left-[40%] shadow-xl transition-all z-[100]">
-            {error}
-          </div>
-        )}
-        <div className="w-3/4">
-          <div className="flex flex-col gap-1">
-            <p className="font-bold text-slate-700 mt-10 text-xl">
-              Editar venta
-            </p>
-            <p className="text-slate-600 font-medium text-sm">
-              En esta sección podrás editar la venta.
-            </p>
-          </div>
-
-          <div className="bg-white my-5 rounded-xl shadow-lg flex flex-col gap-3">
-            <div className="bg-gray-100 py-4 rounded-t-xl">
-              <p className="text-sky-500 text-center text-base font-bold">
-                Formulario
+      {/* Formulario para crear una nueva venta */}
+      <div className="mx-10 flex justify-start items-start gap-8">
+        <div className="w-3/4 mx-auto">
+          <div className="bg-white my-5 border rounded-md flex flex-col gap-3">
+            <div className="bg-gray-800 py-4 rounded-t-md">
+              <p className="text-white text-center text-base font-bold">
+                Actualizar la venta del cliente{" "}
+                <span className="capitalize font-bold text-primary">
+                  {clienteSeleccionado.nombre} {clienteSeleccionado.apellido}
+                </span>
+                .
               </p>
             </div>
 
             <div className="px-10 py-8 flex flex-col gap-5">
               <form
-                onSubmit={handleSubmit(onSubmit)}
+                onSubmit={handleSubmit(onSubmit)} // Maneja el envío del formulario
                 className="flex flex-col gap-4"
               >
-                <div className="flex flex-col gap-2 w-1/5">
-                  <label className="text-sm font-bold text-slate-700 uppercase">
-                    Tipo de venta
+                <div className="flex flex-col gap-2 w-1/5 cursor-pointer">
+                  <label className="text-sm font-bold text-slate-700">
+                    Selecciona el tipo
                   </label>
                   <select
-                    {...register("tipo", { required: true })}
-                    className="uppercase text-sm text-slate-700 bg-gray-100 rounded-lg py-3 px-2 font-semibold outline-none ease-linear transition-all focus:outline-sky-700"
+                    {...register("tipo", { required: true })} // Registro del campo con validación
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   >
-                    <option value="venta">Venta</option> // Opciones disponibles
-                    <option value="presupuesto">Presupuesto</option>
+                    <option className="font-bold" value="" disabled selected>
+                      Seleccione tipo
+                    </option>
+                    <option className="font-semibold" value="venta">
+                      Venta
+                    </option>{" "}
+                    // Opciones disponibles
+                    <option className="font-semibold" value="presupuesto">
+                      Presupuesto
+                    </option>
                   </select>
                   {errors.tipo && (
                     <span className="text-red-500 text-sm uppercase">
@@ -254,50 +260,45 @@ export function EditarVenta() {
                 </div>
 
                 <div className="flex flex-col items-start gap-2">
-                  <p className="font-bold text-slate-700 uppercase text-sm">
-                    Seleccionar el cliente de la venta
+                  <p className="text-sm font-bold text-slate-700">
+                    Seleccionar el cliente de la{" "}
                   </p>
                   <button
-                    onClick={() => openModal()}
-                    className="bg-orange-500 text-white hover:bg-orange-500/90 rounded-full py-3 px-8 text-sm font-semibold"
+                    onClick={() =>
+                      document
+                        .getElementById("my_modal_cargar_cliente")
+                        .showModal()
+                    }
+                    className="py-2 px-4 rounded-md text-white font-semibold bg-primary text-sm hover:shadow-md transition-all ease-linear"
                     type="button"
                   >
                     Seleccionar cliente
                   </button>
                 </div>
 
-                <div className="overflow-x-auto w-full mb-3">
+                <div className="overflow-x-auto w-full">
                   <table className="table">
                     {/* head */}
-                    <thead className="uppercase">
-                      <tr>
-                        <th className="text-slate-500 text-sm">Nombre</th>
-                        <th className="text-slate-500 text-sm">Apellido</th>
-                        <th className="text-slate-500 text-sm">
-                          Localidad
-                        </th>{" "}
-                        <th className="text-slate-500 text-sm">Provincia</th>{" "}
+                    <thead>
+                      <tr className="font-bold text-gray-800 text-sm">
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Localidad</th> <th>Provincia</th>{" "}
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody className="capitalize text-xs">
                       <tr>
-                        <th className="uppercase">
-                          {clienteSeleccionado.nombre}
-                        </th>
-                        <th className="uppercase">
-                          {clienteSeleccionado.apellido}
-                        </th>
-                        <th className="uppercase">
-                          {clienteSeleccionado.localidad}
-                        </th>
-                        <th className="uppercase">
-                          {clienteSeleccionado.provincia}
-                        </th>
+                        <th>{clienteSeleccionado.nombre}</th>
+                        <th>{clienteSeleccionado.apellido}</th>
+                        <th>{clienteSeleccionado.localidad}</th>
+                        <th>{clienteSeleccionado.provincia}</th>
                         <td>
                           <button
                             type="button"
-                            onClick={handleResetCliente}
-                            className="bg-orange-600/90 py-2 px-6 rounded-full text-white font-semibold"
+                            onClick={() => {
+                              handleResetCliente();
+                            }}
+                            className="bg-red-600 py-1.5 px-4 rounded-md text-white font-semibold"
                           >
                             Resetear
                           </button>
@@ -308,54 +309,46 @@ export function EditarVenta() {
                 </div>
 
                 <div className="flex flex-col items-start gap-2">
-                  <p className="font-bold text-slate-700 uppercase text-sm">
-                    Seleccionar los productos de la venta
-                  </p>
+                  <p className="text-sm font-bold text-slate-700"></p>
                   <button
-                    onClick={() => openProducto()}
-                    className="bg-sky-700 text-white hover:bg-sky-700/90 rounded-full py-3 px-8 text-sm font-semibold"
+                    onClick={() =>
+                      document
+                        .getElementById("my_modal_seleccionar_productos")
+                        .showModal()
+                    }
+                    className="py-2 px-4 rounded-md text-white font-semibold bg-primary text-sm hover:shadow-md transition-all ease-linear"
                     type="button"
                   >
-                    Seleccionar productos
+                    Seleccionar los productos
                   </button>
                 </div>
-
                 <div className="w-full scroll-bar overflow-x-scroll">
                   <table className="table">
                     {/* head */}
-                    <thead className="uppercase">
+                    <thead className="font-bold text-gray-800 text-sm">
                       <tr>
-                        <th className="text-slate-500 text-sm">Código</th>
-                        <th className="text-slate-500 text-sm">Detalle</th>
-                        <th className="text-slate-500 text-sm">Color</th>
-                        <th className="text-slate-500 text-sm">Categoría</th>
-                        <th className="text-slate-500 text-sm">
-                          Peso barra (kg)
-                        </th>
-                        <th className="text-slate-500 text-sm">
-                          Precio kg (ARS)
-                        </th>
-                        <th className="text-slate-500 text-sm">Total kg</th>
-                        <th className="text-slate-500 text-sm">Cantidad</th>
-                        <th className="text-slate-500 text-sm">Total final</th>
+                        <th>Código</th>
+                        <th>Detalle</th>
+                        <th>Color</th>
+                        <th>Categoría</th>
+                        <th>Peso barra (kg)</th>
+                        <th>Precio kg (ARS)</th>
+                        <th>Total kg</th>
+                        <th>Cantidad</th>
+                        <th>Total final</th>
                       </tr>
                     </thead>
                     <tbody>
                       {productosSeleccionados.map((producto, index) => (
-                        <tr className="uppercase" key={index}>
-                          <td className="font-semibold text-gray-700">
-                            {producto.codigo}
-                          </td>
-                          <td className="font-semibold text-gray-700">
-                            {producto.detalle}
-                          </td>
-                          <td className="font-semibold text-gray-700">
-                            {producto.color}
-                          </td>
-                          <td className="font-semibold text-gray-700">
-                            {producto.categoria}
-                          </td>
-                          <td className="font-semibold text-gray-700">
+                        <tr
+                          className="uppercase text-xs font-medium"
+                          key={index}
+                        >
+                          <td>{producto.codigo}</td>
+                          <td>{producto.detalle}</td>
+                          <td>{producto.color}</td>
+                          <td>{producto.categoria}</td>
+                          <td>
                             {editIndex === index ? (
                               <input
                                 type="text"
@@ -375,7 +368,7 @@ export function EditarVenta() {
                               )} kg`
                             )}
                           </td>
-                          <td className="font-semibold text-gray-700">
+                          <td className="font-semibold">
                             {editIndex === index ? (
                               <input
                                 type="number"
@@ -396,14 +389,14 @@ export function EditarVenta() {
                               })
                             )}
                           </td>
-                          <td className="font-semibold text-gray-700">
+                          <td className="font-semibold">
                             {Number(
                               Number(
                                 producto.kg_barra_estimado * producto.cantidad
-                              )
-                            )}
+                              ).toFixed(2)
+                            )}{" "}
                           </td>
-                          <td className="font-semibold text-gray-700">
+                          <td className="font-semibold">
                             {editIndex === index ? (
                               <input
                                 type="number"
@@ -421,7 +414,7 @@ export function EditarVenta() {
                               producto.cantidad
                             )}
                           </td>
-                          <td className="font-semibold text-gray-700">
+                          <td className="font-bold text-green-600">
                             {Number(
                               Number(
                                 producto.kg_barra_estimado * producto.cantidad
@@ -433,16 +426,6 @@ export function EditarVenta() {
                           </td>
                           <td>
                             <div className="flex gap-2">
-                              {/* Botón para alternar entre edición y no edición */}
-                              <button
-                                type="button"
-                                onClick={() => handleEditToggle(index)}
-                                className="bg-sky-700 py-2 px-6 text-white rounded-full font-bold"
-                              >
-                                {editIndex === index ? "Guardar" : "Editar"}
-                              </button>
-
-                              {/* Botón para eliminar el producto */}
                               <button
                                 type="button"
                                 onClick={() => {
@@ -450,9 +433,8 @@ export function EditarVenta() {
                                     prev.filter((_, i) => i !== index)
                                   );
                                 }}
-                                className="bg-orange-600/90 py-2 px-6 rounded-full font-bold text-white"
                               >
-                                Eliminar
+                                <FaDeleteLeft className="text-red-500 text-xl" />
                               </button>
                             </div>
                           </td>
@@ -462,93 +444,117 @@ export function EditarVenta() {
                   </table>
                 </div>
 
+                <div className="bg-gray-800 py-5 px-4 rounded-md my-5 flex gap-5">
+                  <div>
+                    <p className="text-white font-bold text-xl">Subtotal</p>
+                    <p className="text-white font-bold text-xl">
+                      {formatearDinero(finalValue)}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-white font-bold text-xl">
+                      Total de klgs.
+                    </p>
+                    <p className="text-primary font-bold text-xl">
+                      {finalValueKgs.toFixed(2)} kgs
+                    </p>
+                  </div>
+                </div>
                 <div>
                   <button
                     type="submit"
-                    className="bg-green-500 py-2.5 px-6 text-sm rounded-full font-semibold text-white mt-3 hover:bg-green-600/90 cursor-pointer"
+                    className="bg-green-500 py-2 px-4 text-sm rounded-md font-semibold text-white mt-3 hover:bg-green-600/90 cursor-pointer"
                   >
-                    Actualizar venta
+                    Actualizar el presupuesto
                   </button>
                 </div>
               </form>
             </div>
           </div>
-
-          {productosSeleccionados.length > 0 && (
-            <div className="my-10">
+          {productosSeleccionados?.length === 0 ? (
+            ""
+          ) : (
+            <div className="my-10 ">
               <div className="mb-3">
                 <p className="text-gray-700 font-semibold text-lg">
                   Productos seleccionados 🖐️
                 </p>
                 <p className="font-normal text-sm">
-                  Mira por los productos creados, compara precios, etc.
+                  Mira por los productos creados, compara precios,etc.
                 </p>
               </div>
-
-              <div className="bg-white py-5 px-5 rounded-xl shadow-xl grid grid-cols-4 justify-center items-center gap-2">
-                {productosSeleccionados.map((p, index) => (
-                  <div
-                    key={index}
-                    className="border py-4 px-2 rounded-xl flex flex-col gap-2 justify-center items-center h-full"
-                  >
+              <div className="bg-white py-5 px-5 rounded-md grid grid-cols-4 justify-center items-center gap-2">
+                {productosSeleccionados.map((p) => (
+                  <div className="border py-4 px-2 rounded-xl flex flex-col gap-2 justify-center items-center h-full">
                     <img
                       className="w-[120px] object-cover"
                       src={p.imagen}
                       alt="imagen"
                     />
-                    <div className="h-[5vh] overflow-y-scroll scroll-bar w-full">
+                    <div className="h-[8vh] overflow-y-scroll scroll-bar w-full">
                       <div className="w-full px-2">
                         <p className="text-sm font-bold text-gray-700 uppercase">
-                          Código:{" "}
-                          <span className="font-bold text-sky-700">
+                          {" "}
+                          Codigo:{" "}
+                          <span className="font-bold text-blue-500">
                             {p.codigo}
                           </span>
                         </p>
                       </div>
                       <div className="w-full px-2">
                         <p className="text-sm font-bold text-gray-700 uppercase">
+                          {" "}
                           Detalle:{" "}
-                          <span className="font-bold text-sky-700">
+                          <span className="font-bold text-blue-500">
                             {p.detalle}
                           </span>
                         </p>
                       </div>
                       <div className="w-full px-2">
                         <p className="text-sm font-bold text-gray-700 uppercase">
+                          {" "}
                           Color:{" "}
-                          <span className="font-bold text-sky-700">
+                          <span className="font-bold text-blue-500">
                             {p.color}
                           </span>
                         </p>
                       </div>
                       <div className="w-full px-2">
                         <p className="text-sm font-bold text-gray-700 uppercase">
-                          Categoría:{" "}
-                          <span className="font-bold text-sky-700">
+                          {" "}
+                          Categoria:{" "}
+                          <span className="font-bold text-blue-500">
                             {p.categoria}
                           </span>
                         </p>
                       </div>
                       <div className="w-full px-2">
                         <p className="text-sm font-bold text-gray-700 uppercase">
+                          {" "}
                           Kg de la barra:{" "}
-                          <span className="font-bold text-sky-700">
-                            {p.kg_barra_estimado} kg
+                          <span className="font-bold text-blue-500">
+                            {Number(p?.kg_barra_estimado)?.toFixed(2)} kgs
                           </span>
                         </p>
                       </div>
                       <div className="w-full px-2">
                         <p className="text-sm font-bold text-gray-700 uppercase">
+                          {" "}
                           Total de kgs:{" "}
-                          <span className="font-bold text-sky-700">
-                            {p.total_kilogramos} kg
+                          <span className="font-bold text-blue-500">
+                            {Number(
+                              p?.kg_barra_estimado * p?.cantidad
+                            )?.toFixed(2)}{" "}
+                            kgs
                           </span>
                         </p>
                       </div>
                       <div className="w-full px-2">
                         <p className="text-sm font-bold text-gray-700 uppercase">
-                          Precio por kg:{" "}
-                          <span className="font-bold text-sky-700">
+                          {" "}
+                          Precio kg:{" "}
+                          <span className="font-bold text-blue-500">
                             {Number(p.precio).toLocaleString("es-AR", {
                               style: "currency",
                               currency: "ARS",
@@ -558,9 +564,13 @@ export function EditarVenta() {
                       </div>
                       <div className="w-full px-2">
                         <p className="text-sm font-bold text-gray-700 uppercase">
+                          {" "}
                           Precio total:{" "}
-                          <span className="font-bold text-sky-700">
-                            {Number(p.total_dinero).toLocaleString("es-AR", {
+                          <span className="font-bold text-blue-500">
+                            {Number(
+                              Number(p.kg_barra_estimado * p.cantidad) *
+                                p.precio
+                            ).toLocaleString("es-AR", {
                               style: "currency",
                               currency: "ARS",
                             })}
@@ -569,8 +579,9 @@ export function EditarVenta() {
                       </div>
                       <div className="w-full px-2">
                         <p className="text-sm font-bold text-gray-700 uppercase">
+                          {" "}
                           Cantidad:{" "}
-                          <span className="font-bold text-sky-700">
+                          <span className="font-bold text-blue-500">
                             {p.cantidad}
                           </span>
                         </p>
@@ -582,29 +593,540 @@ export function EditarVenta() {
             </div>
           )}
         </div>
-
-        <div className="my-28 bg-white rounded-xl py-5 px-5 shadow-xl w-auto flex flex-col gap-5">
-          <div className="mb-3">
-            <p className="text-gray-700 font-semibold text-lg">
-              Productos seleccionados 🖐️
-            </p>
-            <p className="font-normal text-sm">
-              Mira por los productos creados, compara precios, etc.
-            </p>
+        {productosSeleccionados?.length === 0 ? (
+          ""
+        ) : (
+          <div className="my-28  py-4 px-4 rounded-md flex flex-col gap-2 bg-gray-800">
+            <div className="mb-2">
+              <p className="text-white font-semibold text-lg">
+                Productos seleccionados 🖐️
+              </p>
+              <p className="font-normal text-sm text-white">
+                Mira por los productos creados, compara precios,etc.
+              </p>
+            </div>
+            {groupedProducts.map((p) => (
+              <div className="flex flex-col gap-1">
+                <p className="font-semibold text-sm uppercase  text-white">
+                  Linea <span className="text-primary">{p.categoria}</span>
+                </p>
+                <p className="font-semibold text-sm uppercase  text-white">
+                  Color <span className="text-primary">{p.color}</span>
+                </p>
+                <p className="font-semibold text-sm uppercase  text-white">
+                  Total de kgs{" "}
+                  <span className="text-primary">
+                    {Number(p.total_kilogramos).toFixed(2)}
+                  </span>
+                </p>
+                <p className="font-semibold text-sm uppercase  text-white">
+                  Precio total{" "}
+                  <span className="text-primary">
+                    {formatearDinero(p.total_dinero)}
+                  </span>
+                </p>
+              </div>
+            ))}
           </div>
-        </div>
+        )}
       </div>
 
-      <ModalClientes
-        addToCliente={addToCliente}
-        isOpen={isOpen}
-        closeModal={closeModal}
-      />
-      <ModalProductos
-        addToProducto={addToProducto}
-        isOpen={isOpenProducto}
-        closeModal={closeProducto}
-      />
+      <SeleccionarProductos addToProducto={addToProducto} />
+      <CargarCliente addToCliente={addToCliente} />
     </section>
   );
 }
+
+const SeleccionarProductos = ({ addToProducto }) => {
+  const {
+    productos,
+    getProductos,
+    categorias,
+    getCategorias,
+    colores,
+    getColores,
+  } = useProductos();
+  const [productoData, setProductoData] = useState({});
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedColor, setSelectedColor] = useState("all");
+
+  // Filtrar productos antes de la paginación
+  const filteredVentas = productos.filter((product) => {
+    const searchTermMatches =
+      product.detalle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.codigo.toLowerCase().includes(searchTerm.toLowerCase());
+    const categoryMatches =
+      selectedCategory === "all" || product.categoria === selectedCategory;
+
+    const colorMatches =
+      selectedColor === "all" || product.color === selectedColor;
+
+    return searchTermMatches && categoryMatches && colorMatches;
+  });
+
+  const sortedProducts = filteredVentas.sort((a, b) => b.stock - a.stock);
+
+  useEffect(() => {
+    getProductos();
+    getCategorias();
+    getColores();
+  }, []);
+
+  dayjs.extend(utc);
+
+  const fechaActual = dayjs().utc().format();
+
+  const { handleObtenerId, idObtenida } = useObtenerId();
+
+  return (
+    <dialog id="my_modal_seleccionar_productos" className="modal">
+      <div className="modal-box h-full max-w-full rounded-md">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <h3 className="font-bold text-lg pb-4">
+          Seleccionar los productos de la venta o presupuesto.
+        </h3>
+
+        <div className="py-2 flex gap-2">
+          <div className="border border-gray-300 flex items-center gap-2 px-2 py-1.5 text-sm rounded-md w-1/5 max-md:w-full">
+            <input
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              type="text"
+              className="outline-none font-medium w-full"
+              placeholder="Buscar por el codigo o detalle.."
+            />
+            <FaSearch className="text-gray-700" />
+          </div>
+          <div>
+            <select
+              className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              <option className="font-bold text-blue-500" value="all">
+                Todas las lineas
+              </option>
+              {categorias.map((c) => (
+                <option className="font-semibold uppercase text-xs" key={c.id}>
+                  {c?.detalle}
+                </option>
+              ))}
+            </select>
+          </div>{" "}
+          <div>
+            <select
+              className="border border-gray-300 flex items-center gap-2 w-full px-2 py-1.5 text-sm rounded-md outline-none font-semibold capitalize"
+              value={selectedColor}
+              onChange={(e) => setSelectedColor(e.target.value)}
+            >
+              <option className="font-bold text-blue-500" value="all">
+                Todos los colores
+              </option>
+              {colores.map((c) => (
+                <option className="font-semibold uppercase text-xs" key={c.id}>
+                  {c?.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        <div className="overflow-x-auto w-full">
+          <table className="table table-auto w-full">
+            <thead>
+              <tr className="text-gray-800 text-sm font-bold">
+                <th>Código</th>
+                <th>Detalle</th>
+                <th>Categoria</th>
+                <th>Color</th>
+                <th>Stock/Fabrica</th>
+                {/* <th>Kilogramos/peso barra</th> */}
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody className="text-xs font-medium uppercase">
+              {sortedProducts.map((producto, index) => (
+                <tr key={index}>
+                  <th className="">{producto.codigo}</th>
+                  <td className="">{producto.detalle}</td>
+                  <td className="">{producto.categoria}</td>
+                  <td className="">{producto.color}</td>
+                  <td className="">
+                    <div className="flex">
+                      <p
+                        className={`${
+                          producto.stock <= 0
+                            ? "bg-red-100/90 text-red-700"
+                            : "bg-green-100/90 text-green-700"
+                        } py-1.5 px-2 rounded-md font-bold`}
+                      >
+                        {producto.stock}
+                      </p>
+                    </div>
+                  </td>
+
+                  <td>
+                    <button
+                      onClick={() => {
+                        handleObtenerId(producto._id),
+                          document
+                            .getElementById("my_modal_seleccionar_cantidad")
+                            .showModal();
+                      }}
+                      className="bg-primary text-white py-1.5 px-4 rounded-md text-sm font-semibold"
+                    >
+                      Seleccionar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <SeleccionarCantidadProducto
+          fechaActual={fechaActual}
+          addToProducto={addToProducto}
+          idObtenida={idObtenida}
+        />
+      </div>
+    </dialog>
+  );
+};
+
+const SeleccionarCantidadProducto = ({
+  idObtenida,
+  addToProducto,
+  fechaActual,
+}) => {
+  const [producto, setProducto] = useState([]);
+  const [kg_estimado, setKgEstimado] = useState(0);
+  const [precio, setPrecio] = useState(0);
+  const [cantidad, setCantidad] = useState(0);
+
+  useEffect(() => {
+    const obtenerDatos = async () => {
+      const res = await instance.get(`/productos/${idObtenida}`);
+      setProducto(res.data);
+      console.log("asdsaddasdasddasdasdasd", res.data);
+    };
+
+    obtenerDatos();
+  }, [idObtenida]);
+
+  const [isEditable, setIsEditable] = useState(false);
+
+  const handleInputClick = (index) => {
+    setIsEditable(true);
+  };
+
+  const handleAddProducto = (producto) => {
+    addToProducto(
+      producto._id,
+      generateRandomNumericId(),
+      producto.codigo,
+      producto.detalle,
+      producto.imagen,
+      producto.color,
+      producto.categoria,
+      kg_estimado,
+      kg_estimado * cantidad,
+      precio,
+      Number(kg_estimado * cantidad) * Number(precio),
+      cantidad,
+      fechaActual
+    );
+
+    setKgEstimado(0);
+    // setPrecio(0);
+    setCantidad(0);
+
+    document.getElementById("my_modal_seleccionar_cantidad").close();
+    document.getElementById("my_modal_seleccionar_productos").close();
+
+    toast.success("Perfil cargado correctamente", {
+      position: "top-center",
+      autoClose: 500,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      style: {
+        padding: "10px",
+        borderRadius: "15px",
+      },
+    });
+  };
+
+  return (
+    <dialog id="my_modal_seleccionar_cantidad" className="modal">
+      <div className="modal-box rounded-md max-w-6xl">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <h3 className="font-bold text-lg">Perfil seleccionado.</h3>
+        <div>
+          <p className="font-bold text-base pt-2 underline">
+            Datos del perfil seleccionado a cargar.
+          </p>
+          <div className="text-sm flex gap-2 mt-1">
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Codigo <span className="font-bold">{producto.codigo}</span>
+            </p>
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Detalle <span className="font-bold">{producto.detalle}</span>
+            </p>
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Color <span className="font-bold">{producto.color}</span>
+            </p>
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Linea <span className="font-bold">{producto.categoria}</span>
+            </p>
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Stock{" "}
+              <span
+                className={`font-bold ${
+                  producto.stock <= 0 ? "text-red-700" : "text-green-600"
+                }`}
+              >
+                {producto.stock}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div className="mt-2">
+          <p className="font-bold text-base pt-2 underline">
+            Seleccionar cantidad y kgs.
+          </p>
+
+          <div className="grid grid-cols-4 gap-4">
+            <div onClick={handleInputClick} className="cursor-pointer">
+              {isEditable ? (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Kg aproximado de la barra del perfil.
+                  </label>
+                  <input
+                    value={kg_estimado}
+                    onChange={(e) => setKgEstimado(e.target.value)}
+                    onBlur={() => {
+                      setIsEditable(false);
+                    }}
+                    type="text"
+                    className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Kg aproximado de la barra del perfil.
+                  </label>
+
+                  <p className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md">
+                    {Number(kg_estimado) || 0} kg
+                  </p>
+                </div>
+              )}
+            </div>
+            <div onClick={handleInputClick} className="cursor-pointer">
+              {isEditable ? (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Precio del aluminio actual.
+                  </label>
+                  <input
+                    value={precio}
+                    onChange={(e) => setPrecio(e.target.value)}
+                    onBlur={() => {
+                      setIsEditable(false);
+                    }}
+                    type="text"
+                    className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Precio del aluminio actual.
+                  </label>
+
+                  <p className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md">
+                    {formatearDinero(Number(precio)) || 0}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div onClick={handleInputClick} className="cursor-pointer">
+              {isEditable ? (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Cantidad de perfiles/barras
+                  </label>
+                  <input
+                    value={cantidad}
+                    onChange={(e) => setCantidad(e.target.value)}
+                    onBlur={() => {
+                      setIsEditable(false);
+                    }}
+                    type="text"
+                    className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Cantidad de perfiles/barras
+                  </label>
+
+                  <p className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md">
+                    {Number(cantidad) || 0} barras.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="mt-2">
+            <p className="font-bold text-base pt-2 underline">
+              Final kgs, monto.
+            </p>
+            <div className=" flex items-center gap-4">
+              <p className="text-sm font-medium">
+                Kgs:{" "}
+                <span className="font-bold">
+                  {parseFloat(
+                    Number(cantidad) * Number(kg_estimado).toFixed(2)
+                  )}{" "}
+                  kgs
+                </span>
+              </p>
+              <p className="text-sm font-medium">
+                Precio Final:{" "}
+                <span className="font-bold text-blue-600 bg-blue-100/90 py-1 px-2 rounded-md">
+                  {formatearDinero(
+                    Number(
+                      Number(cantidad) * Number(kg_estimado) * Number(precio)
+                    )
+                  )}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <button
+              onClick={() => handleAddProducto(producto)}
+              className="bg-primary py-1.5 px-4 rounded-md text-sm font-semibold text-white group flex gap-3 items-center relative transition-all"
+              type="button"
+            >
+              Cargar perfil <FaCheck />
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  );
+};
+
+const CargarCliente = ({ addToCliente }) => {
+  const { clientes, getClientes } = useClientes();
+
+  const [searchTerm, setSearchTerm] = useState(""); // Para la búsqueda
+
+  // Manejar búsqueda
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value); // Actualizar el término de búsqueda
+  };
+
+  // Filtrar ventas por el término de búsqueda
+  const filteredClientes = clientes.filter(
+    (venta) =>
+      venta?.nombre?.toLowerCase()?.includes(searchTerm?.toLowerCase()) ||
+      venta?.apellido?.toLowerCase()?.includes(searchTerm?.toLowerCase())
+  );
+
+  useEffect(() => {
+    getClientes();
+  }, []);
+
+  return (
+    <dialog id="my_modal_cargar_cliente" className="modal">
+      <div className="modal-box rounded-md max-w-3xl">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <h3 className="font-bold text-lg mb-2">
+          Cargar nuevo cliente al presupuesto/venta.
+        </h3>
+
+        <div className="border border-gray-300 flex items-center gap-2 px-2 py-1.5 text-sm rounded-md w-2/3 max-md:w-full">
+          <input
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            type="text"
+            className="outline-none font-medium w-full"
+            placeholder="Buscar por el cliente, nombre, apellido, etc.."
+          />
+          <FaSearch className="text-gray-700" />
+        </div>
+
+        <div className="overflow-x-auto w-full capitalize">
+          <table className="table">
+            {/* head */}
+            <thead className="font-bold text-sm text-gray-800">
+              <tr>
+                <th className="">Nombre</th>
+                <th className="">Apellido</th>
+              </tr>
+            </thead>
+            <tbody className="uppercase text-xs font-medium">
+              {filteredClientes.map((c) => (
+                <tr>
+                  <td>{c.nombre}</td>
+                  <td>{c.apellido}</td>
+                  <td>
+                    <button
+                      onClick={() => {
+                        {
+                          document
+                            .getElementById("my_modal_cargar_cliente")
+                            .close(),
+                            addToCliente(
+                              c._id,
+                              c.nombre,
+                              c.apellido,
+                              c.email,
+                              c.dni,
+                              c.telefono,
+                              c.localidad,
+                              c.provincia
+                            );
+                        }
+                      }}
+                      className="py-2 px-4 rounded-md bg-primary text-white font-bold"
+                    >
+                      Seleccionar este cliente
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </dialog>
+  );
+};

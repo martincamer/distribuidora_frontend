@@ -10,7 +10,7 @@ const FileDropZoneClientsPdfs = ({
   handleRemoveFile,
 }) => {
   return (
-    <div className="bg-white py-5 px-5 rounded-xl shadow-xl mt-3 border w-full">
+    <div className="bg-white py-5 px-5 rounded-md shadow-xl mt-3 border w-full">
       <div className="p-6 bg-white">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
@@ -23,7 +23,7 @@ const FileDropZoneClientsPdfs = ({
             />
             <label
               htmlFor="file-upload"
-              className="bg-sky-700 text-white px-4 py-2 rounded cursor-pointer hover:bg-sky-700/90"
+              className="bg-primary text-white px-4 py-2 rounded cursor-pointer text-sm font-bold"
             >
               Cargar imagen o archivo
             </label>
@@ -67,7 +67,7 @@ const FileDropZoneClientsPdfs = ({
             <div>
               <div className="text-gray-500">
                 Arrastra y suelta o{" "}
-                <span className="text-sky-700 cursor-pointer">
+                <span className="text-blue-500 font-semibold cursor-pointer">
                   carga tu imagen o archivo aquí
                 </span>
               </div>

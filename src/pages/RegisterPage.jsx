@@ -29,12 +29,6 @@ function Register() {
 
   return (
     <div className="h-screen flex gap-12 items-center border-slate-200 border-[1px] max-md:px-8">
-      {/* <div class="flex items-center gap-2 justify-center bg-blue-500 text-white px-4 py-2 rounded cursor-pointer md:hidden">
-        <BiLogoPlayStore className="text-5xl" />
-        <span className="font-semibold">
-          Descargar la app en PlayStore o AppStore
-        </span>
-      </div> */}
       <img
         className="w-[55%] object-cover opacity-[0.7] h-[100%] max-md:hidden"
         src={img}
@@ -93,7 +87,7 @@ function Register() {
         </form>
         <p className="justify-between flex mt-5 text-sm">
           Ya tienes una cuenta?
-          <Link to="/login" className="text-sky-500 font-semibold underline">
+          <Link to="/login" className="text-gray-900 font-semibold underline">
             Inicia Sesión
           </Link>
         </p>

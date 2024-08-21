@@ -5,7 +5,6 @@ import { useProductos } from "../../context/ProductosContext";
 import { generateRandomNumericId } from "../../helpers/generateId";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
   const { productos, getProductos } = useProductos();
@@ -30,7 +29,7 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
   };
 
   // Filtrar ventas por el término de búsqueda
-  const filteredVentas = currentProductos.filter(
+  const filteredVentas = productos.filter(
     (venta) =>
       venta?.codigo?.toLowerCase().includes(searchTerm?.toLowerCase()) ||
       venta?.detalle?.toLowerCase().includes(searchTerm?.toLowerCase())
@@ -77,13 +76,13 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
       producto.imagen,
       producto.color,
       producto.categoria,
-      producto.kg_barra_estimado,
+      productoData[index]?.kilogramos,
       parseFloat(
-        data.kilogramos || producto.kg_barra_estimado * data.cantidad
+        data.kilogramos || productoData[index]?.kilogramos * data.cantidad
       ) || 0,
       parseFloat(data.precio) || 0,
       Number(
-        (parseFloat(data.kilogramos || producto.kg_barra_estimado) || 0) *
+        (parseFloat(data.kilogramos || productoData[index]?.kilogramos) || 0) *
           (parseFloat(data.cantidad) || 0)
       ) * (parseFloat(data.precio) || 0),
       parseFloat(data.cantidad) || 0,
@@ -143,150 +142,57 @@ export default function ModalProductos({ isOpen, closeModal, addToProducto }) {
                     />
                   </div>
 
-                  <div className="overflow-x-auto w-full capitalize">
+                  <div className="overflow-x-auto w-full">
                     <table className="table table-auto w-full">
                       <thead>
-                        <tr>
-                          <th className="font-bold text-sm uppercase">
-                            Código
-                          </th>
-                          <th className="font-bold text-sm uppercase">
-                            Detalle
-                          </th>
-                          <th className="font-bold text-sm uppercase">
-                            Categoria
-                          </th>
-                          <th className="font-bold text-sm uppercase">Color</th>
-                          <th className="font-bold text-sm uppercase">
-                            Stock/Fabrica
-                          </th>
-                          <th className="font-bold text-sm uppercase">
-                            Kilogramos/peso barra
-                          </th>
-                          <th className="font-bold text-sm uppercase">
-                            Cantidad
-                          </th>
-                          <th className="font-bold text-sm uppercase">
-                            Precio del kg
-                          </th>
-                          <th className="font-bold text-sm uppercase">
-                            Acción
-                          </th>
+                        <tr className="text-gray-800 text-sm font-bold">
+                          <th>Código</th>
+                          <th>Detalle</th>
+                          <th>Categoria</th>
+                          <th>Color</th>
+                          <th>Stock/Fabrica</th>
+                          {/* <th>Kilogramos/peso barra</th> */}
+                          <th>Acción</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="text-xs font-medium uppercase">
                         {filteredVentas.map((producto, index) => (
                           <tr key={index}>
-                            <th className="text-sm">{producto.codigo}</th>
-                            <th className="text-sm uppercase">
-                              {producto.detalle}
-                            </th>
-                            <th className="text-sm uppercase">
-                              {producto.categoria}
-                            </th>
-                            <th className="text-sm">{producto.color}</th>
-                            <th className="text-sm text-sky-500">
-                              {producto.stock}
-                            </th>
-                            <th className="text-sm">
-                              <input
-                                type="text"
-                                placeholder="PESO BARRA KG"
-                                value={
-                                  productoData[index]?.kilogramos ||
-                                  producto.kg_barra_estimado
-                                }
-                                onChange={(e) =>
-                                  handleInputChange(
-                                    index,
-                                    "kilogramos",
-                                    e.target.value
-                                  )
-                                }
-                                className="bg-gray-200 rounded-xl py-2 px-3 placeholder:font-bold placeholder:text-slate-400 text-gray-700 outline-none focus:outline-sky-500"
-                              />
-                            </th>
-                            <th>
-                              <input
-                                type="text"
-                                placeholder="CANTIDAD BARRAS"
-                                value={productoData[index]?.cantidad || ""}
-                                onChange={(e) =>
-                                  handleInputChange(
-                                    index,
-                                    "cantidad",
-                                    e.target.value
-                                  )
-                                }
-                                className="bg-gray-200 rounded-xl py-2 px-3 placeholder:font-bold placeholder:text-slate-400 text-gray-700 outline-none focus:outline-sky-500"
-                              />
-                            </th>
-                            <th>
-                              <input
-                                type="text"
-                                placeholder="$ PRECIO ARS"
-                                value={productoData[index]?.precio || ""}
-                                onChange={(e) =>
-                                  handleInputChange(
-                                    index,
-                                    "precio",
-                                    e.target.value
-                                  )
-                                }
-                                className="bg-gray-200 rounded-xl py-2 px-3 placeholder:font-bold placeholder:text-slate-400 text-gray-700 outline-none focus:outline-sky-500"
-                              />
-                            </th>
+                            <th className="">{producto.codigo}</th>
+                            <td className="">{producto.detalle}</td>
+                            <td className="">{producto.categoria}</td>
+                            <td className="">{producto.color}</td>
+                            <td className="">
+                              <div className="flex">
+                                <p
+                                  className={`${
+                                    producto.stock <= 0
+                                      ? "bg-red-100/90 text-red-700"
+                                      : "bg-green-100/90 text-green-700"
+                                  } py-1.5 px-2 rounded-md font-bold`}
+                                >
+                                  {producto.stock}
+                                </p>
+                              </div>
+                            </td>
+                            {/* <th className="text-blue-500">
+                              {producto.kg_barra_estimado} kgs
+                            </th> */}
+
                             <td>
                               <button
-                                className="bg-sky-700 text-white py-2 px-6 rounded-full font-semibold"
-                                onClick={() =>
-                                  handleAddProducto(index, producto)
-                                }
+                                className="bg-primary text-white py-1.5 px-4 rounded-md text-sm font-semibold"
+                                // onClick={() =>
+                                //   handleAddProducto(index, producto)
+                                // }
                               >
-                                Agregar
+                                Seleccionar
                               </button>
                             </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                  </div>
-
-                  <div className="mt-3 flex justify-center items-center space-x-2">
-                    <button
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.max(prev - 1, 1))
-                      }
-                      disabled={currentPage === 1}
-                      className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
-                    >
-                      <FaArrowLeft /> {/* Icono para la flecha izquierda */}
-                    </button>
-                    <ul className="flex space-x-2">
-                      {getPageNumbers().map((number) => (
-                        <li key={number} className="cursor-pointer">
-                          <button
-                            onClick={() => paginate(number)}
-                            className={`${
-                              currentPage === number
-                                ? "bg-white"
-                                : "bg-gray-300"
-                            } py-2 px-3 rounded-md text-sm text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 font-bold`}
-                          >
-                            {number} {/* Número de página */}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
-                    <button
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                      }
-                      disabled={currentPage === totalPages}
-                      className="bg-white py-2 px-3 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-300 focus:outline-none focus:bg-gray-100 cursor-pointer"
-                    >
-                      <FaArrowRight /> {/* Icono para la flecha derecha */}
-                    </button>
                   </div>
                 </div>
               </Dialog.Panel>
