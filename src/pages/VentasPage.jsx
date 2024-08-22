@@ -435,7 +435,7 @@ const ModalCrearVentaPresupuesto = () => {
   const [clienteSeleccionado, setClienteSeleccionado] = useState([]);
   const [productosSeleccionados, setProductosSeleccionados] = useState([]);
 
-  const { createVenta, getVentas } = useVentas(); // Cambia al método para crear venta
+  const { createVenta, getVentas, error, setVentas } = useVentas(); // Cambia al método para crear venta
 
   const {
     register,
@@ -461,6 +461,8 @@ const ModalCrearVentaPresupuesto = () => {
 
       const res = await createVenta(ventaData); // Crea la nueva venta con el formulario
 
+      document.getElementById("my_modal_crear_venta_presupuesto").close();
+
       toast.success("Creado correctamente", {
         position: "top-center",
         autoClose: 500,
@@ -474,7 +476,6 @@ const ModalCrearVentaPresupuesto = () => {
           padding: "10px",
           borderRadius: "15px",
         },
-        // transition: "Bounce",
       });
     } catch (error) {
       console.error("Error creando venta:", error);
@@ -589,51 +590,51 @@ const ModalCrearVentaPresupuesto = () => {
   // Convertir el objeto a un arreglo
   const groupedProducts = Object.values(groupedByCategoryAndColor);
 
-  useEffect(() => {
-    if (tipo === "presupuesto") {
-      toast(
-        "Acuerdate que el presupuesto no descuenta el stock, ni se suma dinero a los clientes",
-        {
-          position: "bottom-center",
-          autoClose: 8000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          style: {
-            padding: "10px",
-            fontWeight: "bold",
-            borderRadius: "15px",
-            border: "1px solid rgb(229 231 235)",
-          },
-          // transition: "Bounce",
-        }
-      );
-    } else if (tipo === "venta") {
-      toast(
-        "Es una venta descontara el stock y sumara el total al cliente seleccionado al generar la venta.",
-        {
-          position: "bottom-center",
-          autoClose: 8000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          style: {
-            padding: "10px",
-            fontWeight: "bold",
-            borderRadius: "15px",
-            border: "1px solid rgb(229 231 235)",
-          },
-          // transition: "Bounce",
-        }
-      );
-    }
-  }, [tipo]);
+  // useEffect(() => {
+  //   if (tipo === "presupuesto") {
+  //     toast(
+  //       "Acuerdate que el presupuesto no descuenta el stock, ni se suma dinero a los clientes",
+  //       {
+  //         position: "bottom-center",
+  //         autoClose: 8000,
+  //         hideProgressBar: true,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //         style: {
+  //           padding: "10px",
+  //           fontWeight: "bold",
+  //           borderRadius: "15px",
+  //           border: "1px solid rgb(229 231 235)",
+  //         },
+  //         // transition: "Bounce",
+  //       }
+  //     );
+  //   } else if (tipo === "venta") {
+  //     toast(
+  //       "Es una venta descontara el stock y sumara el total al cliente seleccionado al generar la venta.",
+  //       {
+  //         position: "bottom-center",
+  //         autoClose: 8000,
+  //         hideProgressBar: true,
+  //         closeOnClick: true,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //         style: {
+  //           padding: "10px",
+  //           fontWeight: "bold",
+  //           borderRadius: "15px",
+  //           border: "1px solid rgb(229 231 235)",
+  //         },
+  //         // transition: "Bounce",
+  //       }
+  //     );
+  //   }
+  // }, [tipo]);
 
   const calculateFinalValue = (productos) => {
     return productos.reduce((total, producto) => {
@@ -672,9 +673,20 @@ const ModalCrearVentaPresupuesto = () => {
           <div className="bg-white my-5 border rounded-md flex flex-col gap-3">
             <div className="bg-gray-800 py-4 rounded-t-md">
               <p className="text-white text-center text-base font-bold">
-                Formulario para crear una perfil.
+                Formulario para crear{" "}
+                {(tipo === "presupuesto" && "un presupusto") ||
+                  (tipo === "venta" && "una nueva venta")}
+                .
               </p>
             </div>
+
+            {error && (
+              <div className="flex justify-center items-center">
+                <p className="bg-gray-800 py-2 px-4 rounded-md text-red-300  font-bold text-sm">
+                  {error}
+                </p>
+              </div>
+            )}
 
             <div className="px-10 py-8 flex flex-col gap-5">
               <form
@@ -1203,7 +1215,6 @@ const SeleccionarProductos = ({ addToProducto }) => {
                 <th>Categoria</th>
                 <th>Color</th>
                 <th>Stock/Fabrica</th>
-                {/* <th>Kilogramos/peso barra</th> */}
                 <th>Acción</th>
               </tr>
             </thead>
@@ -1337,7 +1348,7 @@ const SeleccionarCantidadProducto = ({
           <p className="font-bold text-base pt-2 underline">
             Datos del perfil seleccionado a cargar.
           </p>
-          <div className="text-sm flex gap-2 mt-1">
+          <div className="text-sm flex gap-2 mt-1 uppercase font-medium">
             <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
               Codigo <span className="font-bold">{producto.codigo}</span>
             </p>

@@ -117,7 +117,7 @@ export function ClientesPage() {
                       <div className="flex">
                         <p
                           className={`py-1 px-2 rounded-md font-bold ${
-                            p.total >= 0
+                            p.total <= 0
                               ? "bg-green-100/90 text-green-700"
                               : "bg-red-100/90 text-red-700 "
                           }`}
@@ -130,7 +130,7 @@ export function ClientesPage() {
                       <div className="flex">
                         <p
                           className={`py-1 px-2 rounded-md font-bold ${
-                            p.total >= 0
+                            p.total <= 0
                               ? "bg-green-100/90 text-green-700"
                               : "bg-red-100/90 text-red-700 "
                           }`}

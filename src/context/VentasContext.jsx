@@ -25,7 +25,7 @@ export const useVentas = () => {
 // Proveedor del contexto de ventas
 export function VentasProvider({ children }) {
   const [ventas, setVentas] = useState([]); // Estado para guardar ventas
-  const [error, setError] = useState([]);
+  const [error, setError] = useState("");
 
   // Obtener todas las ventas
   const getVentas = async () => {
@@ -80,7 +80,10 @@ export function VentasProvider({ children }) {
         theme: "light",
       });
     } catch (error) {
-      console.error("Error al crear venta:", error); // Manejo de errores
+      setError(error?.response?.data?.message); // Manejo de errores
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
@@ -95,7 +98,6 @@ export function VentasProvider({ children }) {
   };
 
   const navigate = useNavigate();
-
   // Actualizar una venta por ID
   const updateVenta = async (id, venta) => {
     try {
@@ -118,11 +120,9 @@ export function VentasProvider({ children }) {
         theme: "light",
       });
 
-      setTimeout(() => {
-        navigate("/ventas");
-      }, 3000);
+      navigate("/ventas");
     } catch (error) {
-      setError(error.response.data.message);
+      setError(error.response.data.message); // Manejo de errores
       setTimeout(() => {
         setError("");
       }, 3000);

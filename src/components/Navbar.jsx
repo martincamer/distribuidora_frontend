@@ -40,14 +40,11 @@ export function Navbar() {
             </button>
             <ul
               tabIndex={0}
-              className="dropdown-content menu bg-base-100 w-52 p-1 rounded-md shadow-xl"
+              className="dropdown-content menu bg-base-100 w-60 p-1 rounded-md shadow-xl"
             >
               <li className="hover:bg-gray-800 hover:text-white rounded-md text-xs font-semibold">
-                <Link to={"/ventas"}>Sector de ventas/pre.</Link>
+                <Link to={"/ventas"}>Sector de ventas/presupuestos</Link>
               </li>
-              <li className="hover:bg-gray-800 hover:text-white rounded-md text-xs font-semibold">
-                <Link to={"/crear-venta"}>Generar venta o prep.</Link>
-              </li>{" "}
             </ul>
           </div>
           <Link
@@ -55,6 +52,12 @@ export function Navbar() {
             to={"/clientes"}
           >
             Clientes
+          </Link>{" "}
+          <Link
+            className="hover:bg-gray-700 text-sm text-white rounded-md  py-2 px-4 font-semibold transition-all"
+            to={"/perfil"}
+          >
+            Datos/facturación
           </Link>
         </div>
       </nav>

@@ -19,7 +19,7 @@ export function CrearVenta() {
   const [clienteSeleccionado, setClienteSeleccionado] = useState([]);
   const [productosSeleccionados, setProductosSeleccionados] = useState([]);
 
-  const { createVenta, getVentas } = useVentas(); // Cambia al método para crear venta
+  const { createVenta, getVentas, error } = useVentas(); // Cambia al método para crear venta
   const navigate = useNavigate(); // Para redirigir después de crear
 
   const {

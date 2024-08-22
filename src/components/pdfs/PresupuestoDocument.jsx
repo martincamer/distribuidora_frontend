@@ -136,7 +136,7 @@ export const PresupuestoDocument = ({ datos, user }) => {
         >
           <Image
             style={{
-              width: "120px",
+              width: "60|px",
             }}
             src={
               user?.imagen_facturacion ||
@@ -152,15 +152,27 @@ export const PresupuestoDocument = ({ datos, user }) => {
             >
               {datos?.tipo === "venta" ? "Factura de venta" : "Presupuesto"}
             </Text>
-            <Text
-              style={{
-                fontFamily: "Roboto",
-                fontWeight: "medium",
-                fontSize: 12,
-              }}
-            >
-              N ° {invoiceNumber}
-            </Text>
+            <View style={{ display: "flex", flexDirection: "row", gap: 1 }}>
+              <Text
+                style={{
+                  fontFamily: "Roboto",
+                  fontWeight: "medium",
+                  fontSize: 12,
+                }}
+              >
+                Referencia:{" "}
+              </Text>
+              <Text
+                style={{
+                  fontFamily: "Roboto",
+                  fontWeight: "bold",
+                  fontSize: 12,
+                }}
+              >
+                {datos._id}
+              </Text>
+              {/* N ° {invoiceNumber} */}
+            </View>
           </View>
         </View>
 
