@@ -15,23 +15,49 @@ export function HomeApp() {
   useEffect(() => {
     getVentas(); // Obtiene las ventas cuando el componente se monta
   }, []); // No olvides agregar dependencias necesarias para evitar advertencias
-  useEffect(() => {
-    const now = dayjs();
-    const currentMonth = now.month();
-    const currentYear = now.year();
 
-    const filtrados = ventas.filter((item) => {
-      const itemDate = dayjs(item.date);
-      return (
-        itemDate.month() === currentMonth && itemDate.year() === currentYear
-      );
-    });
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1; // Los meses son 0-based, por eso sumamos 1
 
-    setFiltrados(filtrados);
-  }, [ventas]);
+  // Inicializar el estado con el año y mes actuales
+  const [selectedYear, setSelectedYear] = useState(currentYear.toString());
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth.toString());
+
+  const handleYearChange = (e) => {
+    setSelectedYear(e.target.value);
+  };
+
+  const handleMonthChange = (e) => {
+    setSelectedMonth(e.target.value);
+  };
+
+  const filteredComprobantes = comprobante.filter((c) => {
+    const date = new Date(c.date);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Months are 0-based
+
+    return (
+      (selectedYear ? year === parseInt(selectedYear, 10) : true) &&
+      (selectedMonth ? month === parseInt(selectedMonth, 10) : true)
+    );
+  });
+
+  const filteredVentas = ventas.filter((c) => {
+    const date = new Date(c.date);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Months are 0-based
+
+    return (
+      (selectedYear ? year === parseInt(selectedYear, 10) : true) &&
+      (selectedMonth ? month === parseInt(selectedMonth, 10) : true)
+    );
+  });
 
   // Filtrar las ventas que son de tipo 'venta'
-  const ventasDeTipoVenta = filtrados.filter((venta) => venta.tipo === "venta");
+  const ventasDeTipoVenta = filteredVentas.filter(
+    (venta) => venta.tipo === "venta"
+  );
 
   // Calcular el total de ganancias para cada venta de tipo 'venta'
   const totalVentas = ventasDeTipoVenta.map((venta) => {
@@ -64,12 +90,12 @@ export function HomeApp() {
     getComprobantesDelMesRequest();
   }, []);
 
-  const totalGanancias = comprobante.reduce((total, c) => {
+  const totalGanancias = filteredComprobantes.reduce((total, c) => {
     return Number(total) + Number(c.total);
   }, 0);
 
   // console.log(comprobante);
-  const totalPorCategoriaColor = filtrados.reduce((acumulador, venta) => {
+  const totalPorCategoriaColor = filteredVentas.reduce((acumulador, venta) => {
     venta.productos.forEach((producto) => {
       const { categoria, color, total_dinero, total_kilogramos } = producto;
 
@@ -99,11 +125,52 @@ export function HomeApp() {
 
   return (
     <section className="mx-10 my-10 max-md:mx-4">
+      <div className="flex gap-2 mb-4">
+        <select
+          className="outline-none border border-gray-300 py-2 px-2 rounded-md text-sm font-bold"
+          onChange={handleYearChange}
+          value={selectedYear}
+        >
+          <option className="font-bold" value="">
+            Seleccione el año
+          </option>
+          {/* Generar opciones de años dinámicamente */}
+          {Array.from(
+            new Set(comprobante.map((c) => new Date(c.date).getFullYear()))
+          ).map((year) => (
+            <option className="font-semibold" key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+
+        {/* Selector para mes */}
+        <select
+          className="outline-none border border-gray-300 py-2 px-2 rounded-md text-sm font-bold capitalize"
+          onChange={handleMonthChange}
+          value={selectedMonth}
+        >
+          <option className="font-bold" value="">
+            Seleccione el mes
+          </option>
+          {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+            <option
+              className="font-semibold capitalize"
+              key={month}
+              value={month}
+            >
+              {new Date(0, month - 1).toLocaleString("es-ES", {
+                month: "long",
+              })}
+            </option>
+          ))}
+        </select>
+      </div>
       <div className="grid grid-cols-3 gap-3 max-md:grid-cols-1">
         <div className="stats items-center scroll-bar max-md:scroll-hidden border border-gray-300">
           <div className="stat">
             <div className="stat-title font-semibold">
-              Total ganancias del mes
+              Total ganancias generadas
             </div>
             <div className="stat-value text-green-500">
               {" "}
@@ -139,7 +206,7 @@ export function HomeApp() {
         <div className="stats items-center scroll-bar max-md:scroll-hidden border border-gray-300">
           <div className="stat">
             <div className="stat-title font-semibold">
-              Total generado en ventas del mes
+              Total generado en ventas
             </div>
             <div className="stat-value text-blue-500">
               {" "}
@@ -163,8 +230,8 @@ export function HomeApp() {
                 strokeWidth={9}
                 // backgroundPadding={"#22c55e"}
                 styles={buildStyles({
-                  textColor: "rgb(2 135 224)",
-                  pathColor: "rgb(2 135 224)",
+                  textColor: "#3b82f6",
+                  pathColor: "#3b82f6",
                   trailColor: "#e5e7eb",
                 })}
               />
@@ -174,12 +241,13 @@ export function HomeApp() {
 
         <div className="stats items-center scroll-bar max-md:scroll-hidden border border-gray-300">
           <div className="stat">
-            <div className="stat-title font-semibold">
-              Total de ventas del mes
+            <div className="stat-title font-semibold">Total ventas</div>
+            <div className="stat-value text-primary">
+              {" "}
+              {filteredVentas.length}
             </div>
-            <div className="stat-value text-primary"> {filtrados.length}</div>
             <div className="stat-desc font-bold text-primarymt-1">
-              ↗︎ {Number(filtrados.length & 100).toFixed(2)}%
+              ↗︎ {Number(filteredVentas.length & 100).toFixed(2)}%
             </div>
           </div>
 
@@ -203,15 +271,15 @@ export function HomeApp() {
       <div className="mt-12  grid grid-cols-2 gap-4 max-md:grid-cols-1">
         <div className="bg-white py-5 px-5 rounded-md border-gray-300 border">
           <p className=" text-gray-800 px-5 font-bold">
-            Ventas generadas mensuales grafico
+            Ventas generadas grafico.
           </p>
-          <VentasAreaChart ventas={filtrados} />
+          <VentasAreaChart ventas={filteredVentas} />
         </div>
         <div className="bg-white py-5 px-5 rounded-md border-gray-300 border">
           <p className=" text-gray-800 px-5 font-bold">
-            Comprobantes cargados mensuales grafico
+            Ganancias generadas grafico.
           </p>
-          <ComprobantesLineChart datos={comprobante} />
+          <ComprobantesLineChart datos={filteredComprobantes} />
         </div>
       </div>
 
@@ -220,32 +288,37 @@ export function HomeApp() {
           <div className="text-gray-800 font-semibold text-sm mb-2 pb-2 mt-4">
             PROGRESO EN VENTAS/GANANCIAS POR CATEGORIA
           </div>
-          <div className="grid grid-cols-2 gap-4 max-md:grid-cols-1">
+          <div className="grid grid-cols-3 gap-4 max-md:grid-cols-1">
             {Object.entries(totalPorCategoriaColor).map(
               ([categoria, colores]) => (
                 <div
-                  className="flex flex-col gap-1 border-gray-200 border py-3 px-5 rounded-xl cursor-pointer hover:shadow-lg transition-all"
+                  className="flex flex-col gap-1 border-gray-300 border py-3 px-5 rounded-md cursor-pointer transition-all"
                   key={categoria}
                 >
-                  <h3 className="uppercase underline">{categoria}</h3>
+                  <h3 className="uppercase underline font-bold">{categoria}</h3>
                   {Object.entries(colores).map(([color, value]) => {
                     const { total_dinero, total_kilogramos } = value;
+
                     const porcentajeDinero =
-                      (total_dinero / totalGeneralDinero) * 100;
+                      (total_dinero / totalGeneralDinero) * 10.0;
+
                     const porcentajeKg =
-                      (total_kilogramos / totalGeneralKg) * 100;
+                      (total_kilogramos / totalGeneralKg) * 15.0;
 
                     return (
                       <div key={color}>
-                        <p className="uppercase font-semibold text-slate-600">
+                        <p className="uppercase font-semibold text-gray-800">
                           {color}{" "}
-                          <span className="font-normal text-blue-700">
+                          <span className="font-bold text-blue-500">
                             {total_dinero.toLocaleString("es-ar", {
                               style: "currency",
                               currency: "ARS",
                             })}
                           </span>{" "}
-                          | {total_kilogramos.toFixed(2)} kg
+                          |{" "}
+                          <span className="text-green-400">
+                            {total_kilogramos.toFixed(2)} kg
+                          </span>
                         </p>
                         {/* Progreso por Dinero */}
                         <progress

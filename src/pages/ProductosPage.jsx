@@ -6,7 +6,7 @@ import { BsFolderPlus } from "react-icons/bs";
 import { TableProducts } from "../components/products/TableProducts";
 import { IoClose, IoFilterOutline } from "react-icons/io5";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoIosAddCircleOutline, IoIosMore } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { Message } from "../components/ui/Message";
 import { FaDeleteLeft } from "react-icons/fa6";
@@ -176,6 +176,7 @@ export function ProductosPage() {
               <th>Color</th>
               <th>Linea</th>
               <th>Kg aprox.</th>
+              <th>Tipo</th>
               <th>Stock actual</th>
               <th>Notas</th>
             </tr>
@@ -189,6 +190,13 @@ export function ProductosPage() {
                 <td>{p.color}</td>
                 <td>{p.categoria}</td>
                 <td>{p.kg_barra_estimado} kgs.</td>
+                <td>
+                  <div className="flex">
+                    <p className="font-bold bg-blue-600 py-1.5 text-white px-4 rounded-md">
+                      {p.tipo}
+                    </p>
+                  </div>
+                </td>
                 <td>
                   <div className="flex">
                     <p
@@ -222,7 +230,7 @@ export function ProductosPage() {
                       role="button"
                       className="text-2xl hover:bg-gray-800 py-2 px-2 hover:text-white rounded-full transition-all"
                     >
-                      <MdOutlineMenuOpen />
+                      <IoIosMore className="text-2xl" />
                     </div>
                     <ul
                       tabIndex={0}
@@ -241,7 +249,23 @@ export function ProductosPage() {
                           type="button"
                           className="font-semibold text-xs hover:bg-gray-800 hover:text-white rounded-md"
                         >
-                          Actualizar producto
+                          Actualizar perfil
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => {
+                            {
+                              handleObtenerId(p._id),
+                                document
+                                  .getElementById("my_modal_eliminar")
+                                  .showModal();
+                            }
+                          }}
+                          type="button"
+                          className="font-semibold text-xs hover:bg-gray-800 hover:text-white rounded-md"
+                        >
+                          Eliminar perfil
                         </button>
                       </li>
                     </ul>
@@ -257,6 +281,7 @@ export function ProductosPage() {
       <CrearNuevasCategorias />
       <CrearNuevosColores />
       <ModalEditarPerfil idObtenida={idObtenida} />
+      <ModalEliminar idObtenida={idObtenida} />
     </div>
   );
 }
@@ -273,7 +298,7 @@ const ModalCrearPerfil = () => {
     error,
   } = useProductos();
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, watch } = useForm();
 
   const [uploadedFile, setUploadedFile] = useState(null);
   const [dragging, setDragging] = useState(false);
@@ -353,6 +378,9 @@ const ModalCrearPerfil = () => {
   const handleRemoveFile = () => {
     setUploadedFile(null);
   };
+
+  const tipo = watch("tipo");
+
   return (
     <dialog id="my_modal_crear_perfil_aluminio" className="modal">
       <div className="modal-box rounded-md max-w-full scroll-bar">
@@ -388,7 +416,6 @@ const ModalCrearPerfil = () => {
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
                     La descripción
@@ -399,8 +426,33 @@ const ModalCrearPerfil = () => {
                     placeholder="Ej: Marco pesado"
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
+                </div>{" "}
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Seleccionar el tipo
+                  </label>
+                  <select
+                    {...register("tipo")}
+                    type="text"
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium capitalize"
+                  >
+                    <option className="capitalize font-bold">
+                      Seleccionar el tipo
+                    </option>
+                    <option
+                      value={"unidad"}
+                      className="capitalize font-semibold"
+                    >
+                      Unidad
+                    </option>
+                    <option
+                      value={"paquete"}
+                      className="capitalize font-semibold"
+                    >
+                      Paquete
+                    </option>
+                  </select>
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
                     Seleccionar un color
@@ -410,15 +462,16 @@ const ModalCrearPerfil = () => {
                     type="text"
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium capitalize"
                   >
-                    <option className="capitalize">Seleccionar el color</option>
+                    <option className="capitalize font-bold">
+                      Seleccionar el color
+                    </option>
                     {colores.map((c) => (
-                      <option className="capitalize" key={c._id}>
+                      <option className="capitalize font-semibold" key={c._id}>
                         {c.name}
                       </option>
                     ))}
                   </select>
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
                     Seleccionar una categoria
@@ -428,20 +481,19 @@ const ModalCrearPerfil = () => {
                     type="text"
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   >
-                    <option className="capitalize">
+                    <option className="capitalize font-bold">
                       Seleccionar la categoria
                     </option>
                     {categorias.map((c) => (
-                      <option className="capitalize" key={c._id}>
+                      <option className="capitalize font-semibold" key={c._id}>
                         {c.detalle}
                       </option>
                     ))}
                   </select>
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
-                    Kg del perfil
+                    {tipo === "unidad" ? "kg de la unidad" : "Kg del paquete"}
                   </label>
                   <input
                     {...register("kg_barra_estimado")}
@@ -450,10 +502,11 @@ const ModalCrearPerfil = () => {
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
-                    Stock del producto en fabrica
+                    {tipo === "unidad"
+                      ? "Stock de perfiles"
+                      : "Stock de paquetes"}
                   </label>
                   <input
                     {...register("stock")}
@@ -462,10 +515,11 @@ const ModalCrearPerfil = () => {
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
-                    Stock del producto minimo
+                    {tipo === "unidad"
+                      ? "Stock de perfiles minimo"
+                      : "Stock de paquetes minimo"}
                   </label>
                   <input
                     {...register("stock_minimo")}
@@ -474,10 +528,11 @@ const ModalCrearPerfil = () => {
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
-                    Stock del producto maximo
+                    {tipo === "unidad"
+                      ? "Stock de perfiles maximo"
+                      : "Stock de paquetes maximo"}
                   </label>
                   <input
                     {...register("stock_maximo")}
@@ -750,7 +805,7 @@ const ModalEditarPerfil = ({ idObtenida }) => {
     getProducto,
   } = useProductos();
 
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue, watch } = useForm();
 
   const [uploadedFile, setUploadedFile] = useState(null);
   const [dragging, setDragging] = useState(false);
@@ -759,6 +814,8 @@ const ModalEditarPerfil = ({ idObtenida }) => {
     getColores();
     getCategorias();
   }, []);
+
+  const tipo = watch("tipo");
 
   useEffect(() => {
     const loadData = async () => {
@@ -881,7 +938,6 @@ const ModalEditarPerfil = ({ idObtenida }) => {
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
                     La descripción
@@ -892,8 +948,33 @@ const ModalEditarPerfil = ({ idObtenida }) => {
                     placeholder="Ej: Marco pesado"
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
+                </div>{" "}
+                <div className="flex flex-col gap-2">
+                  <label className="text-sm font-bold text-slate-700">
+                    Seleccionar el tipo
+                  </label>
+                  <select
+                    {...register("tipo")}
+                    type="text"
+                    className="text-sm border rounded-md py-2 px-4 outline-none font-medium capitalize"
+                  >
+                    <option className="capitalize font-bold">
+                      Seleccionar el tipo
+                    </option>
+                    <option
+                      value={"unidad"}
+                      className="capitalize font-semibold"
+                    >
+                      Unidad
+                    </option>
+                    <option
+                      value={"paquete"}
+                      className="capitalize font-semibold"
+                    >
+                      Paquete
+                    </option>
+                  </select>
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
                     Seleccionar un color
@@ -903,15 +984,16 @@ const ModalEditarPerfil = ({ idObtenida }) => {
                     type="text"
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium capitalize"
                   >
-                    <option className="capitalize">Seleccionar el color</option>
+                    <option className="capitalize font-bold">
+                      Seleccionar el color
+                    </option>
                     {colores.map((c) => (
-                      <option className="capitalize" key={c._id}>
+                      <option className="capitalize font-semibold" key={c._id}>
                         {c.name}
                       </option>
                     ))}
                   </select>
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
                     Seleccionar una categoria
@@ -921,20 +1003,19 @@ const ModalEditarPerfil = ({ idObtenida }) => {
                     type="text"
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   >
-                    <option className="capitalize">
+                    <option className="capitalize font-bold">
                       Seleccionar la categoria
                     </option>
                     {categorias.map((c) => (
-                      <option className="capitalize" key={c._id}>
+                      <option className="capitalize font-semibold" key={c._id}>
                         {c.detalle}
                       </option>
                     ))}
                   </select>
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
-                    Kg del perfil
+                    {tipo === "unidad" ? "kg de la unidad" : "Kg del paquete"}
                   </label>
                   <input
                     {...register("kg_barra_estimado")}
@@ -943,10 +1024,11 @@ const ModalEditarPerfil = ({ idObtenida }) => {
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
-                    Stock del producto en fabrica
+                    {tipo === "unidad"
+                      ? "Stock de perfiles"
+                      : "Stock de paquetes"}
                   </label>
                   <input
                     {...register("stock")}
@@ -955,10 +1037,11 @@ const ModalEditarPerfil = ({ idObtenida }) => {
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
-                    Stock del producto minimo
+                    {tipo === "unidad"
+                      ? "Stock de perfiles minimo"
+                      : "Stock de paquetes minimo"}
                   </label>
                   <input
                     {...register("stock_minimo")}
@@ -967,10 +1050,11 @@ const ModalEditarPerfil = ({ idObtenida }) => {
                     className="text-sm border rounded-md py-2 px-4 outline-none font-medium"
                   />
                 </div>
-
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-bold text-slate-700">
-                    Stock del producto maximo
+                    {tipo === "unidad"
+                      ? "Stock de perfiles maximo"
+                      : "Stock de paquetes maximo"}
                   </label>
                   <input
                     {...register("stock_maximo")}
@@ -1006,6 +1090,60 @@ const ModalEditarPerfil = ({ idObtenida }) => {
             </form>
           </div>
         </div>
+      </div>
+    </dialog>
+  );
+};
+
+const ModalEliminar = ({ idObtenida }) => {
+  const { deleleteProducto } = useProductos();
+  return (
+    <dialog id="my_modal_eliminar" className="modal">
+      <div className="modal-box rounded-md max-w-md">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <form>
+          <div>
+            <img
+              className="w-44 mx-auto"
+              src="https://app.holded.com/assets/img/document/doc_delete.png"
+            />
+          </div>
+          <div className="font-semibold text-sm text-gray-400 text-center">
+            REFERENCIA {idObtenida}
+          </div>
+          <div className="font-semibold text-[#FD454D] text-lg text-center">
+            Eliminar el perfil..
+          </div>
+          <div className="text-sm text-gray-400 text-center mt-1">
+            El perfil no podra ser recuperado nunca mas...
+          </div>
+          <div className="mt-4 text-center w-full px-16">
+            <button
+              type="button"
+              onClick={() => {
+                deleleteProducto(idObtenida),
+                  document.getElementById("my_modal_eliminar").close();
+              }}
+              className="bg-red-500 py-1 px-4 text-center font-bold text-white text-sm rounded-md w-full"
+            >
+              Confirmar
+            </button>{" "}
+            <button
+              type="button"
+              onClick={() => {
+                document.getElementById("my_modal_eliminar").close();
+              }}
+              className="bg-orange-100 py-1 px-4 text-center font-bold text-orange-600 mt-2 text-sm rounded-md w-full"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
       </div>
     </dialog>
   );

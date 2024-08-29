@@ -7,6 +7,7 @@ import {
   updateClienteRequest,
   agregarComprobante,
   getClienteComprobantesRequest,
+  updateClienteTotalRequest,
 } from "../api/clientes"; // Asegúrate de tener las funciones de solicitud correctas
 import { toast } from "react-toastify";
 
@@ -137,6 +138,41 @@ export function ClientesProvider({ children }) {
     }
   };
 
+  // Actualizar solo el campo 'total' de un cliente
+  const updateTotal = async (id, newTotal) => {
+    try {
+      const res = await updateClienteTotalRequest(id, newTotal);
+
+      // Actualiza el cliente en el estado
+      const clientesActualizados = clientes.map((c) =>
+        c._id === id ? res.data : c
+      );
+
+      setClientes(clientesActualizados);
+
+      toast.success("Total del cliente actualizado correctamente", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("Error al actualizar el total del cliente", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+    }
+  };
+
   return (
     <ClientesContext.Provider
       value={{
@@ -149,6 +185,7 @@ export function ClientesProvider({ children }) {
         updateCliente,
         createComprobante,
         getComprobantesMensuales,
+        updateTotal,
       }}
     >
       {children}

@@ -23,3 +23,7 @@ export const getClienteComprobantesRequest = async (id) =>
 
 export const agregarComprobante = async (id, data) =>
   axios.patch(`/clientes/${id}/comprobantes`, data);
+
+// Actualizar solo el campo 'total' de un cliente por su ID
+export const updateClienteTotalRequest = async (id, total) =>
+  axios.patch(`/clientes/${id}/total`, { total });

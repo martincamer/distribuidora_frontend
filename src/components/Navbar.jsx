@@ -24,10 +24,10 @@ export function Navbar() {
               className="dropdown-content menu bg-base-100 w-52 p-1 rounded-md shadow-xl"
             >
               <li className="hover:bg-gray-800 hover:text-white rounded-md text-xs font-semibold">
-                <Link to={"/productos"}>Perfiles</Link>
+                <Link to={"/productos"}>Sector perfiles</Link>
               </li>
               <li className="hover:bg-gray-800 hover:text-white rounded-md text-xs font-semibold">
-                <Link to={"/crear-producto"}>Crear nuevo perfil</Link>
+                <Link to={"/accesorios"}>Sector accesorios</Link>
               </li>{" "}
             </ul>
           </div>
@@ -40,10 +40,13 @@ export function Navbar() {
             </button>
             <ul
               tabIndex={0}
-              className="dropdown-content menu bg-base-100 w-60 p-1 rounded-md shadow-xl"
+              className="dropdown-content menu bg-base-100 w-52 p-1 rounded-md shadow-xl"
             >
               <li className="hover:bg-gray-800 hover:text-white rounded-md text-xs font-semibold">
-                <Link to={"/ventas"}>Sector de ventas/presupuestos</Link>
+                <Link to={"/ventas"}>Sector de ventas perfiles</Link>
+              </li>{" "}
+              <li className="hover:bg-gray-800 hover:text-white rounded-md text-xs font-semibold">
+                <Link to={"/accesorios"}>Sector de ventas accesorios</Link>
               </li>
             </ul>
           </div>

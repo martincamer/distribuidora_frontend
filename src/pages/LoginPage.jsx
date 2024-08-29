@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Card, Message, Button, Input, Label } from "../components/ui";
 import { loginSchema } from "../schemas/auth";
+import { PasswordInput } from "../components/ui/InputPasword";
 import img from "../assets/intro.jpg";
 
 export function LoginPage() {
@@ -52,34 +53,28 @@ export function LoginPage() {
               placeholder="correo@gmail.com"
               {...register("email", { required: true })}
             />
-            <p>{errors.email?.message}</p>
+            <p className="font-semibold text-red-700 text-sm">
+              {errors.email?.message}
+            </p>
           </div>
 
           <div>
             <Label htmlFor="password">Contraseña del registro</Label>
-            <Input
+            <PasswordInput
               type="password"
               name="password"
               placeholder="******************"
               {...register("password", { required: true, minLength: 6 })}
             />
-            <p>{errors.password?.message}</p>
+            <p className="font-semibold text-red-700 text-sm">
+              {errors.password?.message}
+            </p>
           </div>
 
           <div className="text-sm mt-2">
             <Button>Iniciar Sesion</Button>
           </div>
         </form>
-
-        {/* <p className="flex gap-x-2 justify-between mt-3 text-sm">
-          No tienes una cuenta aun?{" "}
-          <Link
-            to="/register"
-            className="text-gray-900 font-semibold underline"
-          >
-            Registrate ahora
-          </Link>
-        </p> */}
       </Card>
     </div>
   );

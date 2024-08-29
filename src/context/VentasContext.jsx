@@ -42,23 +42,31 @@ export function VentasProvider({ children }) {
   // Eliminar una venta por ID
   const deleteVenta = async (id) => {
     try {
-      const res = await deleteVentaRequest(id); // Solicitud para eliminar una venta
-      if (res.status === 204) {
-        // Venta eliminada correctamente
-        setVentas(ventas.filter((venta) => venta._id !== id)); // Elimina del estado
+      await deleteVentaRequest(id); // Solicitud para eliminar una venta
 
-        toast.error("Venta eliminada correctamente", {
-          position: "top-center",
-          autoClose: 500,
-          hideProgressBar,
-          closeOnClick,
-          pauseOnHover,
-          draggable,
-          theme: "light",
-        });
-      }
+      // Venta eliminada correctamente
+      setVentas(ventas.filter((venta) => venta._id !== id)); // Elimina del estado
+
+      toast.error("Venta eliminada correctamente", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar,
+        closeOnClick,
+        pauseOnHover,
+        draggable,
+        theme: "light",
+      });
     } catch (error) {
       console.error("Error al eliminar venta:", error); // Manejo de errores
+      toast.error("Error al eliminar la venta", {
+        position: "top-center",
+        autoClose: 500,
+        hideProgressBar,
+        closeOnClick,
+        pauseOnHover,
+        draggable,
+        theme: "light",
+      });
     }
   };
 
@@ -98,6 +106,7 @@ export function VentasProvider({ children }) {
   };
 
   const navigate = useNavigate();
+
   // Actualizar una venta por ID
   const updateVenta = async (id, venta) => {
     try {
@@ -126,6 +135,7 @@ export function VentasProvider({ children }) {
       setTimeout(() => {
         setError("");
       }, 3000);
+      console.log("error", error);
     }
   };
 

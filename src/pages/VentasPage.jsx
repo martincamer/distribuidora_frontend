@@ -4,7 +4,7 @@ import { ImFileEmpty } from "react-icons/im"; // Icono para cuando no hay datos
 import { BsFolderPlus } from "react-icons/bs"; // Icono para agregar
 import { Link } from "react-router-dom";
 import { updateFecha } from "../helpers/FechaUpdate.js";
-import { FaCheck, FaEdit, FaSave, FaSearch } from "react-icons/fa";
+import { FaCheck, FaEdit, FaSearch } from "react-icons/fa";
 import { IoIosMore } from "react-icons/io";
 import { useForm } from "react-hook-form";
 import { useObtenerId } from "../helpers/obtenerId.js";
@@ -114,17 +114,49 @@ export function VentasPage() {
     return suma + ganancia;
   }, 0);
 
-  const sortedVentas = ventas
-    .slice()
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1; // Los meses son 0-based
 
-  // Filtrar ventas por el término de búsqueda
-  const filteredVentas = sortedVentas.filter(
-    (venta) =>
-      venta.tipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      venta.cliente.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      venta.cliente.apellido.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Estados para filtro
+  const [selectedYear, setSelectedYear] = useState(currentYear.toString());
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth.toString());
+
+  // Manejar cambios en el año
+  const handleYearChange = (e) => {
+    setSelectedYear(e.target.value);
+  };
+
+  // Manejar cambios en el mes
+  const handleMonthChange = (e) => {
+    setSelectedMonth(e.target.value);
+  };
+
+  // Manejar cambios en el término de búsqueda
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Filtrar y ordenar ventas
+  const filteredVentas = ventas
+    .filter((venta) => {
+      const date = new Date(venta.date);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1; // Meses son 0-based
+
+      return (
+        (selectedYear ? year === parseInt(selectedYear, 10) : true) &&
+        (selectedMonth ? month === parseInt(selectedMonth, 10) : true) &&
+        (venta.tipo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          venta.cliente.nombre
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          venta.cliente.apellido
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()))
+      );
+    })
+    .sort((a, b) => new Date(b.date) - new Date(a.date)); // Ordenar por fecha
 
   const { handleObtenerId, idObtenida } = useObtenerId();
 
@@ -170,8 +202,8 @@ export function VentasPage() {
           </div>
         </div>
       )}
-      <div className="px-10 pt-10 pb-4">
-        <div className="border border-gray-300 flex items-center gap-2 px-2 py-1.5 text-sm rounded-md w-1/5 max-md:w-full">
+      <div className="px-10 pt-10 pb-4 flex gap-2">
+        <div className="border border-gray-300 flex items-center gap-2 px-2 py-2 text-sm rounded-md w-1/5 max-md:w-full">
           <input
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -181,18 +213,62 @@ export function VentasPage() {
           />
           <FaSearch className="text-gray-700" />
         </div>
+
+        <div className="flex gap-2">
+          <select
+            className="outline-none border border-gray-300 py-2 px-2 rounded-md text-sm font-bold"
+            onChange={handleYearChange}
+            value={selectedYear}
+          >
+            <option className="font-bold" value="">
+              Seleccione el año
+            </option>
+            {/* Generar opciones de años dinámicamente */}
+            {Array.from(
+              new Set(ventas.map((c) => new Date(c.date).getFullYear()))
+            ).map((year) => (
+              <option className="font-semibold" key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+
+          {/* Selector para mes */}
+          <select
+            className="outline-none border border-gray-300 py-2 px-2 rounded-md text-sm font-bold capitalize"
+            onChange={handleMonthChange}
+            value={selectedMonth}
+          >
+            <option className="font-bold" value="">
+              Seleccione el mes
+            </option>
+            {/* Generar opciones de meses */}
+            {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+              <option
+                className="font-semibold capitalize"
+                key={month}
+                value={month}
+              >
+                {new Date(0, month - 1).toLocaleString("es-ES", {
+                  month: "long",
+                })}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
+
       <div className="px-10">
         <table className="table">
           <thead className="text-gray-800 text-sm">
             <tr>
               <th>Referencia</th>
-              <th>Tipo</th>
               <th>Cliente</th>
+              <th>Fecha</th>
               <th>Total Brs</th>
               <th>Total Kgs</th>
               <th>Total</th>
-              <th>Fecha</th>
+              <th>Tipo</th>
               <th>Estado</th>
             </tr>
           </thead>
@@ -201,19 +277,10 @@ export function VentasPage() {
               <tr key={v._id} className="text-xs font-medium uppercase">
                 <th>{v._id}</th>
                 <td>
-                  <div className="flex">
-                    <p
-                      className={`font-semibold py-2 px-5 rounded-md ${
-                        (v.tipo === "venta" && "bg-blue-500 text-white ") ||
-                        (v.tipo === "presupuesto" && "bg-primary text-white ")
-                      }`}
-                    >
-                      {v.tipo}
-                    </p>
-                  </div>
-                </td>
-                <td>
                   {v.cliente.nombre} {v.cliente.apellido}
+                </td>
+                <td className="px-4 py-4 text-gray-700 font-semibold">
+                  {updateFecha(v.date)}
                 </td>
                 <td className="px-4 py-4">
                   <div className="flex">
@@ -256,8 +323,17 @@ export function VentasPage() {
                   </div>
                 </td>
 
-                <td className="px-4 py-4 text-gray-700 font-semibold">
-                  {updateFecha(v.date)}
+                <td>
+                  <div className="flex">
+                    <p
+                      className={`font-semibold py-2 px-5 rounded-md ${
+                        (v.tipo === "venta" && "bg-blue-500 text-white ") ||
+                        (v.tipo === "presupuesto" && "bg-primary text-white ")
+                      }`}
+                    >
+                      {v.tipo}
+                    </p>
+                  </div>
                 </td>
                 <td className="px-4 py-4 text-gray-700 font-semibold">
                   <div className="flex">
@@ -272,8 +348,8 @@ export function VentasPage() {
                       }`}
                     >
                       {(v.estado === "completada" && "completada") ||
-                        (v.estado === "pendiente" && "Venta pendiente") ||
-                        (v.estado === "rechazada" && "Rechazada")}
+                        (v.estado === "pendiente" && "pendiente") ||
+                        (v.estado === "rechazada" && "rechazada")}
                     </p>
                   </div>
                 </td>
@@ -326,7 +402,12 @@ export function VentasPage() {
                       </li>
                       <li>
                         <button
-                          // onClick={() => deleteVenta(v._id)} // Función para eliminar venta
+                          onClick={() => {
+                            handleObtenerId(v._id),
+                              document
+                                .getElementById("my_modal_eliminar")
+                                .showModal();
+                          }}
                           type="button"
                           className="capitalize hover:bg-gray-800 hover:text-white font-semibold text-gray-700"
                         >
@@ -342,6 +423,7 @@ export function VentasPage() {
         </table>
         <ModalEstado idObtenida={idObtenida} />
         <ModalCrearVentaPresupuesto />
+        <ModalEliminar idObtenida={idObtenida} />
       </div>
     </>
   );
@@ -510,6 +592,21 @@ const ModalCrearVentaPresupuesto = () => {
     setClienteSeleccionado([]);
   };
 
+  // producto._id,
+  //   generateRandomNumericId(),
+  //   producto.codigo,
+  //   producto.detalle,
+  //   producto.imagen,
+  //   producto.color,
+  //   producto.categoria,
+  //   producto.tipo,
+  //   kg_estimado,
+  //   kg_estimado * cantidad,
+  //   precio,
+  //   Number(kg_estimado * cantidad) * Number(precio),
+  //   cantidad,
+  //   fechaActual;
+
   const addToProducto = (
     ObjectId,
     id,
@@ -518,6 +615,7 @@ const ModalCrearVentaPresupuesto = () => {
     imagen,
     color,
     categoria,
+    tipo,
     kg_barra_estimado,
     total_kilogramos,
     precio,
@@ -533,6 +631,7 @@ const ModalCrearVentaPresupuesto = () => {
       imagen,
       color,
       categoria,
+      tipo,
       kg_barra_estimado,
       total_kilogramos,
       precio,
@@ -587,54 +686,57 @@ const ModalCrearVentaPresupuesto = () => {
       producto.kg_barra_estimado * producto.cantidad;
   });
 
+  const editarProducto = (
+    ObjectId,
+    id,
+    codigo,
+    detalle,
+    imagen,
+    color,
+    categoria,
+    kg_barra_estimado,
+    total_kilogramos,
+    precio,
+    total_dinero,
+    cantidad,
+    date
+  ) => {
+    // Encuentra el índice del producto a editar
+    const index = productosSeleccionados.findIndex(
+      (producto) => producto.ObjectId === ObjectId
+    );
+
+    // Verifica si el producto existe en la lista
+    if (index !== -1) {
+      // Crea un nuevo producto con la información actualizada
+      const productoEditado = {
+        ObjectId,
+        id,
+        codigo,
+        detalle,
+        imagen,
+        color,
+        categoria,
+        kg_barra_estimado,
+        total_kilogramos,
+        precio,
+        total_dinero,
+        cantidad,
+        date,
+      };
+
+      // Crea una nueva lista de productos con el producto editado
+      const productosActualizados = productosSeleccionados.map((producto, i) =>
+        i === index ? productoEditado : producto
+      );
+
+      // Actualiza el estado con la lista de productos modificada
+      setProductosSeleccionados(productosActualizados);
+    }
+  };
+
   // Convertir el objeto a un arreglo
   const groupedProducts = Object.values(groupedByCategoryAndColor);
-
-  // useEffect(() => {
-  //   if (tipo === "presupuesto") {
-  //     toast(
-  //       "Acuerdate que el presupuesto no descuenta el stock, ni se suma dinero a los clientes",
-  //       {
-  //         position: "bottom-center",
-  //         autoClose: 8000,
-  //         hideProgressBar: true,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "light",
-  //         style: {
-  //           padding: "10px",
-  //           fontWeight: "bold",
-  //           borderRadius: "15px",
-  //           border: "1px solid rgb(229 231 235)",
-  //         },
-  //         // transition: "Bounce",
-  //       }
-  //     );
-  //   } else if (tipo === "venta") {
-  //     toast(
-  //       "Es una venta descontara el stock y sumara el total al cliente seleccionado al generar la venta.",
-  //       {
-  //         position: "bottom-center",
-  //         autoClose: 8000,
-  //         hideProgressBar: true,
-  //         closeOnClick: true,
-  //         pauseOnHover: true,
-  //         draggable: true,
-  //         progress: undefined,
-  //         theme: "light",
-  //         style: {
-  //           padding: "10px",
-  //           fontWeight: "bold",
-  //           borderRadius: "15px",
-  //           border: "1px solid rgb(229 231 235)",
-  //         },
-  //         // transition: "Bounce",
-  //       }
-  //     );
-  //   }
-  // }, [tipo]);
 
   const calculateFinalValue = (productos) => {
     return productos.reduce((total, producto) => {
@@ -650,6 +752,8 @@ const ModalCrearVentaPresupuesto = () => {
 
   const finalValue = calculateFinalValue(productosSeleccionados);
   const finalValueKgs = calculateFinalValueKgs(productosSeleccionados);
+
+  const { handleObtenerId, idObtenida } = useObtenerId();
   return (
     <dialog id="my_modal_crear_venta_presupuesto" className="modal">
       <div className="modal-box max-w-full h-full w-full max-h-full rounded-none scroll-bar">
@@ -797,6 +901,7 @@ const ModalCrearVentaPresupuesto = () => {
                         <th>Detalle</th>
                         <th>Color</th>
                         <th>Categoría</th>
+                        <th>Tipo</th>
                         <th>Peso barra (kg)</th>
                         <th>Precio kg (ARS)</th>
                         <th>Total kg</th>
@@ -814,6 +919,7 @@ const ModalCrearVentaPresupuesto = () => {
                           <td>{producto.detalle}</td>
                           <td>{producto.color}</td>
                           <td>{producto.categoria}</td>
+                          <th className="text-blue-600">{producto.tipo}</th>
                           <td>
                             {editIndex === index ? (
                               <input
@@ -902,6 +1008,19 @@ const ModalCrearVentaPresupuesto = () => {
                               >
                                 <FaDeleteLeft className="text-red-500 text-xl" />
                               </button>
+                              <button type="button">
+                                <FaEdit
+                                  onClick={() => {
+                                    handleObtenerId(producto.ObjectId),
+                                      document
+                                        .getElementById(
+                                          "my_modal_editar_cantidad"
+                                        )
+                                        .showModal();
+                                  }}
+                                  className="text-blue-500 text-xl"
+                                />
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -940,126 +1059,6 @@ const ModalCrearVentaPresupuesto = () => {
               </form>
             </div>
           </div>
-          {/* {productosSeleccionados?.length === 0 ? (
-            ""
-          ) : (
-            <div className="my-2 ">
-              <div className="mb-3">
-                <p className="text-gray-700 font-semibold text-lg">
-                  Productos seleccionados 🖐️
-                </p>
-                <p className="font-normal text-sm">
-                  Mira por los productos creados, compara precios,etc.
-                </p>
-              </div>
-              <div className="bg-white py-5 px-5 rounded-md grid grid-cols-4 justify-center items-center gap-2">
-                {productosSeleccionados.map((p) => (
-                  <div className="border py-4 px-2 rounded-xl flex flex-col gap-2 justify-center items-center h-full">
-                    <img
-                      className="w-[120px] object-cover"
-                      src={p.imagen}
-                      alt="imagen"
-                    />
-                    <div className="h-[8vh] overflow-y-scroll scroll-bar w-full">
-                      <div className="w-full px-2">
-                        <p className="text-sm font-bold text-gray-700 uppercase">
-                          {" "}
-                          Codigo:{" "}
-                          <span className="font-bold text-blue-500">
-                            {p.codigo}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="w-full px-2">
-                        <p className="text-sm font-bold text-gray-700 uppercase">
-                          {" "}
-                          Detalle:{" "}
-                          <span className="font-bold text-blue-500">
-                            {p.detalle}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="w-full px-2">
-                        <p className="text-sm font-bold text-gray-700 uppercase">
-                          {" "}
-                          Color:{" "}
-                          <span className="font-bold text-blue-500">
-                            {p.color}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="w-full px-2">
-                        <p className="text-sm font-bold text-gray-700 uppercase">
-                          {" "}
-                          Categoria:{" "}
-                          <span className="font-bold text-blue-500">
-                            {p.categoria}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="w-full px-2">
-                        <p className="text-sm font-bold text-gray-700 uppercase">
-                          {" "}
-                          Kg de la barra:{" "}
-                          <span className="font-bold text-blue-500">
-                            {Number(p?.kg_barra_estimado)?.toFixed(2)} kgs
-                          </span>
-                        </p>
-                      </div>
-                      <div className="w-full px-2">
-                        <p className="text-sm font-bold text-gray-700 uppercase">
-                          {" "}
-                          Total de kgs:{" "}
-                          <span className="font-bold text-blue-500">
-                            {Number(
-                              p?.kg_barra_estimado * p?.cantidad
-                            )?.toFixed(2)}{" "}
-                            kgs
-                          </span>
-                        </p>
-                      </div>
-                      <div className="w-full px-2">
-                        <p className="text-sm font-bold text-gray-700 uppercase">
-                          {" "}
-                          Precio kg:{" "}
-                          <span className="font-bold text-blue-500">
-                            {Number(p.precio).toLocaleString("es-AR", {
-                              style: "currency",
-                              currency: "ARS",
-                            })}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="w-full px-2">
-                        <p className="text-sm font-bold text-gray-700 uppercase">
-                          {" "}
-                          Precio total:{" "}
-                          <span className="font-bold text-blue-500">
-                            {Number(
-                              Number(p.kg_barra_estimado * p.cantidad) *
-                                p.precio
-                            ).toLocaleString("es-AR", {
-                              style: "currency",
-                              currency: "ARS",
-                            })}
-                          </span>
-                        </p>
-                      </div>
-                      <div className="w-full px-2">
-                        <p className="text-sm font-bold text-gray-700 uppercase">
-                          {" "}
-                          Cantidad:{" "}
-                          <span className="font-bold text-blue-500">
-                            {p.cantidad}
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )} */}
         </div>
         {productosSeleccionados?.length === 0 ? (
           ""
@@ -1101,6 +1100,11 @@ const ModalCrearVentaPresupuesto = () => {
 
       <SeleccionarProductos addToProducto={addToProducto} />
       <CargarCliente addToCliente={addToCliente} />
+      <EditarLaCantidadProducto
+        editarProducto={editarProducto}
+        idObtenida={idObtenida}
+        productosSeleccionados={productosSeleccionados}
+      />
     </dialog>
   );
 };
@@ -1214,6 +1218,7 @@ const SeleccionarProductos = ({ addToProducto }) => {
                 <th>Detalle</th>
                 <th>Categoria</th>
                 <th>Color</th>
+                <th>Tipo</th>
                 <th>Stock/Fabrica</th>
                 <th>Acción</th>
               </tr>
@@ -1225,6 +1230,7 @@ const SeleccionarProductos = ({ addToProducto }) => {
                   <td className="">{producto.detalle}</td>
                   <td className="">{producto.categoria}</td>
                   <td className="">{producto.color}</td>
+                  <th className="text-blue-600">{producto.tipo}</th>
                   <td className="">
                     <div className="flex">
                       <p
@@ -1303,6 +1309,7 @@ const SeleccionarCantidadProducto = ({
       producto.imagen,
       producto.color,
       producto.categoria,
+      producto.tipo,
       kg_estimado,
       kg_estimado * cantidad,
       precio,
@@ -1360,6 +1367,10 @@ const SeleccionarCantidadProducto = ({
             </p>
             <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
               Linea <span className="font-bold">{producto.categoria}</span>
+            </p>{" "}
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Tipo{" "}
+              <span className="font-bold text-blue-600">{producto.tipo}</span>
             </p>
             <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
               Stock{" "}
@@ -1383,7 +1394,10 @@ const SeleccionarCantidadProducto = ({
               {isEditable ? (
                 <div className="flex flex-col gap-2 items-start">
                   <label className="text-sm font-bold text-slate-700">
-                    Kg aproximado de la barra del perfil.
+                    {/* Kg aproximado de la barra del perfil. */}{" "}
+                    {producto.tipo === "unidad"
+                      ? "Kg aproximado por perfil,unidad."
+                      : "Kg aproximado por paquete."}
                   </label>
                   <input
                     value={kg_estimado}
@@ -1398,7 +1412,9 @@ const SeleccionarCantidadProducto = ({
               ) : (
                 <div className="flex flex-col gap-2 items-start">
                   <label className="text-sm font-bold text-slate-700">
-                    Kg aproximado de la barra del perfil.
+                    {producto.tipo === "unidad"
+                      ? "Kg aproximado por perfil,unidad."
+                      : "Kg aproximado por paquete."}
                   </label>
 
                   <p className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md">
@@ -1439,7 +1455,9 @@ const SeleccionarCantidadProducto = ({
               {isEditable ? (
                 <div className="flex flex-col gap-2 items-start">
                   <label className="text-sm font-bold text-slate-700">
-                    Cantidad de perfiles/barras
+                    {producto.tipo === "unidad"
+                      ? "Cantidad de perfiles,unidades."
+                      : "Cantidad de paquetes."}
                   </label>
                   <input
                     value={cantidad}
@@ -1454,11 +1472,16 @@ const SeleccionarCantidadProducto = ({
               ) : (
                 <div className="flex flex-col gap-2 items-start">
                   <label className="text-sm font-bold text-slate-700">
-                    Cantidad de perfiles/barras
+                    {producto.tipo === "unidad"
+                      ? "Cantidad de perfiles,unidades."
+                      : "Cantidad de paquetes."}
                   </label>
 
                   <p className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md">
-                    {Number(cantidad) || 0} barras.
+                    {Number(cantidad) || 0}{" "}
+                    {producto.tipo === "unidad"
+                      ? "perfiles/unidades"
+                      : "paquetes"}
                   </p>
                 </div>
               )}
@@ -1594,6 +1617,269 @@ const CargarCliente = ({ addToCliente }) => {
             </tbody>
           </table>
         </div>
+      </div>
+    </dialog>
+  );
+};
+
+const EditarLaCantidadProducto = ({
+  idObtenida,
+  editarProducto,
+  productosSeleccionados,
+}) => {
+  const [producto, setProducto] = useState({});
+  const [kgEstimado, setKgEstimado] = useState(0);
+  const [precio, setPrecio] = useState(0);
+  const [cantidad, setCantidad] = useState(0);
+  const [isEditable, setIsEditable] = useState(false);
+
+  // Efecto para obtener y actualizar datos del producto en productosSeleccionados
+  useEffect(() => {
+    const productoSeleccionado = productosSeleccionados?.find(
+      (p) => p.ObjectId === idObtenida
+    );
+
+    setProducto(productoSeleccionado);
+
+    if (productoSeleccionado) {
+      setKgEstimado(productoSeleccionado?.kg_barra_estimado);
+      setPrecio(productoSeleccionado?.precio);
+      setCantidad(productoSeleccionado?.cantidad);
+    }
+  }, [idObtenida]);
+
+  const handleInputClick = () => {
+    setIsEditable(true);
+  };
+
+  return (
+    <dialog id="my_modal_editar_cantidad" className="modal">
+      <div className="modal-box rounded-md max-w-6xl">
+        <form method="dialog">
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <h3 className="font-bold text-lg">
+          Actualizar el perfil seleccionado.
+        </h3>
+        <div>
+          <p className="font-bold text-base pt-2 underline">
+            Datos del perfil seleccionado a cargar.
+          </p>
+          <div className="text-sm flex gap-2 mt-1 uppercase font-medium">
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Codigo <span className="font-bold">{producto?.codigo}</span>
+            </p>
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Detalle <span className="font-bold">{producto?.detalle}</span>
+            </p>
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Color <span className="font-bold">{producto?.color}</span>
+            </p>
+            <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Linea <span className="font-bold">{producto?.categoria}</span>
+            </p>
+            {/* <p className="border border-gray-300 py-1 px-2 rounded-md shadow">
+              Stock{" "}
+              <span
+                className={`font-bold ${
+                  producto?.stock <= 0 ? "text-red-700" : "text-green-600"
+                }`}
+              >
+                {producto?.stock}
+              </span>
+            </p> */}
+          </div>
+        </div>
+        <div className="mt-2">
+          <p className="font-bold text-base pt-2 underline">
+            Seleccionar cantidad y kgs.
+          </p>
+
+          <div className="grid grid-cols-4 gap-4">
+            <div onClick={handleInputClick} className="cursor-pointer">
+              {isEditable ? (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Kg aproximado de la barra del perfil.
+                  </label>
+                  <input
+                    value={kgEstimado}
+                    onChange={(e) => setKgEstimado(e.target.value)}
+                    onBlur={() => setIsEditable(false)}
+                    type="text"
+                    className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Kg aproximado de la barra del perfil.
+                  </label>
+                  <p className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md">
+                    {Number(kgEstimado) || 0} kg
+                  </p>
+                </div>
+              )}
+            </div>
+            <div onClick={handleInputClick} className="cursor-pointer">
+              {isEditable ? (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Precio del aluminio actual.
+                  </label>
+                  <input
+                    value={precio}
+                    onChange={(e) => setPrecio(e.target.value)}
+                    onBlur={() => setIsEditable(false)}
+                    type="text"
+                    className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Precio del aluminio actual.
+                  </label>
+                  <p className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md">
+                    {formatearDinero(Number(precio)) || 0}
+                  </p>
+                </div>
+              )}
+            </div>
+            <div onClick={handleInputClick} className="cursor-pointer">
+              {isEditable ? (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Cantidad de perfiles/barras
+                  </label>
+                  <input
+                    value={cantidad}
+                    onChange={(e) => setCantidad(e.target.value)}
+                    onBlur={() => setIsEditable(false)}
+                    type="text"
+                    className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2 items-start">
+                  <label className="text-sm font-bold text-slate-700">
+                    Cantidad de perfiles/barras
+                  </label>
+                  <p className="rounded-md border border-gray-300 py-2 px-2 text-sm font-bold capitalize outline-none focus:shadow-md">
+                    {Number(cantidad) || 0} barras.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="mt-2">
+            <p className="font-bold text-base pt-2 underline">
+              Final kgs, monto.
+            </p>
+            <div className="flex items-center gap-4">
+              <p className="text-sm font-medium">
+                Kgs:{" "}
+                <span className="font-bold">
+                  {parseFloat(Number(cantidad) * Number(kgEstimado)).toFixed(2)}{" "}
+                  kgs
+                </span>
+              </p>
+              <p className="text-sm font-medium">
+                Precio Final:{" "}
+                <span className="font-bold text-blue-600 bg-blue-100/90 py-1 px-2 rounded-md">
+                  {formatearDinero(
+                    Number(cantidad) * Number(kgEstimado) * Number(precio)
+                  )}
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-3">
+            <button
+              onClick={() => {
+                document.getElementById("my_modal_editar_cantidad").close(),
+                  editarProducto(
+                    producto.ObjectId,
+                    producto.id,
+                    producto.codigo,
+                    producto.detalle,
+                    producto.imagen,
+                    producto.color,
+                    producto.categoria,
+                    kgEstimado,
+                    Number(kgEstimado) * Number(cantidad),
+                    precio,
+                    Number(
+                      Number(cantidad) * Number(kgEstimado) * Number(precio)
+                    ),
+                    cantidad,
+                    producto.date
+                  );
+              }}
+              className="bg-primary py-1.5 px-4 rounded-md text-sm font-semibold text-white group flex gap-3 items-center relative transition-all"
+              type="button"
+            >
+              Actualizar el perfil <FaCheck />
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  );
+};
+
+const ModalEliminar = ({ idObtenida }) => {
+  const { deleteVenta } = useVentas();
+  return (
+    <dialog id="my_modal_eliminar" className="modal">
+      <div className="modal-box rounded-md max-w-md">
+        <form method="dialog">
+          {/* if there is a button in form, it will close the modal */}
+          <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+            ✕
+          </button>
+        </form>
+        <form>
+          <div>
+            <img
+              className="w-44 mx-auto"
+              src="https://app.holded.com/assets/img/document/doc_delete.png"
+            />
+          </div>
+          <div className="font-semibold text-sm text-gray-400 text-center">
+            REFERENCIA {idObtenida}
+          </div>
+          <div className="font-semibold text-[#FD454D] text-lg text-center">
+            Eliminar la venta..
+          </div>
+          <div className="text-sm text-gray-400 text-center mt-1">
+            El documento, venta no podra ser recuperado nunca mas...
+          </div>
+          <div className="mt-4 text-center w-full px-16">
+            <button
+              type="button"
+              onClick={() => {
+                deleteVenta(idObtenida),
+                  document.getElementById("my_modal_eliminar").close();
+              }}
+              className="bg-red-500 py-1 px-4 text-center font-bold text-white text-sm rounded-md w-full"
+            >
+              Confirmar
+            </button>{" "}
+            <button
+              type="button"
+              onClick={() => {
+                document.getElementById("my_modal_eliminar").close();
+              }}
+              className="bg-orange-100 py-1 px-4 text-center font-bold text-orange-600 mt-2 text-sm rounded-md w-full"
+            >
+              Cancelar
+            </button>
+          </div>
+        </form>
       </div>
     </dialog>
   );

@@ -573,6 +573,17 @@ export const PresupuestoDocument = ({ datos, user }) => {
               </Text>
               <Text
                 style={{
+                  width: "10%",
+                  fontWeight: "bold",
+                  fontSize: "10px",
+                  fontFamily: "Roboto",
+                  textTransform: "uppercase",
+                }}
+              >
+                Tipo
+              </Text>
+              <Text
+                style={{
                   width: "5%",
                   fontWeight: "bold",
                   fontSize: "10px",
@@ -659,6 +670,17 @@ export const PresupuestoDocument = ({ datos, user }) => {
                   }}
                 >
                   {p.categoria}
+                </Text>{" "}
+                <Text
+                  style={{
+                    width: "10%",
+                    fontWeight: "medium",
+                    fontSize: "8px",
+                    fontFamily: "Roboto",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {p.tipo}
                 </Text>
                 <Text
                   style={{

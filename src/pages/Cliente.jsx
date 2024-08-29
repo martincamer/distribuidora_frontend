@@ -85,41 +85,36 @@ export function Cliente() {
     setSelectedImage(null);
   };
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1; // Los meses son 0-based, por eso sumamos 1
 
-  // Ordenar comprobantes por fecha de mayor a menor
-  const sortedComprobantes = [...comprobante].sort(
+  // Inicializar el estado con el año y mes actuales
+  const [selectedYear, setSelectedYear] = useState(currentYear.toString());
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth.toString());
+
+  const handleYearChange = (e) => {
+    setSelectedYear(e.target.value);
+  };
+
+  const handleMonthChange = (e) => {
+    setSelectedMonth(e.target.value);
+  };
+
+  const filteredComprobantes = comprobante.filter((c) => {
+    const date = new Date(c.date);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // Months are 0-based
+
+    return (
+      (selectedYear ? year === parseInt(selectedYear, 10) : true) &&
+      (selectedMonth ? month === parseInt(selectedMonth, 10) : true)
+    );
+  });
+
+  const sortedComprobantes = filteredComprobantes.sort(
     (a, b) => new Date(b.date) - new Date(a.date)
   );
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-
-  const currentComprobantes = sortedComprobantes.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  const handleSearch = (event) => {
-    setCurrentPage(1);
-    setSearchTerm(event.target.value);
-  };
-
-  const totalPages = Math.ceil(comprobante.length / productsPerPage);
-
-  const getPageNumbers = () => {
-    const pageNumbers = [];
-    const maxPages = Math.min(currentPage + 4, totalPages); // Mostrar hasta 5 páginas
-    const startPage = Math.max(1, maxPages - 4); // Comenzar desde la página adecuada
-    for (let i = startPage; i <= maxPages; i++) {
-      pageNumbers.push(i);
-    }
-    return pageNumbers;
-  };
 
   const totalComprobantes = cliente?.comprobantes?.reduce(
     (acc, comprobante) => {
@@ -324,10 +319,11 @@ export function Cliente() {
       <div className="mb-8 flex justify-between mx-10 max-md:flex-col max-md:gap-3 max-md:mx-5">
         <div className="flex flex-col gap-1">
           <p className="font-bold text-gray-700 text-xl">
-            Comprobantes mensuales{" "}
+            Comprobantes de pago del cliente{" "}
           </p>
           <p className="text-gray-600 font-medium text-sm">
-            Aquí puedes ver información detallada de los comprobantes del mes.
+            Aquí puedes ver información detallada de los comprobantes del mes,
+            semanales, etc.
           </p>
         </div>
         <div>
@@ -345,6 +341,48 @@ export function Cliente() {
       </div>
 
       <div className="px-10">
+        <div className="flex gap-2 mb-4">
+          <select
+            className="outline-none border border-gray-300 py-2 px-2 rounded-md text-sm font-bold"
+            onChange={handleYearChange}
+            value={selectedYear}
+          >
+            <option className="font-bold" value="">
+              Seleccione el año
+            </option>
+            {/* Generar opciones de años dinámicamente */}
+            {Array.from(
+              new Set(comprobante.map((c) => new Date(c.date).getFullYear()))
+            ).map((year) => (
+              <option className="font-semibold" key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+
+          {/* Selector para mes */}
+          <select
+            className="outline-none border border-gray-300 py-2 px-2 rounded-md text-sm font-bold capitalize"
+            onChange={handleMonthChange}
+            value={selectedMonth}
+          >
+            <option className="font-bold" value="">
+              Seleccione el mes
+            </option>
+            {/* Generar opciones de meses */}
+            {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+              <option
+                className="font-semibold capitalize"
+                key={month}
+                value={month}
+              >
+                {new Date(0, month - 1).toLocaleString("es-ES", {
+                  month: "long",
+                })}
+              </option>
+            ))}
+          </select>
+        </div>
         <table className="table bg-white">
           {/* head */}
           <thead className="font-bold text-gray-800 text-sm">
@@ -354,7 +392,7 @@ export function Cliente() {
             </tr>
           </thead>
           <tbody className="text-xs font-bold">
-            {currentComprobantes.map((c) => (
+            {sortedComprobantes.map((c) => (
               <tr key={c.id}>
                 <th className="">{c.date}</th>
                 <th className="uppercase">{c.tipo_pago}</th>
@@ -373,13 +411,13 @@ export function Cliente() {
                     <div
                       tabIndex={0}
                       role="button"
-                      className="py-2 px-2 transition-all hover:bg-gray-800 hover:text-white border-none rounded-full"
+                      className="py-2 px-2 transition-all hover:bg-gray-800 hover:text-white  border-none rounded-full"
                     >
                       <IoIosMore className="text-2xl" />
                     </div>
                     <ul
                       tabIndex={0}
-                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52 gap-1"
+                      className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-md w-52 gap-1"
                     >
                       <li>
                         <button
